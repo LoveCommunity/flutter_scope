@@ -1,6 +1,6 @@
 name: Tests
 
-on: 
+on:
   push:
     branches: [main]
     paths-ignore: ['**.md']
@@ -9,40 +9,20 @@ on:
     paths-ignore: ['**.md']
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        dart: [stable, beta, 2.14.0]
+        channel: [stable, beta]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: actions/checkout@v2.4.0
+      - uses: subosito/flutter-action@v1.5.3
         with:
-          sdk: ${{matrix.dart}}
-      - run: dart pub get
-      - run: dart analyze
-      - run: dart pub global activate coverage
-      - name: Run tests
-        run: dart 
-          --disable-service-auth-codes 
-          --pause-isolates-on-exit 
-          --enable_asserts
-          --enable-vm-service=1212 
-          test/flutter_scope_test.dart &
-      - name: Collect coverage
-        run: nohup dart pub global run coverage:collect_coverage
-          --port=1212
-          --out=coverage/coverage.json
-          --wait-paused
-          --resume-isolates
-      - name: Generate LCOV
-        run: dart pub global run coverage:format_coverage
-          --lcov
-          --in=coverage/coverage.json
-          --out=coverage/lcov.info
-          --report-on=lib
+          channel: ${{ matrix.channel }}
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test --coverage
       - name: Upload coverage reports
         uses: codecov/codecov-action@v2.1.0
-
