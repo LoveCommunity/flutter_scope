@@ -92,6 +92,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
+  dart_scope:
+    dependency: "direct main"
+    description:
+      name: dart_scope
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0-alpha.1"
+  disposal:
+    dependency: transitive
+    description:
+      name: disposal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0-alpha.3"
   fake_async:
     dependency: transitive
     description:
@@ -180,7 +194,7 @@ packages:
     source: hosted
     version: "0.1.3"
   meta:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: meta
       url: "https://pub.dartlang.org"
@@ -338,6 +352,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  typedef_equals:
+    dependency: transitive
+    description:
+      name: typedef_equals
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
+  typedef_foundation:
+    dependency: transitive
+    description:
+      name: typedef_foundation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   vector_math:
     dependency: transitive
     description:
