@@ -1,3 +1,3 @@
 library flutter_scope;
 
-const name = 'flutter_scope';
+export 'src/final_change_notifier.dart';
