@@ -110,6 +110,22 @@ void main() {
 
   });
 
+  test('`FinalChangeNotifier` will dispose notifier when `dispose` is omitted', () async {
+
+    final scope = await Scope.root([
+      FinalChangeNotifier<_MockChangeNotifier>(
+        equal: (_) => _MockChangeNotifier('a'),
+      ),
+    ]);
+
+    final notifier = scope.get<_MockChangeNotifier>();
+
+    expect(notifier.disposed, false);
+    scope.dispose();
+    expect(notifier.disposed, true);
+
+  });
+
   test('`FinalChangeNotifier` will dispose notifier when `dispose` is true', () async {
 
     final scope = await Scope.root([
