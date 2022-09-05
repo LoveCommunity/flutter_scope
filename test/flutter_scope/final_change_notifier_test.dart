@@ -6,14 +6,11 @@ import 'package:dart_scope/dart_scope.dart';
 
 void main() {
 
-  test('`FinalChangeNotifierBase` is sync configuration', () {
+  test('`FinalChangeNotifier` is sync configuration', () {
 
     final scope = Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
+      FinalChangeNotifier<_MockChangeNotifier>(
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        late: false,
       ),
     ]);
 
@@ -21,14 +18,11 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifierBase` share same value and states in scope', () async {
+  test('`FinalChangeNotifier` share same value and states in scope', () async {
 
     final scope = await Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
+      FinalChangeNotifier<_MockChangeNotifier>(
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        late: false,
       ),
     ]);
 
@@ -45,14 +39,12 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifierBase` share same value and states in scope with name', () async {
+  test('`FinalChangeNotifier` share same value and states in scope with name', () async {
 
     final scope = await Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
+      FinalChangeNotifier<_MockChangeNotifier>(
         name: 'notifier',
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        late: false,
       ),
     ]);
 
@@ -69,20 +61,17 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifierBase` assign value which depends on other value', () async {
+  test('`FinalChangeNotifier` assign value which depends on other value', () async {
 
     final scope = await Scope.root([
       Configurable((scope) {
         scope.expose<int>(expose: () => 0);
       }),
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
+      FinalChangeNotifier<_MockChangeNotifier>(
         equal: (scope) {
           final value = scope.get<int>().toString();
           return _MockChangeNotifier(value);
         },
-        dispose: true,
-        late: false,
       ),
     ]);
 
@@ -91,14 +80,11 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifierBase` assign states success', () async {
+  test('`FinalChangeNotifier` assign states success', () async {
 
     final scope = await Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
+      FinalChangeNotifier<_MockChangeNotifier>(
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        late: false,
       ),
     ]);
 
@@ -124,14 +110,11 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifierBase` will dispose notifier when `dispose` is true', () async {
+  test('`FinalChangeNotifier` will dispose notifier when `dispose` is omitted', () async {
 
     final scope = await Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
+      FinalChangeNotifier<_MockChangeNotifier>(
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        late: false,
       ),
     ]);
 
@@ -143,14 +126,29 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifierBase` will not dispose notifier when `dispose` is false', () async {
+  test('`FinalChangeNotifier` will dispose notifier when `dispose` is true', () async {
 
     final scope = await Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
+      FinalChangeNotifier<_MockChangeNotifier>(
+        equal: (_) => _MockChangeNotifier('a'),
+        dispose: true,
+      ),
+    ]);
+
+    final notifier = scope.get<_MockChangeNotifier>();
+
+    expect(notifier.disposed, false);
+    scope.dispose();
+    expect(notifier.disposed, true);
+
+  });
+
+  test('`FinalChangeNotifier` will not dispose notifier when `dispose` is false', () async {
+
+    final scope = await Scope.root([
+      FinalChangeNotifier<_MockChangeNotifier>(
         equal: (_) => _MockChangeNotifier('a'),
         dispose: false,
-        late: false,
       ),
     ]);
 
@@ -162,85 +160,63 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifierBase` assign notifier immediately when `late` is false', () async {
-
-    int invokes = 0;
-
-    await Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
-        equal: (_) {
-          invokes += 1;
-          return _MockChangeNotifier('a');
-        },
-        dispose: true,
-        late: false,
-      ),
-    ]);
-    
-    expect(invokes, 1);
-
-  });
-
-  test('`FinalChangeNotifierBase` assign notifier lazily when `late` is true', () async {
+  test('`FinalChangeNotifier` assign notifier lazily when `lazy` is omitted', () async {
 
     int invokes = 0;
 
     final scope = await Scope.root([
-      FinalChangeNotifierBase<_MockChangeNotifier>(
-        name: null,
-        equal: (_) {
-          invokes += 1;
-          return _MockChangeNotifier('a');
-        },
-        dispose: true,
-        late: true,
-      ),
-    ]);
-
-    expect(invokes, 0);
-    scope.get<_MockChangeNotifier>();
-    expect(invokes, 1);
-    
-  });
-
-  test('`FinalChangeNotifier` assign notifier immediately', () async {
-
-    int invokes = 0;
-
-    await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) {
           invokes += 1;
           return _MockChangeNotifier('a');
         },
-        dispose: true,
-      ),
-    ]);
-    
-    expect(invokes, 1);
-
-  });
-  
-  test('`LateFinalChangeNotifier` assign notifier lazily', () async {
-
-    int invokes = 0;
-
-    final scope = await Scope.root([
-      LateFinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
-        equal: (_) {
-          invokes += 1;
-          return _MockChangeNotifier('a');
-        },
-        dispose: true,
       ),
     ]);
 
     expect(invokes, 0);
     scope.get<_MockChangeNotifier>();
     expect(invokes, 1);
+    
+  });
+
+  test('`FinalChangeNotifier` assign notifier lazily when `lazy` is true', () async {
+
+    int invokes = 0;
+
+    final scope = await Scope.root([
+      FinalChangeNotifier<_MockChangeNotifier>(
+        equal: (_) {
+          invokes += 1;
+          return _MockChangeNotifier('a');
+        },
+        lazy: true,
+      ),
+    ]);
+
+    expect(invokes, 0);
+    scope.get<_MockChangeNotifier>();
+    expect(invokes, 1);
+    
+  });
+
+  test('`FinalChangeNotifier` assign notifier immediately when `lazy` is false', () async {
+
+    int invokes = 0;
+
+    final scope = await Scope.root([
+      FinalChangeNotifier<_MockChangeNotifier>(
+        equal: (_) {
+          invokes += 1;
+          return _MockChangeNotifier('a');
+        },
+        lazy: false,
+      ),
+    ]);
+    
+    expect(invokes, 1);
+    scope.get<_MockChangeNotifier>();
+    expect(invokes, 1);
+
   });
 }
 
