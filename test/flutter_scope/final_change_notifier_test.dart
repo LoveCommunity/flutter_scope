@@ -179,24 +179,6 @@ void main() {
     
   });
 
-  test('`FinalChangeNotifier` assign notifier immediately when `lazy` is false', () async {
-
-    int invokes = 0;
-
-    await Scope.root([
-      FinalChangeNotifier<_MockChangeNotifier>(
-        equal: (_) {
-          invokes += 1;
-          return _MockChangeNotifier('a');
-        },
-        lazy: false,
-      ),
-    ]);
-    
-    expect(invokes, 1);
-
-  });
-
   test('`FinalChangeNotifier` assign notifier lazily when `lazy` is true', () async {
 
     int invokes = 0;
@@ -215,6 +197,24 @@ void main() {
     scope.get<_MockChangeNotifier>();
     expect(invokes, 1);
     
+  });
+
+  test('`FinalChangeNotifier` assign notifier immediately when `lazy` is false', () async {
+
+    int invokes = 0;
+
+    await Scope.root([
+      FinalChangeNotifier<_MockChangeNotifier>(
+        equal: (_) {
+          invokes += 1;
+          return _MockChangeNotifier('a');
+        },
+        lazy: false,
+      ),
+    ]);
+    
+    expect(invokes, 1);
+
   });
 }
 
