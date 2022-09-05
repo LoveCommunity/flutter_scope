@@ -203,7 +203,7 @@ void main() {
 
     int invokes = 0;
 
-    await Scope.root([
+    final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
         equal: (_) {
           invokes += 1;
@@ -213,6 +213,8 @@ void main() {
       ),
     ]);
     
+    expect(invokes, 1);
+    scope.get<_MockChangeNotifier>();
     expect(invokes, 1);
 
   });
