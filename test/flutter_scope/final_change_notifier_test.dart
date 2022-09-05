@@ -160,6 +160,25 @@ void main() {
 
   });
 
+  test('`FinalChangeNotifier` assign notifier lazily when `lazy` is omitted', () async {
+
+    int invokes = 0;
+
+    final scope = await Scope.root([
+      FinalChangeNotifier<_MockChangeNotifier>(
+        equal: (_) {
+          invokes += 1;
+          return _MockChangeNotifier('a');
+        },
+      ),
+    ]);
+
+    expect(invokes, 0);
+    scope.get<_MockChangeNotifier>();
+    expect(invokes, 1);
+    
+  });
+
   test('`FinalChangeNotifier` assign notifier immediately when `lazy` is false', () async {
 
     int invokes = 0;
