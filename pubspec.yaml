@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.3.0
-  dart_scope: ^0.1.0-alpha.1
+  dart_scope: ^0.1.0-alpha.2
 
 dev_dependencies:
   flutter_test:

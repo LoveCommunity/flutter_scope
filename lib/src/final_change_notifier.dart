@@ -2,42 +2,13 @@
 import 'package:dart_scope/dart_scope.dart';
 import 'package:flutter/foundation.dart';
 
-
-class FinalChangeNotifier<T extends ChangeNotifier> extends FinalChangeNotifierBase<T> {
+class FinalChangeNotifier<T extends ChangeNotifier> extends FinalStatesConvertible<T, T> {
 
   FinalChangeNotifier({
     Object? name,
     required Equal<T> equal,
     bool dispose = true,
-  }): super(
-    name: name,
-    equal: equal,
-    dispose: dispose,
-    late: false,
-  );
-}
-
-class LateFinalChangeNotifier<T extends ChangeNotifier> extends FinalChangeNotifierBase<T> {
-
-  LateFinalChangeNotifier({
-    Object? name,
-    required Equal<T> equal,
-    bool dispose = true,
-  }): super(
-    name: name,
-    equal: equal,
-    dispose: dispose,
-    late: true,
-  );
-}
-
-class FinalChangeNotifierBase<T extends ChangeNotifier> extends FinalStatesConvertibleBase<T, T> {
-
-  FinalChangeNotifierBase({
-    required Object? name,
-    required Equal<T> equal,
-    required bool dispose,
-    required bool late,
+    bool lazy = true,
   }): super(
     name: name,
     equal: equal,
@@ -45,7 +16,7 @@ class FinalChangeNotifierBase<T extends ChangeNotifier> extends FinalStatesConve
     statesEqual: _changeNotifierToStates,
     expose: null,
     dispose: _superDispose<T>(dispose),
-    late: late,
+    lazy: lazy,
   );
 }
 
