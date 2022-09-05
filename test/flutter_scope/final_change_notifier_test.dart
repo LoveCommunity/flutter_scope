@@ -10,10 +10,7 @@ void main() {
 
     final scope = Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        lazy: false,
       ),
     ]);
 
@@ -25,10 +22,7 @@ void main() {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        lazy: false,
       ),
     ]);
 
@@ -51,8 +45,6 @@ void main() {
       FinalChangeNotifier<_MockChangeNotifier>(
         name: 'notifier',
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        lazy: false,
       ),
     ]);
 
@@ -76,13 +68,10 @@ void main() {
         scope.expose<int>(expose: () => 0);
       }),
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (scope) {
           final value = scope.get<int>().toString();
           return _MockChangeNotifier(value);
         },
-        dispose: true,
-        lazy: false,
       ),
     ]);
 
@@ -95,10 +84,7 @@ void main() {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) => _MockChangeNotifier('a'),
-        dispose: true,
-        lazy: false,
       ),
     ]);
 
@@ -128,10 +114,8 @@ void main() {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) => _MockChangeNotifier('a'),
         dispose: true,
-        lazy: false,
       ),
     ]);
 
@@ -147,10 +131,8 @@ void main() {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) => _MockChangeNotifier('a'),
         dispose: false,
-        lazy: false,
       ),
     ]);
 
@@ -168,12 +150,10 @@ void main() {
 
     await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) {
           invokes += 1;
           return _MockChangeNotifier('a');
         },
-        dispose: true,
         lazy: false,
       ),
     ]);
@@ -188,12 +168,10 @@ void main() {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
-        name: null,
         equal: (_) {
           invokes += 1;
           return _MockChangeNotifier('a');
         },
-        dispose: true,
         lazy: true,
       ),
     ]);
