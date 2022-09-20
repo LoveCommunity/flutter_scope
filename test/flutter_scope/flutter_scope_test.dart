@@ -421,5 +421,23 @@ void main() {
     expect(scopeId, 'abc');
 
   });
+
+  testWidgets('`_inheritedScope.updateShouldNotify` test coverage', (tester) async {
+    final completer = Completer<void>.sync();
+
+    await tester.pumpWidget(
+      FutureBuilder<void>(
+        future: completer.future,
+        builder: (_, __) => FlutterScope.scopeEqual(
+          scopeEqual: (_) => Scope.root([]),
+          builder: (_, __) => Container(),
+        ),
+      ),
+    );
+
+    completer.complete(null);
+
+    await tester.pump();
+  });
 }
 
