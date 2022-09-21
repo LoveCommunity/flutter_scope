@@ -76,3 +76,4 @@ build/
 
 .github_changelog_generator
 
+coverage
