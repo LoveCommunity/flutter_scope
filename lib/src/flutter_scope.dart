@@ -21,6 +21,17 @@ class FlutterScope extends StatefulWidget {
     builder: _defaultConsctructBuilder(child),
   );
 
+  FlutterScope.using({
+    Key? key,
+    required Scope existingScope,
+    required Widget child,
+  }): this.scopeEqual(
+    key: key,
+    scopeEqual: (_) => existingScope,
+    dispose: false,
+    builder: (_, __) => child,
+  );
+
   @experimental
   FlutterScope.scopeEqual({
     Key? key,

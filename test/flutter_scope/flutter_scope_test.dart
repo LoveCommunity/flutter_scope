@@ -570,5 +570,53 @@ void main() {
     expect(disposed, true);
 
   });
+
+  testWidgets('`FlutterScope.using` place an inherited scope in widget tree using an existing scope', (tester) async {
+
+    final existingScope = await Scope.root([]);
+
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope.using(
+        existingScope: existingScope,
+        child: Builder(builder: (context) {
+          scope = FlutterScope.maybeOf(context);
+          return Container();
+        }),
+      ),
+    );
+
+    final isScopeIdentical = identical(existingScope, scope); 
+    expect(isScopeIdentical, true);
+
+  });
+
+  testWidgets("`FlutterScope.using` won't dispose registered resouces when `FlutterScope` is removed from widget tree", (tester) async {
+
+    bool disposed = false;
+
+    final configurable = Configurable((scope) {
+      scope.addDispose(() {
+        disposed = true;
+      });
+    });
+
+    final existingScope = await Scope.root([
+      configurable,
+    ]);
+
+    await tester.pumpWidget(
+      FlutterScope.using(
+        existingScope: existingScope,
+        child: Container(),
+      ),
+    );
+
+    expect(disposed, false);
+    await tester.pumpWidget(Container());
+    expect(disposed, false);
+
+  });
 }
 
