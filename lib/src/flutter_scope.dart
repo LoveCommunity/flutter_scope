@@ -10,6 +10,17 @@ typedef AsyncScopeWidgetBuilder = Widget Function(BuildContext context, Async<Sc
 
 class FlutterScope extends StatefulWidget {
 
+  FlutterScope({
+    Key? key,
+    required List<Configurable> configure,
+    required Widget child,
+  }): this.scopeEqual(
+    key: key,
+    scopeEqual: _defaultConstructScopeEqual(configure),
+    dispose: true,
+    builder: _defaultConsctructBuilder(child),
+  );
+
   @experimental
   FlutterScope.scopeEqual({
     Key? key,
@@ -33,6 +44,27 @@ class FlutterScope extends StatefulWidget {
   FlutterScopeState createState() => FlutterScopeState();
 }
 
+FlutterScopeEqual _defaultConstructScopeEqual(List<Configurable> configure) {
+  return (context) {
+    final scope = FlutterScope.maybeOf(context);
+    return scope?.push(configure) ?? Scope.root(configure);
+  };
+}
+
+AsyncScopeWidgetBuilder _defaultConsctructBuilder(Widget child) {
+  return (_, asyncScope) {
+    assert(
+      asyncScope.status != AsyncStatus.error, 
+      '`FlutterScope` default construct should not throw error when creating scope, ${asyncScope.error}, ${asyncScope.stackTrace}', 
+    );
+    assert(
+      asyncScope.status != AsyncStatus.loading,
+      "`FlutterScope` default construct is for configuring scope synchronounsly, please check if all provided configurables are synchronous. if there should be async configurable consider using `FlutterScope.async`."
+    );
+    return child;
+  };
+}
+
 class FlutterScopeState extends State<FlutterScope> {
 
   late Async<Scope> _asyncScope;
@@ -40,14 +72,22 @@ class FlutterScopeState extends State<FlutterScope> {
   @override
   void initState() {
     super.initState();
-    final scope = widget.scopeEqual(context);
-    if (scope is Scope) {
-      _asyncScope = Async<Scope>.loaded(data: scope);
-    } else {
-      _asyncScope = const Async<Scope>.loading();
-      scope
-        .then(_onScopeLoaded)
-        .catchError(_onError);
+    _initScope();
+  }
+
+  void _initScope() {
+    try {
+      final scope = widget.scopeEqual(context);
+      if (scope is Scope) {
+        _asyncScope = Async<Scope>.loaded(data: scope);
+      } else {
+        _asyncScope = const Async<Scope>.loading();
+        scope
+          .then(_onScopeLoaded)
+          .catchError(_onError);
+      }
+    } catch (error, stackTrace) {
+      _asyncScope = Async<Scope>.error(error: error, stackTrace: stackTrace);
     }
   }
 

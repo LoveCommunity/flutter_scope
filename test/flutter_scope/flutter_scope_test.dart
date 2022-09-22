@@ -439,5 +439,136 @@ void main() {
 
     await tester.pump();
   });
+
+  testWidgets('`FlutterScope.defaultConstructor` place an inherited scope in widget tree', (tester) async {
+
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [],
+        child: Builder(builder: (context) {
+          scope = FlutterScope.maybeOf(context);
+          return Container();
+        }),
+      ),
+    );
+
+    expect(scope, isNotNull);
+
+  });
+
+  testWidgets('`FlutterScope.defaultConstructor` configure scope failed will throw assert error', (tester) async {
+
+    final exception = Exception('custom exception');
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Configurable((scope) => throw exception),
+        ],
+        child: Container(),
+      ),
+    );
+
+    expect(
+      tester.takeException(),
+      isInstanceOf<AssertionError>()
+        .having(
+          (exception) => exception.toString(),
+          'description',
+          contains("`FlutterScope` default construct should not throw error when creating scope, $exception"),
+        ),
+    );
+
+  });
+
+  testWidgets('`FlutterScope.defaultConstructor` configure scope async will throw assert error', (tester) async {
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Configurable((scope) async {}),
+        ],
+        child: Container(),
+      ),
+    );
+
+    expect(
+      tester.takeException(),
+      isInstanceOf<AssertionError>()
+        .having(
+          (exception) => exception.toString(),
+          'description',
+          contains("`FlutterScope` default construct is for configuring scope synchronounsly, please check if all provided configurables are synchronous. if there should be async configurable consider using `FlutterScope.async`."),
+        ),
+    );
+
+  });
+
+  testWidgets("`FlutterScope.defaultConstructor` nested scope inherit parent scope's values", (tester) async {
+
+    Scope? parent;
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<String>(name: 'state1', equal: (_) => 'a'),
+        ],
+        child: Builder(builder: (context) {
+          parent = FlutterScope.maybeOf(context);
+          return FlutterScope(
+            configure: [
+              Final<String>(name: 'state2', equal: (_) => 'b'),
+            ],
+            child: Builder(builder: (context) {
+              scope = FlutterScope.maybeOf(context);
+              return Container();
+            }),
+          );
+        }),
+      ),
+    );
+
+    expect(parent, isNotNull);
+    expect(scope, isNotNull);
+
+    final parentState1 = parent?.getOrNull<String>(name: 'state1');
+    final parentState2 = parent?.getOrNull<String>(name: 'state2');
+    final scopeState1 = scope?.getOrNull<String>(name: 'state1');
+    final scopeState2 = scope?.getOrNull<String>(name: 'state2');
+
+    expect(parentState1, 'a');
+    expect(parentState2, null);
+    expect(scopeState1, 'a');
+    expect(scopeState2, 'b');
+
+  });
+
+  testWidgets('`FlutterScope.defaultConstructor` dispose registered resouces when `FlutterScope` is removed from widget tree', (tester) async {
+
+    bool disposed = false;
+
+    final configurable = Configurable((scope) {
+      scope.addDispose(() {
+        disposed = true;
+      });
+    });
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          configurable,
+        ],
+        child: Container(),
+      )
+    );
+
+    expect(disposed, false);
+    await tester.pumpWidget(Container());
+    expect(disposed, true);
+
+  });
 }
 
