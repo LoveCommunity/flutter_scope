@@ -506,7 +506,7 @@ void main() {
 
   });
 
-  testWidgets("`FlutterScope.defaultConstructor` nested scope inherit parent scope's values", (tester) async {
+  testWidgets("`FlutterScope.defaultConstructor` nested scope inherit values from implicity parent scope", (tester) async {
 
     Scope? parent;
     Scope? scope;
@@ -536,6 +536,41 @@ void main() {
 
     final parentState1 = parent?.getOrNull<String>(name: 'state1');
     final parentState2 = parent?.getOrNull<String>(name: 'state2');
+    final scopeState1 = scope?.getOrNull<String>(name: 'state1');
+    final scopeState2 = scope?.getOrNull<String>(name: 'state2');
+
+    expect(parentState1, 'a');
+    expect(parentState2, null);
+    expect(scopeState1, 'a');
+    expect(scopeState2, 'b');
+
+  });
+
+  testWidgets("`FlutterScope.defaultConstructor` created scope inherit values from explicitly parent scope", (tester) async {
+
+    final Scope parent = await Scope.root([
+      Final<String>(name: 'state1', equal: (_) => 'a'),
+    ]);
+
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope(
+        parentScope: parent,
+        configure: [
+          Final<String>(name: 'state2', equal: (_) => 'b'),
+        ],
+        child: Builder(builder: (context) {
+          scope = FlutterScope.maybeOf(context);
+          return Container();
+        }),
+      ),
+    );
+
+    expect(scope, isNotNull);
+
+    final parentState1 = parent.getOrNull<String>(name: 'state1');
+    final parentState2 = parent.getOrNull<String>(name: 'state2');
     final scopeState1 = scope?.getOrNull<String>(name: 'state1');
     final scopeState2 = scope?.getOrNull<String>(name: 'state2');
 

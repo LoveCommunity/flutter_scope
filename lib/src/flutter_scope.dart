@@ -12,11 +12,12 @@ class FlutterScope extends StatefulWidget {
 
   FlutterScope({
     Key? key,
+    Scope? parentScope,
     required List<Configurable> configure,
     required Widget child,
   }): this.scopeEqual(
     key: key,
-    scopeEqual: _defaultConstructScopeEqual(configure),
+    scopeEqual: _defaultConstructScopeEqual(parentScope, configure),
     dispose: true,
     builder: _defaultConsctructBuilder(child),
   );
@@ -55,9 +56,9 @@ class FlutterScope extends StatefulWidget {
   FlutterScopeState createState() => FlutterScopeState();
 }
 
-FlutterScopeEqual _defaultConstructScopeEqual(List<Configurable> configure) {
+FlutterScopeEqual _defaultConstructScopeEqual(Scope? parentScope, List<Configurable> configure) {
   return (context) {
-    final scope = FlutterScope.maybeOf(context);
+    final scope = parentScope ?? FlutterScope.maybeOf(context);
     return scope?.push(configure) ?? Scope.root(configure);
   };
 }
