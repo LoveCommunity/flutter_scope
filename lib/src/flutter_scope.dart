@@ -17,7 +17,7 @@ class FlutterScope extends StatefulWidget {
     required Widget child,
   }): this.scopeEqual(
     key: key,
-    scopeEqual: _defaultConstructScopeEqual(parentScope, configure),
+    scopeEqual: _scopeEqual(parentScope, configure),
     dispose: true,
     builder: _defaultConsctructBuilder(child),
   );
@@ -31,6 +31,19 @@ class FlutterScope extends StatefulWidget {
     scopeEqual: (_) => existingScope,
     dispose: false,
     builder: (_, __) => child,
+  );
+
+  @experimental
+  FlutterScope.async({
+    Key? key,
+    Scope? parentScope,
+    required List<Configurable> configure,
+    required AsyncScopeWidgetBuilder builder,
+  }): this.scopeEqual(
+    key: key,
+    scopeEqual: _scopeEqual(parentScope, configure),
+    dispose: true,
+    builder: builder,
   );
 
   @experimental
@@ -56,7 +69,7 @@ class FlutterScope extends StatefulWidget {
   FlutterScopeState createState() => FlutterScopeState();
 }
 
-FlutterScopeEqual _defaultConstructScopeEqual(Scope? parentScope, List<Configurable> configure) {
+FlutterScopeEqual _scopeEqual(Scope? parentScope, List<Configurable> configure) {
   return (context) {
     final scope = parentScope ?? FlutterScope.maybeOf(context);
     return scope?.push(configure) ?? Scope.root(configure);
