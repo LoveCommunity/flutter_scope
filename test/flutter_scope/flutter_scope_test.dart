@@ -653,5 +653,260 @@ void main() {
     expect(disposed, false);
 
   });
+
+  testWidgets('`FlutterScope.async` build with `asyncScope` when resolve scope success', (tester) async {
+
+    final List<Async<Scope>> asyncScopes = [];
+
+    final completer = Completer<void>.sync();
+
+    await tester.pumpWidget(
+      FlutterScope.async(
+        configure: [
+          Configurable((scope) => completer.future),
+        ],
+        builder: (context, asyncScope) {
+          asyncScopes.add(asyncScope);
+          return Container();
+        },
+      ),
+    );
+
+    expect(asyncScopes.length, 1);
+    expect(asyncScopes.last.status, AsyncStatus.loading);
+
+    completer.complete(null);
+    await tester.pump();
+
+    expect(asyncScopes.length, 2);
+    expect(asyncScopes.last.status, AsyncStatus.loaded);
+    expect(asyncScopes.last.data, isNotNull);
+    
+  });
+
+  testWidgets('`FlutterScope.async` build with `asyncScope` when resolve scope failed', (tester) async {
+
+    final List<Async<Scope>> asyncScopes = [];
+
+    final completer = Completer<void>.sync();
+
+    final exception = Exception('custom exception');
+
+    await tester.pumpWidget(
+      FlutterScope.async(
+        configure: [
+          Configurable((scope) => completer.future),
+        ],
+        builder: (context, asyncScope) {
+          asyncScopes.add(asyncScope);
+          return Container();
+        },
+      ),
+    );
+
+    expect(asyncScopes.length, 1);
+    expect(asyncScopes.last.status, AsyncStatus.loading);
+
+    completer.completeError(exception);
+    await tester.pump();
+    await tester.pump();
+
+    expect(asyncScopes.length, 2);
+    expect(asyncScopes.last.status, AsyncStatus.error);
+    expect(asyncScopes.last.error, exception);
+    
+  });
+
+  testWidgets('`FlutterScope.async` place an inherited scope in widget tree after scope resolved success', (tester) async {
+
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope.async(
+        configure: [
+          Configurable((scope) async {}),
+        ],
+        builder: (_, __) {
+          return Builder(builder: (context) {
+            scope = FlutterScope.maybeOf(context);
+            return Container();
+          });
+        }
+      ),
+    );
+
+    expect(scope, null);
+    await tester.pump();
+    expect(scope, isNotNull);
+
+  });
+
+  testWidgets('`FlutterScope.async` nested scope inherit values from implicity parent scope', (tester) async {
+
+    Scope? parent;
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<String>(name: 'state1', equal: (_) => 'a'),
+        ],
+        child: Builder(builder: (context) {
+          parent = FlutterScope.maybeOf(context);
+          return FlutterScope.async(
+            configure: [
+              Final<String>(name: 'state2', equal: (_) => 'b'),
+              Configurable((scope) async {}),
+            ],
+            builder: (_, __) {
+              return Builder(builder: (context) {
+                scope = FlutterScope.maybeOf(context);
+                return Container();
+              });
+            },
+          );
+        }),
+      )
+    );
+    
+    await tester.pump();
+
+    expect(parent, isNotNull);
+    expect(scope, isNotNull);
+
+    final parentState1 = parent?.getOrNull<String>(name: 'state1');
+    final parentState2 = parent?.getOrNull<String>(name: 'state2');
+    final scopeState1 = scope?.getOrNull<String>(name: 'state1');
+    final scopeState2 = scope?.getOrNull<String>(name: 'state2');
+
+    expect(parentState1, 'a');
+    expect(parentState2, null);
+    expect(scopeState1, 'a');
+    expect(scopeState2, 'b');
+
+  });
+
+  testWidgets('`FlutterScope.async` created scope inherit values from explicitly parent scope', (tester) async {
+    
+    Scope? scope;
+
+    final parent = await Scope.root([
+      Final<String>(name: 'state1', equal: (_) => 'a'),
+    ]);
+    
+    await tester.pumpWidget(
+      FlutterScope.async(
+        parentScope: parent, configure: [
+          Final<String>(name: 'state2', equal: (_) => 'b'),
+          Configurable((scope) async {}),
+        ],
+        builder: (_, __) {
+          return Builder(builder: (context) {
+            scope = FlutterScope.maybeOf(context);
+            return Container();
+          });
+        },
+      ),
+    );
+
+    await tester.pump();
+
+    expect(scope, isNotNull);
+
+    final parentState1 = parent.getOrNull<String>(name: 'state1');
+    final parentState2 = parent.getOrNull<String>(name: 'state2');
+    final scopeState1 = scope?.getOrNull<String>(name: 'state1');
+    final scopeState2 = scope?.getOrNull<String>(name: 'state2');
+
+    expect(parentState1, 'a');
+    expect(parentState2, null);
+    expect(scopeState1, 'a');
+    expect(scopeState2, 'b');
+
+  });
+
+  testWidgets('`FlutterScope.async` dispose registered resouces when `FlutterScope` is removed from widget tree', (tester) async {
+    
+    bool disposed = false;
+
+    final configurable = Configurable((scope) async {
+      scope.addDispose(() {
+        disposed = true;
+      });
+    });
+
+    await tester.pumpWidget(
+      FlutterScope.async(
+        configure: [
+          configurable,
+        ],
+        builder: (_, __) => Container(),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(disposed, false);
+    await tester.pumpWidget(Container());
+    expect(disposed, true);
+
+  });
+
+  testWidgets('`FlutterScope.async` defer dispose registered resouces when `FlutterScope` is removed from widget tree and scope is not yet resolved', (tester) async {
+    
+    bool disposed = false;
+    final completer = Completer<void>.sync();
+
+    final configurable = Configurable((scope) {
+      scope.addDispose(() {
+        disposed = true;
+      });
+      return completer.future;
+    });
+
+    await tester.pumpWidget(
+      FlutterScope.async(
+        configure: [
+          configurable,
+        ],
+        builder: (_, __) => Container(),
+      ),
+    );
+
+    await tester.pumpWidget(Container());
+
+    expect(disposed, false);
+    completer.complete(null);
+    expect(disposed, true);
+
+  });
+
+  testWidgets('`FlutterScope.async` dispose registered resouces when resolve scope failed', (tester) async {
+
+    bool disposed = false;
+    final completer = Completer<void>.sync();
+
+    final configurable = Configurable((scope) {
+      scope.addDispose(() {
+        disposed = true;
+      });
+      return completer.future;
+    });
+    
+    await tester.pumpWidget(
+      FlutterScope.async(
+        configure: [
+          configurable,
+        ],
+        builder: (_, __) => Container(),
+      ),
+    );
+
+    expect(disposed, false);
+    completer.completeError(Exception());
+    expect(disposed, true);
+
+  });
+
 }
 
