@@ -278,7 +278,7 @@ void main() {
  
     bool disposed = false;
     final List<Async<Scope>> asyncScopes = [];
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     final configurable = Configurable((scope) {
       scope.addDispose(() => disposed = true);
@@ -302,8 +302,9 @@ void main() {
 
     await tester.pumpWidget(Container());
 
-    expect(disposed, false);
     completer.complete(null);
+    expect(disposed, false);
+    await Future.microtask(() {});
     expect(disposed, true);
 
   });
@@ -312,7 +313,7 @@ void main() {
  
     bool disposed = false;
     final List<Async<Scope>> asyncScopes = [];
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     final configurable = Configurable((scope) {
       scope.addDispose(() => disposed = true);
@@ -337,8 +338,9 @@ void main() {
 
     await tester.pumpWidget(Container());
 
-    expect(disposed, false);
     completer.complete(null);
+    expect(disposed, false);
+    await Future.microtask(() {});
     expect(disposed, true);
 
   });
@@ -347,7 +349,7 @@ void main() {
   
     bool disposed = false;
     final List<Async<Scope>> asyncScopes = [];
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     final configurable = Configurable((scope) {
       scope.addDispose(() => disposed = true);
@@ -372,8 +374,9 @@ void main() {
 
     await tester.pumpWidget(Container());
 
-    expect(disposed, false);
     completer.complete(null);
+    expect(disposed, false);
+    await Future.microtask(() {});
     expect(disposed, false);
 
  });
@@ -423,7 +426,7 @@ void main() {
   });
 
   testWidgets('`_inheritedScope.updateShouldNotify` test coverage', (tester) async {
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     await tester.pumpWidget(
       FutureBuilder<void>(
@@ -436,6 +439,7 @@ void main() {
     );
 
     completer.complete(null);
+    await Future.microtask(() {});
 
     await tester.pump();
   });
@@ -658,7 +662,7 @@ void main() {
 
     final List<Async<Scope>> asyncScopes = [];
 
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     await tester.pumpWidget(
       FlutterScope.async(
@@ -676,6 +680,7 @@ void main() {
     expect(asyncScopes.last.status, AsyncStatus.loading);
 
     completer.complete(null);
+    await Future.microtask(() {});
     await tester.pump();
 
     expect(asyncScopes.length, 2);
@@ -688,7 +693,7 @@ void main() {
 
     final List<Async<Scope>> asyncScopes = [];
 
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     final exception = Exception('custom exception');
 
@@ -708,7 +713,7 @@ void main() {
     expect(asyncScopes.last.status, AsyncStatus.loading);
 
     completer.completeError(exception);
-    await tester.pump();
+    await Future.microtask(() {});
     await tester.pump();
 
     expect(asyncScopes.length, 2);
@@ -855,7 +860,7 @@ void main() {
   testWidgets('`FlutterScope.async` defer dispose registered resouces when `FlutterScope` is removed from widget tree and scope is not yet resolved', (tester) async {
     
     bool disposed = false;
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     final configurable = Configurable((scope) {
       scope.addDispose(() {
@@ -875,8 +880,9 @@ void main() {
 
     await tester.pumpWidget(Container());
 
-    expect(disposed, false);
     completer.complete(null);
+    expect(disposed, false);
+    await Future.microtask(() {});
     expect(disposed, true);
 
   });
@@ -884,7 +890,7 @@ void main() {
   testWidgets('`FlutterScope.async` dispose registered resouces when resolve scope failed', (tester) async {
 
     bool disposed = false;
-    final completer = Completer<void>.sync();
+    final completer = Completer<void>();
 
     final configurable = Configurable((scope) {
       scope.addDispose(() {
@@ -902,8 +908,9 @@ void main() {
       ),
     );
 
-    expect(disposed, false);
     completer.completeError(Exception());
+    expect(disposed, false);
+    await Future.microtask(() {});
     expect(disposed, true);
 
   });
