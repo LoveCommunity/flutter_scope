@@ -1004,5 +1004,52 @@ void main() {
     expect(scopeId, 'abc');
 
   });
+
+  testWidgets('`context.scope` throw error if there is no `FlutterScope` above', (tester) async {
+
+    await tester.pumpWidget(
+      Builder(builder: (context) {
+        final _ = context.scope;
+        return Container();
+      }),
+    );
+
+    expect(
+      tester.takeException(),
+      isAssertionError
+        .having(
+          (error) => '$error',
+          'description',
+          contains('There is no scope accociated with context'),
+        ),
+    );
+
+  });
+
+  testWidgets('`context.scope` return scope if there is `FlutterScope` above', (tester) async {
+
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope.scopeEqual(
+        scopeEqual: (_) => Scope.root([]),
+        builder: (_, asyncScope) {
+          switch (asyncScope.status) {
+            case AsyncStatus.loaded:
+              return Builder(builder: (context) {
+                scope = context.scope;
+                return Container();
+              });
+            default:
+              return Container();
+          }
+        },
+      ),
+    );
+
+    expect(scope, isNotNull);
+
+  });
+
 }
 
