@@ -190,5 +190,9 @@ extension BuildContextScopeX on BuildContext {
   Scope? get scopeOrNull {
     return FlutterScope.maybeOf(this);
   }
+
+  Scope get scope {
+    return FlutterScope.of(this);
+  }
 }
 
