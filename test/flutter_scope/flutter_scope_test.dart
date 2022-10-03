@@ -961,5 +961,48 @@ void main() {
 
   });
 
+  testWidgets('`context.scopeOrNull` return null if there is no `FlutterScope` above', (tester) async {
+
+    Scope? scope;
+
+    await tester.pumpWidget(
+      Builder(builder: (context) {
+        scope = context.scopeOrNull;
+        return Container();
+      })
+    );
+
+    expect(scope, null);
+
+  });
+
+  testWidgets('`context.scopeOrNull` return scope if there is `FlutterScope` above', (tester) async {
+
+    Scope? scope;
+
+    await tester.pumpWidget(
+      FlutterScope.scopeEqual(
+        scopeEqual: (_) => Scope.root([
+          Final<String>(name: 'scopeId', equal: (_) => 'abc'),
+        ]),
+        builder: (_, asyncScope) {
+          switch (asyncScope.status) {
+            case AsyncStatus.loaded:
+              return Builder(builder: (context) {
+                scope = context.scopeOrNull;
+                return Container();
+              });
+            default:
+              return Container();
+          }
+        },
+      ),
+    );
+
+    expect(scope, isNotNull);
+    final scopeId = scope?.get<String>(name: 'scopeId');
+    expect(scopeId, 'abc');
+
+  });
 }
 
