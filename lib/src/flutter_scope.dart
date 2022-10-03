@@ -185,3 +185,10 @@ class _InheritedScope extends InheritedWidget {
   }
 }
 
+extension BuildContextScopeX on BuildContext {
+
+  Scope? get scopeOrNull {
+    return FlutterScope.maybeOf(this);
+  }
+}
+
