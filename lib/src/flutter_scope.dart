@@ -65,6 +65,12 @@ class FlutterScope extends StatefulWidget {
     return inherited?.scope;
   }
 
+  static Scope of(BuildContext context) {
+    final scope = FlutterScope.maybeOf(context);
+    assert(scope != null, 'There is no scope accociated with context: $context');
+    return scope!;
+  }
+
   @override
   FlutterScopeState createState() => FlutterScopeState();
 }
