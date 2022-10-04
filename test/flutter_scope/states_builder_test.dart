@@ -108,4 +108,120 @@ void main() {
 
   });
 
+  testWidgets('`StatesBuilder.defaultConstructor` assign states success', (tester) async {
+
+    final List<String> recorded = [];
+
+    final subject = ValueSubject<String>('a');
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<States<String>>(equal: (_) => subject.asStates()),
+        ],
+        child: StatesBuilder<String>(
+          builder: (context, state) {
+            recorded.add(state);
+            return Container();
+          }
+        ),
+      ),
+    );
+
+    expect(recorded, [
+      'a',
+    ]);
+    
+    subject.value = 'b';
+    await tester.pump();
+
+    expect(recorded, [
+      'a',
+      'b',
+    ]);
+
+    subject.dispose();
+
+  });
+
+  testWidgets('`StatesBuilder.defaultConstructor` assign states success with name', (tester) async {
+ 
+    final List<String> recorded = [];
+
+    final subject = ValueSubject<String>('a');
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<States<String>>(name: 'states', equal: (_) => subject.asStates()),
+        ],
+        child: StatesBuilder<String>(
+          name: 'states',
+          builder: (context, state) {
+            recorded.add(state);
+            return Container();
+          }
+        ),
+      ),
+    );
+
+    expect(recorded, [
+      'a',
+    ]);
+    
+    subject.value = 'b';
+    await tester.pump();
+
+    expect(recorded, [
+      'a',
+      'b',
+    ]);
+
+    subject.dispose();
+
+  });
+
+  testWidgets('`StatesBuilder.defaultConstructor` throw error if there is no `FlutterScope` above', (tester) async {
+
+    await tester.pumpWidget(
+      StatesBuilder<String>(
+        builder: (_, __) => Container(),
+      ),
+    );
+
+    expect(
+      tester.takeException(),
+      isAssertionError
+        .having(
+          (error) => '$error',
+          'description',
+          contains('There is no scope accociated with context'),
+        ),
+    );
+
+  });
+
+  testWidgets('`StatesBuilder.defaultConstructor` throw error if value not exposed in scope', (tester) async {
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [],
+        child: StatesBuilder<String>(
+          builder: (_, __) => Container(),
+        ),
+      ),
+    );
+
+    expect(
+      tester.takeException(),
+      isA<ScopeValueNotExposedError<States<String>>>()
+        .having(
+          (error) => '$error',
+          'description',
+          contains('`States<String>` is not exposed in current scope'),
+        ),
+    );
+        
+  });
+
 }
