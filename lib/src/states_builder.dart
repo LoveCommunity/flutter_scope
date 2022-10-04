@@ -29,13 +29,11 @@ class _StatesBuilderState<T> extends State<StatesBuilder<T>> {
 
   late T _currentState;
   late final Disposable _observation;
-  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
     _startObserve();
-    _initialized = true;
   }
 
   @override
@@ -54,13 +52,9 @@ class _StatesBuilderState<T> extends State<StatesBuilder<T>> {
   }
 
   void _setCurrentState(T state) {
-    if (!_initialized) {
+    setState(() {
       _currentState = state;
-    } else {
-      setState(() {
-        _currentState = state;
-      });
-    }
+    });
   }
 
   Widget build(BuildContext context) {
