@@ -2,11 +2,22 @@
 import 'package:flutter/widgets.dart';
 import 'package:dart_scope/dart_scope.dart';
 
+import 'flutter_scope.dart';
 import 'shared.dart';
 
 typedef StateWidgetBuilder<T> = Widget Function(BuildContext context, T state);
 
 class StatesBuilder<T> extends StatefulWidget {
+
+  StatesBuilder({
+    Key? key,
+    Object? name,
+    required StateWidgetBuilder builder,
+  }): this.statesEqual(
+    key: key,
+    statesEqual: (context) => context.scope.get<States<T>>(name: name),
+    builder: builder,
+  );
 
   StatesBuilder.statesEqual({
     Key? key,
