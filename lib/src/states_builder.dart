@@ -12,7 +12,7 @@ class StatesBuilder<T> extends StatefulWidget {
   StatesBuilder({
     Key? key,
     Object? name,
-    required StateWidgetBuilder builder,
+    required StateWidgetBuilder<T> builder,
   }): this.statesEqual(
     key: key,
     statesEqual: (context) => context.scope.get<States<T>>(name: name),
@@ -28,7 +28,7 @@ class StatesBuilder<T> extends StatefulWidget {
   );
 
   final FlutterEqual<States<T>> statesEqual;
-  final StateWidgetBuilder builder;
+  final StateWidgetBuilder<T> builder;
 
   @override
   _StatesBuilderState<T> createState() {

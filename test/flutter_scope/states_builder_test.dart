@@ -87,7 +87,7 @@ void main() {
       });
     });
 
-    expect(invokes, []);
+    expect(invokes, <String>[]);
     await tester.pumpWidget(
       StatesBuilder<String>.statesEqual(
         statesEqual: (_) => states,
