@@ -205,7 +205,7 @@ void main() {
 
     await tester.pumpWidget(
       FlutterScope(
-        configure: [],
+        configure: const [],
         child: StatesBuilder<String>(
           builder: (_, __) => Container(),
         ),

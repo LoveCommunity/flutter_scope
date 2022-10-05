@@ -19,7 +19,7 @@ class StatesBuilder<T> extends StatefulWidget {
     builder: builder,
   );
 
-  StatesBuilder.statesEqual({
+  const StatesBuilder.statesEqual({
     Key? key,
     required this.statesEqual,
     required this.builder,
@@ -68,6 +68,7 @@ class _StatesBuilderState<T> extends State<StatesBuilder<T>> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return widget.builder(context, _currentState);
   }

@@ -496,7 +496,7 @@ void main() {
 
     await tester.pumpWidget(
       FlutterScope(
-        configure: [],
+        configure: const [],
         child: Builder(builder: (context) {
           scope = FlutterScope.maybeOf(context);
           return Container();
