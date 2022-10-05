@@ -13,6 +13,7 @@ dependencies:
   dart_scope: ^0.1.0-alpha.4
 
 dev_dependencies:
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
   test: ^1.19.5

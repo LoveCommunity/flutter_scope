@@ -47,7 +47,7 @@ class FlutterScope extends StatefulWidget {
   );
 
   @experimental
-  FlutterScope.scopeEqual({
+  const FlutterScope.scopeEqual({
     Key? key,
     required this.scopeEqual,
     this.dispose = true,
@@ -168,7 +168,7 @@ class FlutterScopeState extends State<FlutterScope> {
 
 class _InheritedScope extends InheritedWidget {
 
-  _InheritedScope({
+  const _InheritedScope({
     Key? key,
     required this.scope,
     required Widget child,

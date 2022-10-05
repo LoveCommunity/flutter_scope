@@ -87,7 +87,7 @@ void main() {
       });
     });
 
-    expect(invokes, []);
+    expect(invokes, <String>[]);
     await tester.pumpWidget(
       StatesBuilder<String>.statesEqual(
         statesEqual: (_) => states,
@@ -205,7 +205,7 @@ void main() {
 
     await tester.pumpWidget(
       FlutterScope(
-        configure: [],
+        configure: const [],
         child: StatesBuilder<String>(
           builder: (_, __) => Container(),
         ),
