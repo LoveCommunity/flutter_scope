@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:dart_scope/dart_scope.dart';
+import 'package:typedef_equals/typedef_equals.dart';
 
 import 'flutter_scope.dart';
 import 'shared.dart';
@@ -34,6 +35,26 @@ class StatesBuilder<T> extends StatefulWidget {
   _StatesBuilderState<T> createState() {
     return _StatesBuilderState<T>();
   }
+}
+
+class StatesBuilderSelect<T, R> extends StatesBuilder<R> {
+
+  StatesBuilderSelect({
+    Key? key,
+    Object? name,
+    required R Function(T state) select,
+    Equals<R>? equals,
+    required StateWidgetBuilder<R> builder,
+  }): super.statesEqual(
+    key: key,
+    statesEqual: (context) => context.scope
+      .get<States<T>>(name: name)
+      .select<R>(
+        select,
+        equals: equals,
+      ),
+    builder: builder,
+  );
 }
 
 class _StatesBuilderState<T> extends State<StatesBuilder<T>> {
