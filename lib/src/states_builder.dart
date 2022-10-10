@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:dart_scope/dart_scope.dart';
 import 'package:typedef_equals/typedef_equals.dart';
 
-import 'flutter_scope.dart';
 import 'shared.dart';
 
 typedef StateWidgetBuilder<T> = Widget Function(BuildContext context, T state);
@@ -16,7 +15,9 @@ class StatesBuilder<T> extends StatefulWidget {
     required StateWidgetBuilder<T> builder,
   }): this.statesEqual(
     key: key,
-    statesEqual: (context) => context.scope.get<States<T>>(name: name),
+    statesEqual: contextGetStates<T>(
+      name: name
+    ),
     builder: builder,
   );
 
@@ -47,12 +48,11 @@ class StatesBuilderSelect<T, R> extends StatesBuilder<R> {
     required StateWidgetBuilder<R> builder,
   }): super.statesEqual(
     key: key,
-    statesEqual: (context) => context.scope
-      .get<States<T>>(name: name)
-      .select<R>(
-        select,
-        equals: equals,
-      ),
+    statesEqual: contextSelectStates<T, R>(
+      name: name,
+      select: select,
+      equals: equals,
+    ),
     builder: builder,
   );
 }
