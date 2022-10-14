@@ -173,5 +173,202 @@ void main() {
     ]);
 
   });
+ 
+  testWidgets('`StatesListener.defaultConstructor` resolve states success', (tester) async {
+
+    final List<String> recorded = [];
+
+    final subject = ValueSubject<String>('a');
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<States<String>>(equal: (_) => subject.asStates()),
+        ],
+        child: StatesListener<String>(
+          onData: (context, state) {
+            recorded.add(state);
+          },
+          child: Container(),
+        ),
+      ),
+    );
+
+    expect(recorded, <String>[]);
+
+    subject.value = 'b';
+    await tester.pump();
+
+    expect(recorded, [
+      'b',
+    ]);
+
+    subject.dispose();
+
+  });
+
+  testWidgets('`StatesListener.defaultConstructor` resolve states success with name', (tester) async {
+
+    final List<String> recorded = [];
+
+    final subject = ValueSubject<String>('a');
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<States<String>>(name: 'states', equal: (_) => subject.asStates()),
+        ],
+        child: StatesListener<String>(
+          name: 'states',
+          onData: (context, state) {
+            recorded.add(state);
+          },
+          child: Container(),
+        ),
+      ),
+    );
+
+    expect(recorded, <String>[]);
+
+    subject.value = 'b';
+    await tester.pump();
+
+    expect(recorded, [
+      'b',
+    ]);
+
+    subject.dispose();
+
+  });
+
+  testWidgets('`StatesListener.defaultConstructor` throw error if there is no `FlutterScope` above', (tester) async {
+
+    await tester.pumpWidget(
+      StatesListener<String>(
+        onData: (_, __) {},
+        child: Container(),
+      ),
+    );
+
+    expect(
+      tester.takeException(),
+      isAssertionError
+        .having(
+          (error) => '$error',
+          'description',
+          contains('There is no scope accociated with context'),
+        ),
+    );
+
+  });
+
+  testWidgets('`StatesListener.defaultConstructor` throw error if value not exposed in scope', (tester) async {
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: const [],
+        child: StatesListener<String>(
+          onData: (_, __) {},
+          child: Container(),
+        ),
+      ),
+    );
+    
+    expect(
+      tester.takeException(),
+      isA<ScopeValueNotExposedError<States<String>>>()
+        .having(
+          (error) => '$error',
+          'description',
+          contains('`States<String>` is not exposed in current scope'),
+        ),
+    );
+
+  });
+
+  testWidgets('`StatesListener.defaultConstructor` skip initial state if `skipInitialState` is omitted', (tester) async {
+
+    final List<String> recorded = [];
+
+    final States<String> states = States((setState) {
+      setState('a');
+      return Disposable.empty;
+    });
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<States<String>>(equal: (_) => states),
+        ],
+        child: StatesListener<String>(
+          onData: (context, state) {
+            recorded.add(state);
+          },
+          child: Container(),
+        ),
+      ),
+    );
+
+    expect(recorded, <String>[]);
+
+  });
+
+  testWidgets('`StatesListener.defaultConstructor` skip initial state if `skipInitialState` is true', (tester) async {
+ 
+    final List<String> recorded = [];
+
+    final States<String> states = States((setState) {
+      setState('a');
+      return Disposable.empty;
+    });
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<States<String>>(equal: (_) => states),
+        ],
+        child: StatesListener<String>(
+          skipInitialState: true,
+          onData: (context, state) {
+            recorded.add(state);
+          },
+          child: Container(),
+        ),
+      ),
+    );
+
+    expect(recorded, <String>[]);
+
+ });
+
+  testWidgets('`StatesListener.defaultConstructor` will not skip initial state if `skipInitialState` is false', (tester) async {
+  
+    final List<String> recorded = [];
+
+    final States<String> states = States((setState) {
+      setState('a');
+      return Disposable.empty;
+    });
+
+    await tester.pumpWidget(
+      FlutterScope(
+        configure: [
+          Final<States<String>>(equal: (_) => states),
+        ],
+        child: StatesListener<String>(
+          skipInitialState: false,
+          onData: (context, state) {
+            recorded.add(state);
+          },
+          child: Container(),
+        ),
+      ),
+    );
+
+    expect(recorded, [
+      'a',
+    ]);
+
+ });
 
 }
