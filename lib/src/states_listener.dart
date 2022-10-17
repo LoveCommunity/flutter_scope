@@ -8,6 +8,22 @@ typedef FlutterOnData<T> = void Function(BuildContext context, T data);
 
 class StatesListener<T> extends StatefulWidget {
 
+  StatesListener({
+    Key? key,
+    Object? name,
+    bool skipInitialState = true,
+    required FlutterOnData<T> onData,
+    required Widget child,
+  }): this.statesEqual(
+    key: key,
+    statesEqual: contextGetStates<T>(
+      name: name,
+    ),
+    skipInitialState: skipInitialState,
+    onData: onData,
+    child: child,
+  );
+
   const StatesListener.statesEqual({
     Key? key,
     required this.statesEqual,
