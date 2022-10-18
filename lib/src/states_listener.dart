@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:dart_scope/dart_scope.dart';
+import 'package:typedef_equals/typedef_equals.dart';
 
 import 'shared.dart';
 
@@ -43,6 +44,29 @@ class StatesListener<T> extends StatefulWidget {
   _StatesListenerState<T> createState() {
     return _StatesListenerState<T>();
   }
+}
+
+class StatesListenerSelect<T, R> extends StatesListener<R> {
+
+  StatesListenerSelect({
+    Key? key,
+    Object? name,
+    required R Function(T state) select,
+    Equals<R>? equals,
+    bool skipInitialState = true,
+    required FlutterOnData<R> onData,
+    required Widget child,
+  }): super.statesEqual(
+    key: key,
+    statesEqual: contextSelectStates<T, R>(
+      name: name,
+      select: select,
+      equals: equals,
+    ),
+    skipInitialState: skipInitialState,
+    onData: onData,
+    child: child,
+  );
 }
 
 class _StatesListenerState<T> extends State<StatesListener<T>> {
