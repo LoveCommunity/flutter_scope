@@ -1,12 +1,15 @@
 
+import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dart_scope/dart_scope.dart';
 import 'package:typedef_equals/typedef_equals.dart';
 
 import 'shared.dart';
 
+@experimental
 typedef FlutterOnData<T> = void Function(BuildContext context, T data);
 
+@experimental
 class StatesListener<T> extends StatefulWidget {
 
   StatesListener({
@@ -46,6 +49,7 @@ class StatesListener<T> extends StatefulWidget {
   }
 }
 
+@experimental
 class StatesListenerSelect<T, R> extends StatesListener<R> {
 
   StatesListenerSelect({
