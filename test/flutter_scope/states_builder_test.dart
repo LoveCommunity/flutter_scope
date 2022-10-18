@@ -108,7 +108,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilder.defaultConstructor` assign states success', (tester) async {
+  testWidgets('`StatesBuilder.defaultConstructor` resolve states success', (tester) async {
 
     final List<String> recorded = [];
 
@@ -144,7 +144,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilder.defaultConstructor` assign states success with name', (tester) async {
+  testWidgets('`StatesBuilder.defaultConstructor` resolve states success with name', (tester) async {
  
     final List<String> recorded = [];
 
@@ -201,7 +201,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilder.defaultConstructor` throw error if value not exposed in scope', (tester) async {
+  testWidgets('`StatesBuilder.defaultConstructor` throw error if states not exposed in scope', (tester) async {
 
     await tester.pumpWidget(
       FlutterScope(
