@@ -76,14 +76,14 @@ class _StatesBuilderState<T> extends State<StatesBuilder<T>> {
 
   void _startObserve() {
     final States<T> states = widget.statesEqual(context);
-    _observation = states.observe(_setCurrentState);
+    _observation = states.observe(_onData);
   }
 
   void _stopObserve() {
     _observation.dispose();
   }
 
-  void _setCurrentState(T state) {
+  void _onData(T state) {
     setState(() {
       _currentState = state;
     });
