@@ -262,7 +262,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener.defaultConstructor` throw error if value not exposed in scope', (tester) async {
+  testWidgets('`StatesListener.defaultConstructor` throw error if states not exposed in scope', (tester) async {
 
     await tester.pumpWidget(
       FlutterScope(
