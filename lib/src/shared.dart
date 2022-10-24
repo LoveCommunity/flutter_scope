@@ -2,7 +2,6 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dart_scope/dart_scope.dart';
-import 'package:typedef_equals/typedef_equals.dart';
 
 import 'flutter_scope.dart';
 
