@@ -2,7 +2,6 @@
 import 'package:test/test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_scope/flutter_scope.dart';
-import 'package:dart_scope/dart_scope.dart';
 
 void main() {
 
