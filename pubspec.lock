@@ -98,14 +98,14 @@ packages:
       name: dart_scope
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0-alpha.4"
+    version: "0.1.0-alpha.5"
   disposal:
     dependency: transitive
     description:
       name: disposal
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0-alpha.3"
+    version: "0.1.0-alpha.4"
   fake_async:
     dependency: transitive
     description:
