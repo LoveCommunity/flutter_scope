@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_scope/flutter_scope.dart';
-import 'package:dart_scope/dart_scope.dart';
 
 void main() {
 
