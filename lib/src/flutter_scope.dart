@@ -70,7 +70,7 @@ class FlutterScope extends StatefulWidget {
   }
 
   @override
-  FlutterScopeState createState() => FlutterScopeState();
+  _FlutterScopeState createState() => _FlutterScopeState();
 }
 
 FlutterScopeEqual _scopeEqual(Scope? parentScope, List<Configurable> configure) {
@@ -94,7 +94,7 @@ AsyncScopeWidgetBuilder _defaultConsctructBuilder(Widget child) {
   };
 }
 
-class FlutterScopeState extends State<FlutterScope> {
+class _FlutterScopeState extends State<FlutterScope> {
 
   late Async<Scope> _asyncScope;
 
