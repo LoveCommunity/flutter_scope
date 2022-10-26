@@ -21,7 +21,7 @@ export 'package:dart_scope/dart_scope.dart'
     Publisher,
     Replayer,
     Subject,
-    ValueSubject,
+    Variable,
     AsyncStatus,
     Async,
     FutureOr,

@@ -9,7 +9,7 @@ void main() {
   
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       StatesListener<String>.statesEqual(
@@ -38,7 +38,7 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
@@ -177,7 +177,7 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
@@ -210,7 +210,7 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
@@ -374,7 +374,7 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
@@ -407,7 +407,7 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
@@ -488,7 +488,7 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
@@ -531,7 +531,7 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final subject = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
