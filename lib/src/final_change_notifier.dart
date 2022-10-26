@@ -31,7 +31,7 @@ States<T> _changeNotifierToStates<T extends ChangeNotifier>(T notifier) {
   });
 }
 
-ValueDispose<T>? _superDispose<T extends ChangeNotifier>(bool dispose) {
+DisposeValue<T>? _superDispose<T extends ChangeNotifier>(bool dispose) {
   return dispose 
     ? (value) => value.dispose()
     : null;
