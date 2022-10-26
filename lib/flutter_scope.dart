@@ -18,7 +18,7 @@ export 'package:dart_scope/dart_scope.dart'
     ObservableX,
     OnData,
     Observer,
-    PublishSubject,
+    Publisher,
     ReplaySubject,
     Subject,
     ValueSubject,
