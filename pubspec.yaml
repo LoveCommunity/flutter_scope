@@ -2,6 +2,7 @@
 name: flutter_scope
 version: 0.1.0-alpha.1
 homepage: https://github.com/LoveCommunity/flutter_scope
+description: A declarative dependency injection library which use dart syntax and flutter style
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
