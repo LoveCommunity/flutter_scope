@@ -19,7 +19,7 @@ export 'package:dart_scope/dart_scope.dart'
     OnData,
     Observer,
     Publisher,
-    ReplaySubject,
+    Replayer,
     Subject,
     ValueSubject,
     AsyncStatus,
