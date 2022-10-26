@@ -1,4 +1,4 @@
-# flutter_socpe
+# flutter_scope
 
 [![Build Status](https://github.com/LoveCommunity/flutter_scope/workflows/Tests/badge.svg)](https://github.com/LoveCommunity/flutter_scope/actions/workflows/tests.yaml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/LoveCommunity/flutter_scope/main.svg)](https://codecov.io/gh/LoveCommunity/flutter_scope) 

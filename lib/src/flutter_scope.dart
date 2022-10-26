@@ -17,7 +17,7 @@ class FlutterScope extends StatefulWidget {
     key: key,
     scopeEqual: _scopeEqual(parentScope, configure),
     dispose: true,
-    builder: _defaultConsctructBuilder(child),
+    builder: _defaultConstructBuilder(child),
   );
 
   FlutterScope.using({
@@ -65,7 +65,7 @@ class FlutterScope extends StatefulWidget {
 
   static Scope of(BuildContext context) {
     final scope = FlutterScope.maybeOf(context);
-    assert(scope != null, 'There is no scope accociated with context: $context');
+    assert(scope != null, 'There is no scope associated with context: $context');
     return scope!;
   }
 
@@ -80,7 +80,7 @@ FlutterScopeEqual _scopeEqual(Scope? parentScope, List<Configurable> configure) 
   };
 }
 
-AsyncScopeWidgetBuilder _defaultConsctructBuilder(Widget child) {
+AsyncScopeWidgetBuilder _defaultConstructBuilder(Widget child) {
   return (_, asyncScope) {
     assert(
       asyncScope.status != AsyncStatus.error, 
@@ -88,7 +88,7 @@ AsyncScopeWidgetBuilder _defaultConsctructBuilder(Widget child) {
     );
     assert(
       asyncScope.status != AsyncStatus.loading,
-      "`FlutterScope` default construct is for configuring scope synchronounsly, please check if all provided configurables are synchronous. if there should be async configurable consider using `FlutterScope.async`."
+      "`FlutterScope` default construct is for configuring scope synchronously, please check if all provided configurables are synchronous. if there should be async configurable consider using `FlutterScope.async`."
     );
     return child;
   };
