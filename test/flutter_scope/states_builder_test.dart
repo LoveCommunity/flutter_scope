@@ -194,7 +194,7 @@ void main() {
         .having(
           (error) => '$error',
           'description',
-          contains('There is no scope accociated with context'),
+          contains('There is no scope associated with context'),
         ),
     );
 
@@ -418,7 +418,7 @@ void main() {
         .having(
           (error) => '$error',
           'description',
-          contains('There is no scope accociated with context'),
+          contains('There is no scope associated with context'),
         ),
     );
 

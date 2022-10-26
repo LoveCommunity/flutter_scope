@@ -5,7 +5,7 @@ import 'package:flutter_scope/flutter_scope.dart';
 
 void main() {
 
-  testWidgets('`StatesListner.statesEqual` assigned states directly', (tester) async {
+  testWidgets('`StatesListener.statesEqual` assigned states directly', (tester) async {
   
     final List<String> recorded = [];
 
@@ -34,7 +34,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListner.statesEqual` assigned states from scope', (tester) async {
+  testWidgets('`StatesListener.statesEqual` assigned states from scope', (tester) async {
 
     final List<String> recorded = [];
 
@@ -68,7 +68,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListner.statesEqual` skip initial state if `skipInitialState` is omitted', (tester) async {
+  testWidgets('`StatesListener.statesEqual` skip initial state if `skipInitialState` is omitted', (tester) async {
 
     final List<String> invokes = [];
 
@@ -91,7 +91,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListner.statesEqual` skip initial state if `skipInitialState` is true', (tester) async {
+  testWidgets('`StatesListener.statesEqual` skip initial state if `skipInitialState` is true', (tester) async {
  
     final List<String> invokes = [];
 
@@ -115,7 +115,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListner.statesEqual` will not skip initial state if `skipInitialState` is false', (tester) async {
+  testWidgets('`StatesListener.statesEqual` will not skip initial state if `skipInitialState` is false', (tester) async {
  
     final List<String> invokes = [];
 
@@ -141,7 +141,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListner.statesEqual` start observe states when widget been inserted into tree, stop observe states when widget been removed from tree', (tester) async {
+  testWidgets('`StatesListener.statesEqual` start observe states when widget been inserted into tree, stop observe states when widget been removed from tree', (tester) async {
 
     final List<String> invokes = [];
 
@@ -255,7 +255,7 @@ void main() {
         .having(
           (error) => '$error',
           'description',
-          contains('There is no scope accociated with context'),
+          contains('There is no scope associated with context'),
         ),
     );
 
@@ -453,7 +453,7 @@ void main() {
         .having(
           (error) => '$error',
           'description',
-          contains('There is no scope accociated with context'),
+          contains('There is no scope associated with context'),
         ),
     );
 

@@ -439,7 +439,7 @@ void main() {
         .having(
           (error) => '$error',
           'description',
-          contains('There is no scope accociated with context'),
+          contains('There is no scope associated with context'),
         ),
     );
 
@@ -549,13 +549,13 @@ void main() {
         .having(
           (exception) => exception.toString(),
           'description',
-          contains("`FlutterScope` default construct is for configuring scope synchronounsly, please check if all provided configurables are synchronous. if there should be async configurable consider using `FlutterScope.async`."),
+          contains("`FlutterScope` default construct is for configuring scope synchronously, please check if all provided configurables are synchronous. if there should be async configurable consider using `FlutterScope.async`."),
         ),
     );
 
   });
 
-  testWidgets("`FlutterScope.defaultConstructor` nested scope inherit values from implicity parent scope", (tester) async {
+  testWidgets("`FlutterScope.defaultConstructor` nested scope inherit values from implicitly parent scope", (tester) async {
 
     Scope? parent;
     Scope? scope;
@@ -630,7 +630,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` dispose registered resouces when `FlutterScope` is removed from widget tree', (tester) async {
+  testWidgets('`FlutterScope.defaultConstructor` dispose registered resources when `FlutterScope` is removed from widget tree', (tester) async {
 
     bool disposed = false;
 
@@ -676,7 +676,7 @@ void main() {
 
   });
 
-  testWidgets("`FlutterScope.using` won't dispose registered resouces when `FlutterScope` is removed from widget tree", (tester) async {
+  testWidgets("`FlutterScope.using` won't dispose registered resources when `FlutterScope` is removed from widget tree", (tester) async {
 
     bool disposed = false;
 
@@ -791,7 +791,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` nested scope inherit values from implicity parent scope', (tester) async {
+  testWidgets('`FlutterScope.async` nested scope inherit values from implicitly parent scope', (tester) async {
 
     Scope? parent;
     Scope? scope;
@@ -875,7 +875,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` dispose registered resouces when `FlutterScope` is removed from widget tree', (tester) async {
+  testWidgets('`FlutterScope.async` dispose registered resources when `FlutterScope` is removed from widget tree', (tester) async {
     
     bool disposed = false;
 
@@ -902,7 +902,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` defer dispose registered resouces when `FlutterScope` is removed from widget tree and scope is not yet resolved', (tester) async {
+  testWidgets('`FlutterScope.async` defer dispose registered resources when `FlutterScope` is removed from widget tree and scope is not yet resolved', (tester) async {
     
     bool disposed = false;
     final completer = Completer<void>();
@@ -932,7 +932,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` dispose registered resouces when resolve scope failed', (tester) async {
+  testWidgets('`FlutterScope.async` dispose registered resources when resolve scope failed', (tester) async {
 
     bool disposed = false;
     final completer = Completer<void>();
@@ -1019,7 +1019,7 @@ void main() {
         .having(
           (error) => '$error',
           'description',
-          contains('There is no scope accociated with context'),
+          contains('There is no scope associated with context'),
         ),
     );
 
