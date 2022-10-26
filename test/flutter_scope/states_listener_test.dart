@@ -9,11 +9,11 @@ void main() {
   
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       StatesListener<String>.statesEqual(
-        statesEqual: (_) => subject.asStates(),
+        statesEqual: (_) => variable.asStates(),
         onData: (context, state) {
           recorded.add(state);
         },
@@ -23,14 +23,14 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
     await tester.pump();
 
     expect(recorded, [
       'b',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
@@ -38,12 +38,12 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
         configure: [
-          Final<States<String>>(equal: (_) => subject.asStates()),
+          Final<States<String>>(equal: (_) => variable.asStates()),
         ],
         child: StatesListener<String>.statesEqual(
           statesEqual: (context) => FlutterScope.of(context).get(),
@@ -57,14 +57,14 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
     await tester.pump();
 
     expect(recorded, [
       'b',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
@@ -177,12 +177,12 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
         configure: [
-          Final<States<String>>(equal: (_) => subject.asStates()),
+          Final<States<String>>(equal: (_) => variable.asStates()),
         ],
         child: StatesListener<String>(
           onData: (context, state) {
@@ -195,14 +195,14 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
     await tester.pump();
 
     expect(recorded, [
       'b',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
@@ -210,12 +210,12 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
         configure: [
-          Final<States<String>>(name: 'states', equal: (_) => subject.asStates()),
+          Final<States<String>>(name: 'states', equal: (_) => variable.asStates()),
         ],
         child: StatesListener<String>(
           name: 'states',
@@ -229,14 +229,14 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
     await tester.pump();
 
     expect(recorded, [
       'b',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
@@ -374,12 +374,12 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
         configure: [
-          Final<States<String>>(equal: (_) => subject.asStates()),
+          Final<States<String>>(equal: (_) => variable.asStates()),
         ],
         child: StatesListenerSelect<String, String>(
           select: (state) => '1$state',
@@ -393,13 +393,13 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
 
     expect(recorded, [
       '1b',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
@@ -407,12 +407,12 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
         configure: [
-          Final<States<String>>(name: 'states', equal: (_) => subject.asStates()),
+          Final<States<String>>(name: 'states', equal: (_) => variable.asStates()),
         ],
         child: StatesListenerSelect<String, String>(
           name: 'states',
@@ -427,13 +427,13 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
 
     expect(recorded, [
       '1b',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
@@ -488,12 +488,12 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
         configure: [
-          Final<States<String>>(equal: (_) => subject.asStates()),
+          Final<States<String>>(equal: (_) => variable.asStates()),
         ],
         child: StatesListenerSelect<String, String>(
           select: (state) => '1$state',
@@ -507,23 +507,23 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'a';
+    variable.value = 'a';
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
 
     expect(recorded, [
       '1b',
     ]);
 
-    subject.value = 'b';
+    variable.value = 'b';
 
     expect(recorded, [
       '1b',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
@@ -531,12 +531,12 @@ void main() {
 
     final List<String> recorded = [];
 
-    final subject = ValueSubject<String>('a');
+    final variable = Variable<String>('a');
 
     await tester.pumpWidget(
       FlutterScope(
         configure: [
-          Final<States<String>>(equal: (_) => subject.asStates()),
+          Final<States<String>>(equal: (_) => variable.asStates()),
         ],
         child: StatesListenerSelect<String, String>(
           select: (state) => '1$state',
@@ -551,23 +551,23 @@ void main() {
 
     expect(recorded, <String>[]);
 
-    subject.value = 'b';
+    variable.value = 'b';
 
     expect(recorded, <String>[]);
 
-    subject.value = 'aa';
+    variable.value = 'aa';
 
     expect(recorded, [
       '1aa',
     ]);
 
-    subject.value = 'bb';
+    variable.value = 'bb';
 
     expect(recorded, [
       '1aa',
     ]);
 
-    subject.dispose();
+    variable.dispose();
 
   });
 
