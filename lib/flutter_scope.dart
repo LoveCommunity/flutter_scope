@@ -36,7 +36,7 @@ export 'package:dart_scope/dart_scope.dart'
     ConfigurableCompose,
     Final,
     FinalStates,
-    StatesConvertibleExpose,
+    ExposeStatesConvertible,
     FinalStatesConvertible,
     ScopeValueNotExposedError,
     DisposableSink,
