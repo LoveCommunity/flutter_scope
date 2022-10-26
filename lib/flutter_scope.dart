@@ -48,7 +48,7 @@ export 'package:dart_scope/dart_scope.dart'
     ConfigurableScope,
     Scope,
     DisposeValue,
-    ValueExpose,
+    ExposeValue,
     Equal;
 export 'src/final_change_notifier.dart'
   show
