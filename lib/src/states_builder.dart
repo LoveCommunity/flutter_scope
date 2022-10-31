@@ -37,19 +37,19 @@ class StatesBuilder<T> extends StatefulWidget {
   }
 }
 
-class StatesBuilderSelect<T, R> extends StatesBuilder<R> {
+class StatesBuilderConvert<T, R> extends StatesBuilder<R> {
 
-  StatesBuilderSelect({
+  StatesBuilderConvert({
     Key? key,
     Object? name,
-    required R Function(T state) select,
+    required R Function(T state) convert,
     Equals<R>? equals,
     required StateWidgetBuilder<R> builder,
   }): super.statesEqual(
     key: key,
-    statesEqual: contextSelectStates<T, R>(
+    statesEqual: contextConvertStates<T, R>(
       name: name,
-      select: select,
+      convert: convert,
       equals: equals,
     ),
     builder: builder,
