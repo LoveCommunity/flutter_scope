@@ -49,21 +49,21 @@ class StatesListener<T> extends StatefulWidget {
 }
 
 @experimental
-class StatesListenerSelect<T, R> extends StatesListener<R> {
+class StatesListenerConvert<T, R> extends StatesListener<R> {
 
-  StatesListenerSelect({
+  StatesListenerConvert({
     Key? key,
     Object? name,
-    required R Function(T state) select,
+    required R Function(T state) convert,
     Equals<R>? equals,
     bool skipInitialState = true,
     required FlutterOnData<R> onData,
     required Widget child,
   }): super.statesEqual(
     key: key,
-    statesEqual: contextSelectStates<T, R>(
+    statesEqual: contextConvertStates<T, R>(
       name: name,
-      select: select,
+      convert: convert,
       equals: equals,
     ),
     skipInitialState: skipInitialState,

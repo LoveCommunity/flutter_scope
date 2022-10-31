@@ -223,7 +223,7 @@ void main() {
         
   });
 
-  testWidgets('`StatesBuilderSelect` resolve states success', (tester) async {
+  testWidgets('`StatesBuilderConvert` resolve states success', (tester) async {
 
     final List<String> recorded = [];
     
@@ -234,8 +234,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => variable.asStates()),
         ],
-        child: StatesBuilderSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesBuilderConvert<String, String>(
+          convert: (state) => '1$state',
           builder: (context, value) {
             recorded.add(value);
             return Container();
@@ -260,7 +260,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilderSelect` resolve states success with name', (tester) async {
+  testWidgets('`StatesBuilderConvert` resolve states success with name', (tester) async {
  
     final List<String> recorded = [];
     
@@ -271,9 +271,9 @@ void main() {
         configure: [
           Final<States<String>>(name: 'states', equal: (_) => variable.asStates()),
         ],
-        child: StatesBuilderSelect<String, String>(
+        child: StatesBuilderConvert<String, String>(
           name: 'states',
-          select: (state) => '1$state',
+          convert: (state) => '1$state',
           builder: (context, value) {
             recorded.add(value);
             return Container();
@@ -298,7 +298,7 @@ void main() {
 
  });
 
-  testWidgets('`StatesBuilderSelect` using default `equals`', (tester) async {
+  testWidgets('`StatesBuilderConvert` using default `equals`', (tester) async {
 
     final List<String> recorded = [];
     
@@ -309,8 +309,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => variable.asStates()),
         ],
-        child: StatesBuilderSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesBuilderConvert<String, String>(
+          convert: (state) => '1$state',
           builder: (context, value) {
             recorded.add(value);
             return Container();
@@ -350,7 +350,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilderSelect` using custom `equals`', (tester) async {
+  testWidgets('`StatesBuilderConvert` using custom `equals`', (tester) async {
 
     final List<String> recorded = [];
 
@@ -361,8 +361,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => variable.asStates()),
         ],
-        child: StatesBuilderSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesBuilderConvert<String, String>(
+          convert: (state) => '1$state',
           equals: (value1, value2) => value1.length == value2.length,
           builder: (context, value) {
             recorded.add(value);
@@ -403,11 +403,11 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilderSelect` throw error if there is no `FlutterScope` above', (tester) async {
+  testWidgets('`StatesBuilderConvert` throw error if there is no `FlutterScope` above', (tester) async {
     
     await tester.pumpWidget(
-      StatesBuilderSelect<String, String>(
-        select: (state) => '1$state',
+      StatesBuilderConvert<String, String>(
+        convert: (state) => '1$state',
         builder: (_, __) => Container(),
       ),
     );
@@ -424,13 +424,13 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilderSelect` throw error if states not exposed in scope', (tester) async {
+  testWidgets('`StatesBuilderConvert` throw error if states not exposed in scope', (tester) async {
 
     await tester.pumpWidget(
       FlutterScope(
         configure: const [],
-        child: StatesBuilderSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesBuilderConvert<String, String>(
+          convert: (state) => '1$state',
           builder: (_, __) => Container(),
         ),
       ),

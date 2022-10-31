@@ -370,7 +370,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` resolve states success', (tester) async {
+  testWidgets('`StatesListenerConvert` resolve states success', (tester) async {
 
     final List<String> recorded = [];
 
@@ -381,8 +381,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => variable.asStates()),
         ],
-        child: StatesListenerSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesListenerConvert<String, String>(
+          convert: (state) => '1$state',
           onData: (context, state) {
             recorded.add(state);
           },
@@ -403,7 +403,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` resolve states success with name', (tester) async {
+  testWidgets('`StatesListenerConvert` resolve states success with name', (tester) async {
 
     final List<String> recorded = [];
 
@@ -414,9 +414,9 @@ void main() {
         configure: [
           Final<States<String>>(name: 'states', equal: (_) => variable.asStates()),
         ],
-        child: StatesListenerSelect<String, String>(
+        child: StatesListenerConvert<String, String>(
           name: 'states',
-          select: (state) => '1$state',
+          convert: (state) => '1$state',
           onData: (context, state) {
             recorded.add(state);
           },
@@ -437,11 +437,11 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` throw error if there is no `FlutterScope` above', (tester) async {
+  testWidgets('`StatesListenerConvert` throw error if there is no `FlutterScope` above', (tester) async {
 
     await tester.pumpWidget(
-      StatesListenerSelect<String, String>(
-        select: (state) => '1$state',
+      StatesListenerConvert<String, String>(
+        convert: (state) => '1$state',
         onData: (_, __) {},
         child: Container(),
       ),
@@ -459,13 +459,13 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` throw error if value not exposed in scope', (tester) async {
+  testWidgets('`StatesListenerConvert` throw error if value not exposed in scope', (tester) async {
 
     await tester.pumpWidget(
       FlutterScope(
         configure: const [],
-        child: StatesListenerSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesListenerConvert<String, String>(
+          convert: (state) => '1$state',
           onData: (_, __) {},
           child: Container(),
         ),
@@ -484,7 +484,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` using default `equals`', (tester) async {
+  testWidgets('`StatesListenerConvert` using default `equals`', (tester) async {
 
     final List<String> recorded = [];
 
@@ -495,8 +495,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => variable.asStates()),
         ],
-        child: StatesListenerSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesListenerConvert<String, String>(
+          convert: (state) => '1$state',
           onData: (context, state) {
             recorded.add(state);
           },
@@ -527,7 +527,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` using custom `equals`', (tester) async {
+  testWidgets('`StatesListenerConvert` using custom `equals`', (tester) async {
 
     final List<String> recorded = [];
 
@@ -538,8 +538,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => variable.asStates()),
         ],
-        child: StatesListenerSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesListenerConvert<String, String>(
+          convert: (state) => '1$state',
           equals: (value1, value2) => value1.length == value2.length,
           onData: (context, state) {
             recorded.add(state);
@@ -571,7 +571,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` skip initial state if `skipInitialState` is omitted', (tester) async {
+  testWidgets('`StatesListenerConvert` skip initial state if `skipInitialState` is omitted', (tester) async {
 
     final List<String> recorded = [];
 
@@ -585,8 +585,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => states),
         ],
-        child: StatesListenerSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesListenerConvert<String, String>(
+          convert: (state) => '1$state',
           onData: (context, state) {
             recorded.add(state);
           },
@@ -599,7 +599,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` skip initial state if `skipInitialState` is true', (tester) async {
+  testWidgets('`StatesListenerConvert` skip initial state if `skipInitialState` is true', (tester) async {
 
     final List<String> recorded = [];
 
@@ -613,8 +613,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => states),
         ],
-        child: StatesListenerSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesListenerConvert<String, String>(
+          convert: (state) => '1$state',
           skipInitialState: true,
           onData: (context, state) {
             recorded.add(state);
@@ -628,7 +628,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListenerSelect` will not skip initial state if `skipInitialState` is false', (tester) async {
+  testWidgets('`StatesListenerConvert` will not skip initial state if `skipInitialState` is false', (tester) async {
 
     final List<String> recorded = [];
 
@@ -642,8 +642,8 @@ void main() {
         configure: [
           Final<States<String>>(equal: (_) => states),
         ],
-        child: StatesListenerSelect<String, String>(
-          select: (state) => '1$state',
+        child: StatesListenerConvert<String, String>(
+          convert: (state) => '1$state',
           skipInitialState: false,
           onData: (context, state) {
             recorded.add(state);

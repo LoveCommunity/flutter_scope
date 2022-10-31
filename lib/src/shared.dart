@@ -16,15 +16,15 @@ FlutterEqual<States<T>> contextGetStates<T>({
 }
 
 @internal
-FlutterEqual<States<R>> contextSelectStates<T, R>({ 
+FlutterEqual<States<R>> contextConvertStates<T, R>({ 
   required Object? name,
-  required R Function(T state) select,
+  required R Function(T state) convert,
   required Equals<R>? equals,
 }) {
   return (context) => context.scope
     .get<States<T>>(name: name)
     .convert<R>(
-      select,
+      convert,
       equals: equals,
     );
 }

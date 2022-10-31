@@ -69,10 +69,10 @@ export 'src/states_builder.dart'
   show
     StateWidgetBuilder,
     StatesBuilder,
-    StatesBuilderSelect;
+    StatesBuilderConvert;
 export 'src/states_listener.dart'
   show
     FlutterOnData,
     StatesListener,
-    StatesListenerSelect;
+    StatesListenerConvert;
 
