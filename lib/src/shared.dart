@@ -23,7 +23,7 @@ FlutterEqual<States<R>> contextSelectStates<T, R>({
 }) {
   return (context) => context.scope
     .get<States<T>>(name: name)
-    .select<R>(
+    .convert<R>(
       select,
       equals: equals,
     );
