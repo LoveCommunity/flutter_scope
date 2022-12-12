@@ -2,7 +2,8 @@
 
 ```
 .
-└── counter       // an application that records the count of button presses.
+├── counter       // an application that records the count of button presses.
+└── todo          // an todo application
 ```
 
 ## counter example preview
