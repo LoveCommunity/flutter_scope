@@ -12,7 +12,7 @@ _TestTodo _testTodo(TodoFilter filter) {
   } 
 }
 
-List<Todo> filterTodos(List<Todo> todos, TodoFilter filter) {
+List<Todo> filteredTodos(List<Todo> todos, TodoFilter filter) {
   final test = _testTodo(filter);
   return todos
     .where(test)
@@ -25,5 +25,5 @@ States<List<Todo>> filteredTodosStates({
 }) => States.combine2(
   states1: todosStates,
   states2: filterStates,
-  combiner: filterTodos,
+  combiner: filteredTodos,
 );

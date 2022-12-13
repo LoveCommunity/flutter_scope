@@ -26,24 +26,24 @@ final List<Todo> _todos = [
 
 void main() {
 
-  test('`filterTodos` using `TodoFilter.all`', () {
-    final it = filterTodos(_todos, TodoFilter.all);
-    expect(it, [
+  test('`filteredTodos` using `TodoFilter.all`', () {
+    final todos = filteredTodos(_todos, TodoFilter.all);
+    expect(todos, [
       _uncompletedTodo,
       _completedTodo,
     ]);
   });
 
   test('`filteredTodos` using `TodoFilter.completed`', () {
-    final it = filterTodos(_todos, TodoFilter.completed);
-    expect(it, [
+    final todos = filteredTodos(_todos, TodoFilter.completed);
+    expect(todos, [
       _completedTodo
     ]);
   });
 
   test('`filteredTodos` using `TodoFilter.uncompleted`', () {
-    final it = filterTodos(_todos, TodoFilter.uncompleted);
-    expect(it, [
+    final todos = filteredTodos(_todos, TodoFilter.uncompleted);
+    expect(todos, [
       _uncompletedTodo
     ]);
   });
