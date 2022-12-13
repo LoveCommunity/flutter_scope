@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_scope/flutter_scope.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:todo/dart/filtered_todos.dart';
+import 'package:todo/dart/filtered_todos_states.dart';
 import 'package:todo/dart/todo.dart';
 import 'package:todo/dart/todo_filter.dart';
 import 'package:todo/dart/todo_filter_notifier.dart';
@@ -164,7 +164,7 @@ void main() {
               equal: (_) => TodoFilterNotifier(),
             ),
             FinalStates<List<Todo>>(
-              equal: (scope) => filteredTodos(
+              equal: (scope) => filteredTodosStates(
                 todosStates: scope.get<States<TodosState>>()
                   .convert((state) => state.todos.values.toList()),
                 filterStates: scope.get(),

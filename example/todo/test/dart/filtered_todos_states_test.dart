@@ -1,6 +1,6 @@
 import 'package:flutter_scope/flutter_scope.dart';
 import 'package:test/test.dart';
-import 'package:todo/dart/filtered_todos.dart';
+import 'package:todo/dart/filtered_todos_states.dart';
 import 'package:todo/dart/todo.dart';
 import 'package:todo/dart/todo_filter.dart';
 
@@ -48,14 +48,14 @@ void main() {
     ]);
   });
 
-  test('`filteredTodos` common usage', () {
+  test('`filteredTodosStates` common usage', () {
     
     final List<List<Todo>> recorded = [];
 
     final todos = Variable(_todos);
     final filter = Variable(TodoFilter.all);
 
-    final states = filteredTodos(
+    final states = filteredTodosStates(
       todosStates: todos.asStates(),
       filterStates: filter.asStates(),
     );

@@ -5,7 +5,7 @@ import '../dart/todos_notifier.dart';
 import '../dart/todo.dart';
 import '../dart/todo_filter_notifier.dart';
 import '../dart/todo_filter.dart';
-import '../dart/filtered_todos.dart';
+import '../dart/filtered_todos_states.dart';
 import 'my_navigator.dart';
 import 'todos_page.dart';
 
@@ -34,7 +34,7 @@ class AppScope extends FlutterScope {
         equal: (_) => TodoFilterNotifier(),
       ),
       FinalStates<List<Todo>>(
-        equal: (scope) => filteredTodos(
+        equal: (scope) => filteredTodosStates(
           todosStates: scope.get<States<TodosState>>()
             .convert((state) => state.todos.values.toList()),
           filterStates: scope.get(),

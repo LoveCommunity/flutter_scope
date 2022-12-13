@@ -19,7 +19,7 @@ List<Todo> filterTodos(List<Todo> todos, TodoFilter filter) {
     .toList();
 }
 
-States<List<Todo>> filteredTodos({
+States<List<Todo>> filteredTodosStates({
   required States<List<Todo>> todosStates,
   required States<TodoFilter> filterStates,
 }) => States.combine2(
