@@ -38,15 +38,15 @@ class TodosPage extends StatelessWidget {
 }
 
 class TodosView extends StatelessWidget {
-  const TodosView({ 
-    Key? key,
+  const TodosView({
+    super.key,
     required this.todoFilterStates,
     required this.todosStates,
     required this.onTodoFilterChanged,
     required this.onTodoCompleteChanged,
     required this.onTodoDismissed,
     required this.onAddTodoPressed,
-  }) : super(key: key);
+  });
 
   final States<TodoFilter> todoFilterStates;
   final States<List<Todo>> todosStates;
@@ -107,11 +107,11 @@ class TodosView extends StatelessWidget {
 
 class TodoTile extends StatelessWidget {
   const TodoTile({
-    Key? key,
+    super.key,
     required this.todo,
     this.onCompletedChanged,
     this.onDismissed,
-  }) : super(key: key);
+  });
 
   final Todo todo;
   final ValueChanged<bool?>? onCompletedChanged;
@@ -147,10 +147,10 @@ class TodoTile extends StatelessWidget {
 
 class TodoFilterButton extends StatelessWidget {
   const TodoFilterButton({
-    Key? key,
+    super.key,
     required this.filter,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   final TodoFilter filter;
   final PopupMenuItemSelected<TodoFilter>? onSelected;

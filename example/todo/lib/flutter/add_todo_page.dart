@@ -6,7 +6,7 @@ import '../dart/add_todo_notifier.dart';
 import '../dart/todo.dart';
 
 class AddTodoPage extends StatelessWidget {
-  const AddTodoPage({ super.key });
+  const AddTodoPage({super.key});
 
   @override
   Widget build(BuildContext context) {

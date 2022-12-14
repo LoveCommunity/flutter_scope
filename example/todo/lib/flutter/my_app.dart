@@ -61,9 +61,9 @@ class MyMaterialApp extends StatelessWidget {
 
 class TodoChangesListener extends StatelessWidget {
   const TodoChangesListener({
-    Key? key,
+    super.key,
     required this.child,
-  }): super(key: key);
+  });
 
   final Widget child;
 
