@@ -1,0 +1,27 @@
+name: todo
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+dependencies:
+  collection: ^1.16.0
+  flutter:
+    sdk: flutter
+  flutter_scope:
+    path: ../../
+  intl: ^0.17.0
+  uuid: ^3.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  test: ^1.21.4
+
+flutter:
+  uses-material-design: true
