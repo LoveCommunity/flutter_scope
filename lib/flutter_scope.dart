@@ -33,7 +33,6 @@ export 'package:dart_scope/dart_scope.dart'
     ConfigureScope,
     Configurable,
     ConfigurableCombine,
-    ConfigurableCompose,
     Final,
     FinalStates,
     ExposeStatesConvertible,
