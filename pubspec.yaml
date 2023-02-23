@@ -13,6 +13,12 @@ dependencies:
   meta: ^1.3.0
   dart_scope: ^0.1.0-beta.1
 
+dependency_overrides:
+  dart_scope:
+    git: 
+      url: "git@github.com:LoveCommunity/dart_scope.dart.git"
+      ref: "experiment/observable/hotreload/equality"
+    
 dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
