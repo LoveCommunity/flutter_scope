@@ -21,18 +21,28 @@ class FinalChangeNotifier<T extends ChangeNotifier> extends FinalStatesConvertib
 }
 
 States<T> _changeNotifierToStates<T extends ChangeNotifier>(T notifier) {
-  return States((setState) {
-    setState(notifier);
-    void listener() => setState(notifier);
-    notifier.addListener(listener);
-    return Disposable(() {
-      notifier.removeListener(listener);
-    });
-  });
+  final observable = _ChangeNotifierAsObservable(instance: notifier);
+  return States.from(observable);
 }
 
 DisposeValue<T>? _superDispose<T extends ChangeNotifier>(bool dispose) {
   return dispose 
     ? (value) => value.dispose()
     : null;
+}
+
+class _ChangeNotifierAsObservable<T extends ChangeNotifier> extends InstanceAsObservable<T, T> {
+  const _ChangeNotifierAsObservable({
+    required T instance,
+  }): super(instance: instance);
+
+  @override
+  Disposable observe(OnData<T> onData) {
+    onData(instance);
+    void listener() => onData(instance);
+    instance.addListener(listener);
+    return Disposable(() {
+      instance.removeListener(listener);
+    });
+  }
 }
