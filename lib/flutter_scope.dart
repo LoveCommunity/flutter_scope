@@ -7,15 +7,29 @@ export 'package:dart_scope/dart_scope.dart'
     VoidCallback,
     Disposable,
     DisposableX,
+    Equality,
     States,
     StatesX,
     HasStates,
     StatesActivated,
     ObservableAsStatesX,
     LatestStateNotReplayError,
+    FallbackObservableEquality,
+    PipeObservableEquality,
+    MultiSourcePipeObservableEquality,
+    InstanceAsObservableEquality,
+    ObservableEqualityFactory,
+    createDeepObservableEquality,
+    observableEqualityFactories,
+    deepObservableEquality,
+    PipeObservable,
+    MultiSourcePipeObservable,
+    InstanceAsObservable,
+    InstanceObservation,
     Observe,
     Observable,
     ObservableX,
+    Observation,
     OnData,
     Observer,
     Publisher,
@@ -64,14 +78,12 @@ export 'src/flutter_scope.dart'
 export 'src/shared.dart' 
   show 
     FlutterEqual;
-export 'src/states_builder.dart'
+export 'src/states_widgets.dart'
   show
+    StatesWidgetBase,
+    StatesWidgetBaseState,
     StateWidgetBuilder,
     StatesBuilder,
-    StatesBuilderConvert;
-export 'src/states_listener.dart'
-  show
     FlutterOnData,
-    StatesListener,
-    StatesListenerConvert;
+    StatesListener;
 
