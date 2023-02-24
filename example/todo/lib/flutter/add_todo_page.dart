@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_scope/flutter_scope.dart';
 
 import '../dart/add_todo_notifier.dart';
-import '../dart/todo.dart';
 
 class AddTodoPage extends StatelessWidget {
   const AddTodoPage({super.key});
@@ -35,8 +34,9 @@ class AddTodoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final addTodoNotifier = context.scope.get<AddTodoNotifier>();
-    return StatesListenerConvert<AddTodoState, Todo?>(
-      convert: (state) => state.todoSubmitted,
+    return StatesListener(
+      states: context.scope.get<States<AddTodoState>>()
+        .convert((AddTodoState state) => state.todoSubmitted),
       onData: (context, todoSubmitted) {
         Navigator.pop(context, todoSubmitted);
       },
@@ -53,8 +53,9 @@ class AddTodoView extends StatelessWidget {
             ),
           ),
         ),
-        floatingActionButton: StatesBuilderConvert<AddTodoState, bool>(
-          convert: (state) => state.isTodoTitleValid,
+        floatingActionButton: StatesBuilder(
+          states: context.scope.get<States<AddTodoState>>()
+            .convert((state) => state.isTodoTitleValid),
           builder: (context, isTodoTitleValid)  => FloatingActionButton(
             onPressed: isTodoTitleValid 
               ? addTodoNotifier.onTodoSubmitted 
@@ -63,7 +64,7 @@ class AddTodoView extends StatelessWidget {
             child: const Icon(Icons.save),
           )
         ),
-      ),
+      ), 
     );
   }
 }

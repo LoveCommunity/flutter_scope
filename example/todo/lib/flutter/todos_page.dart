@@ -61,8 +61,8 @@ class TodosView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Todo'),
         actions: [
-          StatesBuilder<TodoFilter>.statesEqual(
-            statesEqual: (_) => todoFilterStates,
+          StatesBuilder(
+            states: todoFilterStates,
             builder: (context, filter) {
               return TodoFilterButton(
                 filter: filter,
@@ -72,8 +72,8 @@ class TodosView extends StatelessWidget {
           )
         ],
       ),
-      body: StatesBuilder<List<Todo>>.statesEqual(
-        statesEqual: (_) => todosStates,
+      body: StatesBuilder(
+        states: todosStates,
         builder: (context, todos) => Stack(
           fit: StackFit.expand,
           children: [

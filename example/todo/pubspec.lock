@@ -81,10 +81,12 @@ packages:
   dart_scope:
     dependency: transitive
     description:
-      name: dart_scope
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0-alpha.7"
+      path: "."
+      ref: "experiment/observable/hotreload/equality"
+      resolved-ref: "4b7ea8a4812b9a8c43fc81306937acfc9f136ea7"
+      url: "git@github.com:LoveCommunity/dart_scope.dart.git"
+    source: git
+    version: "0.1.0-beta.1"
   disposal:
     dependency: transitive
     description:
