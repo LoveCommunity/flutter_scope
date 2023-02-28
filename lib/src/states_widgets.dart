@@ -9,9 +9,11 @@ import 'flutter_scope.dart';
 abstract class StatesWidgetBase<T> extends StatefulWidget {
   const StatesWidgetBase({ 
     Key? key,
+    this.hotReloadKey,
     this.states,
   }): super(key: key);
 
+  final int? hotReloadKey;
   final States<T>? states;
 
   @override
@@ -42,8 +44,9 @@ abstract class StatesWidgetBaseState<W extends StatesWidgetBase<T>, T> extends S
     super.didUpdateWidget(oldWidget);
     if (kDebugMode) { // enabling hot reload
       final newStates = resolveStates();
-      final statesChanged = !_equality.equals(states!.observable, newStates.observable);
-      if (statesChanged) {
+      bool hotReloadKeyChanged() => oldWidget.hotReloadKey != widget.hotReloadKey;
+      bool statesChanged() => !_equality.equals(states!.observable, newStates.observable);
+      if (hotReloadKeyChanged() || statesChanged()) {
         stopObserve();
         startObserve(newStates);
       }
@@ -75,10 +78,12 @@ typedef StateWidgetBuilder<T> = Widget Function(BuildContext context, T state);
 class StatesBuilder<T> extends StatesWidgetBase<T> {
   const StatesBuilder({ 
     Key? key,
+    int? hotReloadKey,
     States<T>? states,
     required this.builder,
   }): super(
     key: key,
+    hotReloadKey: hotReloadKey,
     states: states,
   );
 
@@ -116,12 +121,14 @@ typedef FlutterOnData<T> = void Function(BuildContext context, T data);
 class StatesListener<T> extends StatesWidgetBase<T> {
   const StatesListener({ 
     Key? key,
+    int? hotReloadKey,
     States<T>? states,
     this.skipInitialState = true,
     required this.onData,
     required this.child,
   }) : super(
     key: key,
+    hotReloadKey: hotReloadKey,
     states: states,
   );
 
