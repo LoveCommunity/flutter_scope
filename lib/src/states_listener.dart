@@ -28,14 +28,12 @@ class StatesListener<T> extends StatefulWidget {
   );
 
   const StatesListener.statesEqual({
-    Key? key,
+    super.key,
     required this.statesEqual,
     this.skipInitialState = true,
     required this.onData,
     required this.child,
-  }): super(
-    key: key,
-  );
+  });
 
   final FlutterEqual<States<T>> statesEqual;
   final bool skipInitialState;
@@ -43,32 +41,26 @@ class StatesListener<T> extends StatefulWidget {
   final Widget child;
 
   @override
-  _StatesListenerState<T> createState() {
-    return _StatesListenerState<T>();
-  }
+  createState() => _StatesListenerState<T>();
 }
 
 @experimental
 class StatesListenerConvert<T, R> extends StatesListener<R> {
 
   StatesListenerConvert({
-    Key? key,
+    super.key,
     Object? name,
     required R Function(T state) convert,
     Equals<R>? equals,
-    bool skipInitialState = true,
-    required FlutterOnData<R> onData,
-    required Widget child,
+    super.skipInitialState,
+    required super.onData,
+    required super.child,
   }): super.statesEqual(
-    key: key,
     statesEqual: contextConvertStates<T, R>(
       name: name,
       convert: convert,
       equals: equals,
     ),
-    skipInitialState: skipInitialState,
-    onData: onData,
-    child: child,
   );
 }
 

@@ -46,13 +46,11 @@ class FlutterScope extends StatefulWidget {
 
   @experimental
   const FlutterScope.scopeEqual({
-    Key? key,
+    super.key,
     required this.scopeEqual,
     this.dispose = true,
     required this.builder,
-  }): super(
-    key: key,
-  );
+  });
 
   final FlutterScopeEqual scopeEqual;
   final bool dispose;
@@ -70,7 +68,7 @@ class FlutterScope extends StatefulWidget {
   }
 
   @override
-  _FlutterScopeState createState() => _FlutterScopeState();
+  createState() => _FlutterScopeState();
 }
 
 FlutterScopeEqual _scopeEqual(Scope? parentScope, List<Configurable> configure) {
@@ -167,13 +165,9 @@ class _FlutterScopeState extends State<FlutterScope> {
 class _InheritedScope extends InheritedWidget {
 
   const _InheritedScope({
-    Key? key,
     required this.scope,
-    required Widget child,
-  }): super(
-    key: key,
-    child: child,
-  );
+    required super.child,
+  });
 
   final Scope scope;
 
