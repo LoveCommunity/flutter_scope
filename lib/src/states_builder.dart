@@ -21,12 +21,10 @@ class StatesBuilder<T> extends StatefulWidget {
   );
 
   const StatesBuilder.statesEqual({
-    Key? key,
+    super.key,
     required this.statesEqual,
     required this.builder,
-  }): super(
-    key: key,
-  );
+  });
 
   final FlutterEqual<States<T>> statesEqual;
   final StateWidgetBuilder<T> builder;
@@ -38,19 +36,17 @@ class StatesBuilder<T> extends StatefulWidget {
 class StatesBuilderConvert<T, R> extends StatesBuilder<R> {
 
   StatesBuilderConvert({
-    Key? key,
+    super.key,
     Object? name,
     required R Function(T state) convert,
     Equals<R>? equals,
-    required StateWidgetBuilder<R> builder,
+    required super.builder,
   }): super.statesEqual(
-    key: key,
     statesEqual: contextConvertStates<T, R>(
       name: name,
       convert: convert,
       equals: equals,
     ),
-    builder: builder,
   );
 }
 

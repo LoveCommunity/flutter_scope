@@ -220,7 +220,7 @@ void main() {
 
 class _MockValueNotifier extends ValueNotifier<String> {
 
-  _MockValueNotifier(String initialValue): super(initialValue);
+  _MockValueNotifier(super.initialValue);
 
   bool _disposed = false;
   bool get disposed => _disposed;
