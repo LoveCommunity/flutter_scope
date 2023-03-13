@@ -43,9 +43,7 @@ class StatesListener<T> extends StatefulWidget {
   final Widget child;
 
   @override
-  _StatesListenerState<T> createState() {
-    return _StatesListenerState<T>();
-  }
+  createState() => _StatesListenerState<T>();
 }
 
 @experimental

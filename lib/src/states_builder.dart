@@ -32,9 +32,7 @@ class StatesBuilder<T> extends StatefulWidget {
   final StateWidgetBuilder<T> builder;
 
   @override
-  _StatesBuilderState<T> createState() {
-    return _StatesBuilderState<T>();
-  }
+  createState() => _StatesBuilderState<T>();
 }
 
 class StatesBuilderConvert<T, R> extends StatesBuilder<R> {

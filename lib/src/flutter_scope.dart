@@ -70,7 +70,7 @@ class FlutterScope extends StatefulWidget {
   }
 
   @override
-  _FlutterScopeState createState() => _FlutterScopeState();
+  createState() => _FlutterScopeState();
 }
 
 FlutterScopeEqual _scopeEqual(Scope? parentScope, List<Configurable> configure) {

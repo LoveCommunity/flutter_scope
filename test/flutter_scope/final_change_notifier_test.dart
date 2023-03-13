@@ -92,8 +92,8 @@ void main() {
 
     final List<String> recorded = [];
 
-    final observation = states.observe((_notifier) {
-      recorded.add(_notifier.value);
+    final observation = states.observe((localNotifier) {
+      recorded.add(localNotifier.value);
     });
 
     expect(recorded, [
