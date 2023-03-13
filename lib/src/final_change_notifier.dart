@@ -5,18 +5,15 @@ import 'package:flutter/foundation.dart';
 class FinalChangeNotifier<T extends ChangeNotifier> extends FinalStatesConvertible<T, T> {
 
   FinalChangeNotifier({
-    Object? name,
-    required Equal<T> equal,
+    super.name,
+    required super.equal,
     bool dispose = true,
-    bool lazy = true,
+    super.lazy,
   }): super(
-    name: name,
-    equal: equal,
     statesName: name,
     statesEqual: _changeNotifierToStates,
     expose: null,
     dispose: _superDispose<T>(dispose),
-    lazy: lazy,
   );
 }
 
