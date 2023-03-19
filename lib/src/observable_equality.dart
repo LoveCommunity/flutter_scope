@@ -85,3 +85,31 @@ class MultiSourcePipeObservableEquality<T, R>
     return o is MultiSourcePipeObservable<T, R>;
   }
 }
+
+@internal
+@visibleForTesting
+class InstanceAsObservableEquality<T, R> 
+  implements Equality<InstanceAsObservable<T, R>> {
+
+  const InstanceAsObservableEquality();
+  
+  @override
+  bool equals(InstanceAsObservable<T, R> e1, InstanceAsObservable<T, R> e2) {
+    return identical(e1, e2)
+      || e1.runtimeType == e2.runtimeType
+        && identical(e1.instance, e2.instance);
+  }
+  
+  @override
+  int hash(InstanceAsObservable<T, R> e) {
+    return Object.hash(
+      e.runtimeType,
+      e.instance,
+    );
+  }  
+
+  @override
+  bool isValidKey(Object? o) {
+    return o is InstanceAsObservable<T, R>;
+  }
+}

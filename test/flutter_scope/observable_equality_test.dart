@@ -79,6 +79,14 @@ final _observableZipMapMap2 = _ObservableZip<int, int>(
   ],
 );
 
+final _object1 = Object();
+final _object2 = Object();
+final _anotherObject1AsObservable = _AnotherObjectAsObservable<int>(_object1);
+final _object1AsObservable1 = _ObjectAsObservable<int>(_object1);
+final _object1AsObservable2 = _ObjectAsObservable<int>(_object1);
+final _object2AsObservable1 = _ObjectAsObservable<int>(_object2);
+final _object2AsObservable2 = _ObjectAsObservable<int>(_object2);
+
 void main() {
 
   test('`fallbackObservableEquality.isValidKey` verify objects', () {
@@ -406,6 +414,102 @@ void main() {
     );
 
   });
+
+  test('`instanceAsObservableEquality.isValidKey` verify objects', () {
+
+    const equality = InstanceAsObservableEquality<Object, int>();
+
+    final objects = [
+      true,
+      0,
+      '',
+      Observable<int>((_) => Disposable.empty),
+      Observable<int>((_) => Disposable.empty)
+        .map((it) => it * 2),
+      _ObservableZip<int, int>(
+        sources: [],
+      ),
+      _ObjectAsObservable<bool>(Object()),
+      _ObjectAsObservable<int>(Object()),
+    ];
+
+    final expected = [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+    ];
+
+    expect(
+      objects
+        .map(equality.isValidKey)
+        .toList(),
+      expected,
+    );
+
+  });
+
+  test('`instanceAsObservableEquality.equals` comparing observables for equality', () {
+
+    const equality = InstanceAsObservableEquality<Object, int>();
+
+    final observables = [
+      [_object1AsObservable1, _anotherObject1AsObservable],
+      [_object1AsObservable1, _object1AsObservable2],
+      [_object1AsObservable1, _object2AsObservable2],
+      [_object2AsObservable1, _object2AsObservable2],
+    ];
+
+    final expected = [
+      false,
+      true,
+      false,
+      true,
+    ];
+
+    expect(
+      observables
+        .map((list) {
+          final observable1 = list[0];
+          final observable2 = list[1];
+          return equality.equals(observable1, observable2);
+        })
+        .toList(),
+      expected,
+    );
+
+  });
+
+  test('`instanceAsObservableEquality.hash` return same value when observables are equal', () {
+
+    const equality = InstanceAsObservableEquality<Object, int>();
+
+    final observables = [
+      [_object1AsObservable1, _object1AsObservable2],
+      [_object2AsObservable1, _object2AsObservable2],
+    ];
+
+    final expected = [
+      true,
+      true,
+    ];
+
+    expect(
+      observables
+        .map((list) {
+          final observable1 = list[0];
+          final observable2 = list[1]; 
+          return equality.hash(observable1) == equality.hash(observable2);
+        })
+        .toList(),
+      expected,
+    );
+
+  });
 }
 
 class _ObservableZip<T, R> extends MultiSourcePipeObservable<T, R> {
@@ -413,6 +517,24 @@ class _ObservableZip<T, R> extends MultiSourcePipeObservable<T, R> {
   _ObservableZip({
     required super.sources,
   });
+
+  @override
+  Disposable observe(OnData<R> onData) {
+    throw UnimplementedError();
+  }
+}
+
+class _ObjectAsObservable<R> extends InstanceAsObservable<Object, R> {
+  _ObjectAsObservable(super.instance);
+
+  @override
+  Disposable observe(OnData<R> onData) {
+    throw UnimplementedError();
+  }
+}
+
+class _AnotherObjectAsObservable<R> extends InstanceAsObservable<Object, R> {
+  _AnotherObjectAsObservable(super.instance);
 
   @override
   Disposable observe(OnData<R> onData) {
