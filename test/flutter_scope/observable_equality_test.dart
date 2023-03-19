@@ -12,6 +12,73 @@ final _observableDistinct2 = _observableCreate2.distinct();
 final _observableMapDistinct1 = _observableMap1.distinct();
 final _observableMapDistinct2 = _observableMap2.distinct();
 
+final _observableCombineEmpty = Observable.combine<int, int>(
+  sources: [],
+  combiner: (items) => items.length,
+);
+final _observableZipEmpty1 = _ObservableZip<int, int>(
+  sources: [],
+);
+final _observableZipEmpty2 = _ObservableZip<int, int>(
+  sources: [],
+);
+final _observableZipCreate1 = _ObservableZip<int, int>(
+  sources: [
+    _observableCreate1,
+  ],
+);
+final _observableZipCreate2 = _ObservableZip<int, int>(
+  sources: [
+    _observableCreate2,
+  ],
+);
+final _observableZipMap1 = _ObservableZip<int, int>(
+  sources: [
+    _observableMap1,
+  ],
+);
+final _observableZipMap2 = _ObservableZip<int, int>(
+  sources: [
+    _observableMap2,
+  ],
+);
+final _observableZipCreateCreate1 = _ObservableZip<int, int>(
+  sources: [
+    _observableCreate1,
+    _observableCreate1,
+  ],
+);
+final _observableZipCreateCreate2 = _ObservableZip<int, int>(
+  sources: [
+    _observableCreate2,
+    _observableCreate2,
+  ],
+);
+final _observableZipCreateMap1 = _ObservableZip<int, int>(
+  sources: [
+    _observableCreate1,
+    _observableMap1,
+  ],
+);
+final _observableZipCreateMap2 = _ObservableZip<int, int>(
+  sources: [
+    _observableCreate2,
+    _observableMap2,
+  ],
+);
+final _observableZipMapMap1 = _ObservableZip<int, int>(
+  sources: [
+    _observableMap1,
+    _observableMap1,
+  ],
+);
+final _observableZipMapMap2 = _ObservableZip<int, int>(
+  sources: [
+    _observableMap2,
+    _observableMap2,
+  ],
+);
+
 void main() {
 
   test('`fallbackObservableEquality.isValidKey` verify objects', () {
@@ -204,4 +271,151 @@ void main() {
     );
     
   });
+
+
+  test('`multiSourceObservableEquality.isValidKey` verify objects', () {
+
+    final equality = MultiSourcePipeObservableEquality<int, int>(
+      () => const FallbackObservableEquality<int>()
+    );
+
+    final objects = [
+      true,
+      0,
+      '',
+      Observable<bool>((_) => Disposable.empty),
+      Observable<int>((_) => Disposable.empty),
+      Observable<int>((_) => Disposable.empty)
+        .map((it) => it * 2),
+      _ObservableZip<bool, int>(
+        sources: [],
+      ),
+      _ObservableZip<int, int>(
+        sources: [],
+      ),
+    ];
+
+    final expected = [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+    ];
+
+    expect(
+      objects
+        .map(equality.isValidKey)
+        .toList(),
+      expected,
+    );
+
+  });
+
+  test('`multiSourceObservableEquality.equals` comparing observables for equality', () {
+
+    final equality = MultiSourcePipeObservableEquality<int, int>(
+      () => const FallbackObservableEquality<int>()
+    );
+
+    final observables = [
+      [_observableZipEmpty1, _observableCombineEmpty],
+      [_observableZipEmpty1, _observableZipEmpty2],
+      [_observableZipEmpty1, _observableZipCreate2],
+
+      [_observableZipCreate1, _observableZipCreate2],
+      [_observableZipCreate1, _observableZipMap2],
+      [_observableZipMap1, _observableZipMap2],
+      [_observableZipMap1, _observableZipMapMap2],
+
+      [_observableZipCreateCreate1, _observableZipCreateCreate2],
+      [_observableZipCreateCreate1, _observableZipCreateMap2],
+      [_observableZipCreateCreate1, _observableZipMapMap2],
+      [_observableZipCreateMap1, _observableZipCreateMap2],
+      [_observableZipCreateMap1, _observableZipMapMap2],
+      [_observableZipMapMap1, _observableZipMapMap2],
+    ];
+
+    final expected = [
+      false,
+      true,
+      false,
+
+      true,
+      false,
+      true,
+      false,
+
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+    ];
+    
+    expect(
+      observables
+        .map((list) {
+          final observable1 = list[0] as MultiSourcePipeObservable<int, int>;
+          final observable2 = list[1] as MultiSourcePipeObservable<int, int>;
+          return equality.equals(observable1, observable2);
+        })
+        .toList(),
+      expected,
+    ); 
+
+  });
+
+  test('`multiSourceObservableEquality.hash` return same value when observables are equal', () {
+
+    final equality = MultiSourcePipeObservableEquality<int, int>(
+      () => const FallbackObservableEquality<int>()
+    );
+
+    final observables = [
+      [_observableZipEmpty1, _observableZipEmpty2],
+      [_observableZipCreate1, _observableZipCreate2],
+      [_observableZipMap1, _observableZipMap2],
+      [_observableZipCreateCreate1, _observableZipCreateCreate2],
+      [_observableZipCreateMap1, _observableZipCreateMap2],
+      [_observableZipMapMap1, _observableZipMapMap2],
+    ];
+
+    final expected = [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+    ];
+
+    expect(
+      observables
+        .map((list) {
+          final observable1 = list[0];
+          final observable2 = list[1];
+          return equality.hash(observable1) == equality.hash(observable2);
+        })
+        .toList(),
+      expected,
+    );
+
+  });
+}
+
+class _ObservableZip<T, R> extends MultiSourcePipeObservable<T, R> {
+
+  _ObservableZip({
+    required super.sources,
+  });
+
+  @override
+  Disposable observe(OnData<R> onData) {
+    throw UnimplementedError();
+  }
 }

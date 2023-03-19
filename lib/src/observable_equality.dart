@@ -54,3 +54,34 @@ class PipeObservableEquality<T, R> implements Equality<PipeObservable<T, R>> {
   }
   
 }
+
+@internal
+@visibleForTesting
+class MultiSourcePipeObservableEquality<T, R> 
+  implements Equality<MultiSourcePipeObservable<T, R>> {
+
+  MultiSourcePipeObservableEquality(this.getObservableEquality);
+  
+  final Getter<Equality<Observable<T>>> getObservableEquality;
+  late final ListEquality<Observable<T>> listEquality = ListEquality(getObservableEquality());
+  
+  @override
+  bool equals(MultiSourcePipeObservable<T, R> e1, MultiSourcePipeObservable<T, R> e2) {
+    return identical(e1, e2)
+      || e1.runtimeType == e2.runtimeType
+        && listEquality.equals(e1.sources, e2.sources);
+  }
+  
+  @override
+  int hash(MultiSourcePipeObservable<T, R> e) {
+    return Object.hash(
+      e.runtimeType,
+      listEquality.hash(e.sources),
+    );
+  }
+  
+  @override
+  bool isValidKey(Object? o) {
+    return o is MultiSourcePipeObservable<T, R>;
+  }
+}
