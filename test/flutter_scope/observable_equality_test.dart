@@ -87,6 +87,64 @@ final _object1AsObservable2 = _ObjectAsObservable<int>(_object1);
 final _object2AsObservable1 = _ObjectAsObservable<int>(_object2);
 final _object2AsObservable2 = _ObjectAsObservable<int>(_object2);
 
+final _complexObservable1 = _ObservableZip<int, int>(
+  sources: [
+    Observable<int>((_) => Disposable.empty)
+      .map((it) => it * 2),
+    _ObjectAsObservable<int>(_object1),
+  ],
+);
+final _complexObservable2 = _ObservableZip<int, int>(
+  sources: [
+    Observable<int>((_) => Disposable.empty)
+      .map((it) => it * 2),
+    _ObjectAsObservable<int>(_object1),
+  ],
+);
+final _changedComplexObservable1 = _ObservableZip<Object, Object>( // generic type changed
+  sources: [
+    Observable<int>((_) => Disposable.empty)
+      .map((it) => it * 2),
+    _ObjectAsObservable<int>(_object1),
+  ],
+);
+final _changedComplexObservable2 = Observable.combine<int, int>( // runtime type changed
+  sources: [
+    Observable<int>((_) => Disposable.empty)
+      .map((it) => it * 2),
+    _ObjectAsObservable<int>(_object1),
+  ],
+  combiner: (items) => items.length,
+);
+final _changedComplexObservable3 = _ObservableZip<int, int>(
+  sources: [
+    _ObjectAsObservable<int>(_object1)  // runtime type changed
+      .map((it) => it * 2),
+    _ObjectAsObservable<int>(_object1),
+  ],
+);
+final _changedComplexObservable4 = _ObservableZip<int, int>(
+  sources: [
+    Observable<int>((_) => Disposable.empty)
+      .distinct(),                      // runtime type changed
+    _ObjectAsObservable<int>(_object1),
+  ],
+);
+final _changedComplexObservable5 = _ObservableZip<int, int>(
+  sources: [
+    Observable<int>((_) => Disposable.empty)
+      .map((it) => it * 2),
+    _ObjectAsObservable<int>(_object2), // object changed
+  ],
+);
+final _changedComplexObservable6 = _ObservableZip<int, int>(
+  sources: [
+    Observable<int>((_) => Disposable.empty)
+      .map((it) => it * 2),
+    _AnotherObjectAsObservable<int>(_object1), // runtime type changed
+  ],
+);
+
 void main() {
 
   test('`fallbackObservableEquality.isValidKey` verify objects', () {
@@ -510,6 +568,146 @@ void main() {
     );
 
   });
+  
+  test('deepObservableEquality.isValidKey verify objects', () {
+
+    final objects = [
+      true,
+      0,
+      '',
+
+      Observable<void>((_) => Disposable.empty),
+      Observable<bool>((_) => Disposable.empty),
+      Observable<int>((_) => Disposable.empty),
+
+      Observable<int>((_) => Disposable.empty)
+        .map((it) => it * 2),
+      _ObservableZip<bool, int>(
+        sources: [],
+      ),
+      _ObservableZip<int, int>(
+        sources: [],
+      ),
+
+      _ObjectAsObservable<bool>(Object()),
+      _ObjectAsObservable<int>(Object()),
+    ];
+
+    final expected = [
+      false,
+      false,
+      false,
+
+      true,
+      true,
+      true,
+
+      true,
+      true,
+      true,
+
+      true,
+      true,
+    ];
+
+    expect(
+      objects
+        .map(deepObservableEquality.isValidKey)
+        .toList(),
+      expected,
+    );
+  });
+
+  test('`deepObservableEquality.equals` comparing observables for equality', () {
+    
+    final observables = [
+      [_complexObservable1, _complexObservable2],
+      [_complexObservable1, _changedComplexObservable1],
+      [_complexObservable1, _changedComplexObservable2],
+      [_complexObservable1, _changedComplexObservable3],
+      [_complexObservable1, _changedComplexObservable4],
+      [_complexObservable1, _changedComplexObservable5],
+      [_complexObservable1, _changedComplexObservable6],
+    ];
+
+    final expected = [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ];
+
+    expect(
+      observables
+        .map((list) {
+          final observable1 = list[0] as Observable<Object?>;
+          final observable2 = list[1] as Observable<Object?>;
+          return deepObservableEquality.equals(observable1, observable2);
+        })
+        .toList(),
+      expected,
+    );
+
+  });
+
+  test('`deepObservableEquality.hash` return same value when observables are equal', () {
+
+    final observables = [
+      [_observableCreate1, _observableCreate1],
+      [_observableCreate1, _observableCreate2],
+
+      [_observableMap1, _observableMap2],
+      [_observableDistinct1, _observableDistinct2],
+      [_observableMapDistinct1, _observableMapDistinct2],
+
+      [_observableZipEmpty1, _observableZipEmpty2],
+      [_observableZipCreate1, _observableZipCreate2],
+      [_observableZipMap1, _observableZipMap2],
+      [_observableZipCreateCreate1, _observableZipCreateCreate2],
+      [_observableZipCreateMap1, _observableZipCreateMap2],
+      [_observableZipMapMap1, _observableZipMapMap2],
+
+      [_object1AsObservable1, _object1AsObservable2],
+      [_object2AsObservable1, _object2AsObservable2],
+
+      [_complexObservable1, _complexObservable2],
+    ];
+
+    final expected = [
+      true,
+      true,
+
+      true,
+      true,
+      true,
+
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+
+      true,
+      true,
+
+      true,
+    ];
+
+    expect(
+      observables
+        .map((list) => 
+          deepObservableEquality.hash(list[0]) == deepObservableEquality.hash(list[0])
+        )
+        .toList(),
+      expected,
+    );
+
+  });
+ 
 }
 
 class _ObservableZip<T, R> extends MultiSourcePipeObservable<T, R> {
