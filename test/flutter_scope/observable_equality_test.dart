@@ -700,7 +700,7 @@ void main() {
     expect(
       observables
         .map((list) => 
-          deepObservableEquality.hash(list[0]) == deepObservableEquality.hash(list[0])
+          deepObservableEquality.hash(list[0]) == deepObservableEquality.hash(list[1])
         )
         .toList(),
       expected,
