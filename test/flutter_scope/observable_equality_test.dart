@@ -569,7 +569,7 @@ void main() {
 
   });
   
-  test('deepObservableEquality.isValidKey verify objects', () {
+  test('`deepObservableEquality.isValidKey` verify objects', () {
 
     final objects = [
       true,
