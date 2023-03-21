@@ -4,7 +4,6 @@ import 'package:dart_scope/dart_scope.dart';
 import 'package:collection/collection.dart';
 
 @internal
-@visibleForTesting
 class FallbackObservableEquality<T> implements Equality<Observable<T>> {
   
   const FallbackObservableEquality();
@@ -27,7 +26,6 @@ class FallbackObservableEquality<T> implements Equality<Observable<T>> {
 }
 
 @internal
-@visibleForTesting
 class PipeObservableEquality<T, R> implements Equality<PipeObservable<T, R>> {
   const PipeObservableEquality(this.getObservableEquality);
 
@@ -56,7 +54,6 @@ class PipeObservableEquality<T, R> implements Equality<PipeObservable<T, R>> {
 }
 
 @internal
-@visibleForTesting
 class MultiSourcePipeObservableEquality<T, R> 
   implements Equality<MultiSourcePipeObservable<T, R>> {
 
@@ -87,7 +84,6 @@ class MultiSourcePipeObservableEquality<T, R>
 }
 
 @internal
-@visibleForTesting
 class InstanceAsObservableEquality<T, R> 
   implements Equality<InstanceAsObservable<T, R>> {
 
@@ -139,5 +135,4 @@ Equality<Observable<Object?>> _createDeepObservableEquality() {
 }
 
 @internal
-@visibleForTesting
 final deepObservableEquality = _createDeepObservableEquality(); 
