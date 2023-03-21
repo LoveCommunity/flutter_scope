@@ -113,3 +113,31 @@ class InstanceAsObservableEquality<T, R>
     return o is InstanceAsObservable<T, R>;
   }
 }
+
+Equality<Observable<Object?>> _createDeepObservableEquality() {
+  // There is a circular dependency between `deepObservableEquality` 
+  // with `pipeObservableEquality`.
+  // Current solution is delaying creation of `deepObservableEquality` with `late`
+  // keyword, passing getter of `deepObservableEquality` to `pipeObservableEquality`.
+  // In `pipeObservableEquality` delay resolve `deepObservableEquality` after its creation.
+  late final Equality<Observable<Object?>> deepObservableEquality;
+  const fallbackObservableEquality = FallbackObservableEquality<Object?>();
+  final pipeObservableEquality = PipeObservableEquality<Object?, Object?>(
+    () => deepObservableEquality,
+  );
+  final multiSourcePipeObservableEquality = MultiSourcePipeObservableEquality<Object?, Object?>(
+    () => deepObservableEquality,
+  );
+  const instanceAsObservableEquality = InstanceAsObservableEquality<Object, Object?>();
+  deepObservableEquality = MultiEquality([
+    pipeObservableEquality,
+    multiSourcePipeObservableEquality,
+    instanceAsObservableEquality,
+    fallbackObservableEquality,
+  ]);
+  return deepObservableEquality;
+}
+
+@internal
+@visibleForTesting
+final deepObservableEquality = _createDeepObservableEquality(); 
