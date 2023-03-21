@@ -78,4 +78,8 @@ export 'src/states_listener.dart'
     FlutterOnData,
     StatesListener,
     StatesListenerConvert;
+export 'src/states_widgets.dart'
+  show
+    StatesWidgetBase,
+    StatesWidgetBaseState;
 
