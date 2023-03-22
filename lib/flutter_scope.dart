@@ -76,5 +76,7 @@ export 'src/states_listener.dart'
 export 'src/states_widgets.dart'
   show
     StatesWidgetBase,
-    StatesWidgetBaseState;
+    StatesWidgetBaseState,
+    StateWidgetBuilder,
+    StatesBuilder;
 

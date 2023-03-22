@@ -73,3 +73,38 @@ abstract class StatesWidgetBaseState<W extends StatesWidgetBase<T>, T>
     observedStates = null;
   }
 }
+
+typedef StateWidgetBuilder<T> = Widget Function(BuildContext context, T state);
+
+class StatesBuilder<T> extends StatesWidgetBase<T> {
+
+  const StatesBuilder({
+    super.key,
+    super.hotReloadKey,
+    super.states,
+    required this.builder,
+  });
+
+  final StateWidgetBuilder<T> builder;
+
+  @override
+  createState() => _StatesBuilderState<T>();
+}
+
+class _StatesBuilderState<T> extends StatesWidgetBaseState<StatesBuilder<T>, T> {
+
+  T? _currentState;
+
+  @override
+  void onData(T data) {
+    setState(() {
+      _currentState = data;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    assert(_currentState is T, 'Current state: $_currentState, should be instance of $T at build stage.');
+    return widget.builder(context, _currentState as T);
+  }
+}
