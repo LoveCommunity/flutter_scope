@@ -68,11 +68,6 @@ export 'src/flutter_scope.dart'
 export 'src/shared.dart' 
   show 
     FlutterEqual;
-export 'src/states_builder.dart'
-  show
-    StateWidgetBuilder,
-    StatesBuilder,
-    StatesBuilderConvert;
 export 'src/states_listener.dart'
   show
     FlutterOnData,
@@ -81,5 +76,7 @@ export 'src/states_listener.dart'
 export 'src/states_widgets.dart'
   show
     StatesWidgetBase,
-    StatesWidgetBaseState;
+    StatesWidgetBaseState,
+    StateWidgetBuilder,
+    StatesBuilder;
 
