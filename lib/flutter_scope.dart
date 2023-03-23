@@ -73,5 +73,7 @@ export 'src/states_widgets.dart'
     StatesWidgetBase,
     StatesWidgetBaseState,
     StateWidgetBuilder,
-    StatesBuilder;
+    StatesBuilder,
+    FlutterOnData,
+    StatesListener;
 
