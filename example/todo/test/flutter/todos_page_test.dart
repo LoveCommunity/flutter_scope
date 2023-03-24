@@ -165,7 +165,7 @@ void main() {
             ),
             FinalStates<List<Todo>>(
               equal: (scope) => filteredTodosStates(
-                todosStates: scope.get<States<TodosState>>()
+                todosStates: scope.getStates<TodosState>()
                   .convert((state) => state.todos.values.toList()),
                 filterStates: scope.get(),
               ),

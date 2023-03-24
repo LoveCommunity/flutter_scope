@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_scope/flutter_scope.dart';
-import '../dart/item_changed.dart';
 import '../dart/todos_notifier.dart';
 import '../dart/todo.dart';
 import '../dart/todo_filter_notifier.dart';
@@ -35,7 +34,7 @@ class AppScope extends FlutterScope {
       ),
       FinalStates<List<Todo>>(
         equal: (scope) => filteredTodosStates(
-          todosStates: scope.get<States<TodosState>>()
+          todosStates: scope.getStates<TodosState>()
             .convert((state) => state.todos.values.toList()),
           filterStates: scope.get(),
         ),
@@ -69,8 +68,9 @@ class TodoChangesListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StatesListenerConvert<TodosState, ItemChanges<String, Todo>>(
-      convert: (state) => state.changes,
+    return StatesListener(
+      states: context.scope.getStates<TodosState>()
+        .convert((state) => state.changes),
       onData: (context, changes) {
         final text = [
           if (changes.inserts.isNotEmpty) '${changes.inserts.length} todo(s) inserted',
