@@ -108,3 +108,48 @@ class _StatesBuilderState<T> extends StatesWidgetBaseState<StatesBuilder<T>, T> 
     return widget.builder(context, _currentState as T);
   }
 }
+
+typedef FlutterOnData<T> = void Function(BuildContext context, T data);
+
+class StatesListener<T> extends StatesWidgetBase<T> {
+
+  const StatesListener({
+    super.key,
+    super.hotReloadKey,
+    super.states,
+    this.skipInitialState = true,
+    required this.onData,
+    required this.child,
+  });
+
+  final bool skipInitialState;
+  final FlutterOnData<T> onData;
+  final Widget child;
+
+  @override
+  createState() => _StatesListenerState<T>();
+}
+
+class _StatesListenerState<T> extends StatesWidgetBaseState<StatesListener<T>, T> {
+
+  // Yeah, we'd better find a way to remove this override method, since 
+  // `newStates.skipFirst()` logic may not belongs to `startObserve` method
+  @override
+  void startObserve(States<T> newStates) {
+    observedStates = newStates;
+    final observable = widget.skipInitialState
+      ? newStates.skipFirst()
+      : newStates.observable;
+    observation = observable.observe(onData);
+  }
+  
+  @override
+  void onData(T data) {
+    widget.onData(context, data);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
