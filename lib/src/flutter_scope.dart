@@ -1,7 +1,8 @@
 
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dart_scope/dart_scope.dart';
+import 'package:flutter_scope/src/configurable_equality.dart';
 
 typedef FlutterScopeEqual = FutureOr<Scope> Function(BuildContext context);
 typedef AsyncScopeWidgetBuilder = Widget Function(BuildContext context, Async<Scope> asyncScope);
@@ -10,54 +11,33 @@ class FlutterScope extends StatefulWidget {
 
   FlutterScope({
     Key? key,
+    int? hotReloadKey,
     Scope? parentScope,
     required List<Configurable> configure,
     required Widget child,
-  }): this.scopeEqual(
+  }): this.async(
     key: key,
-    scopeEqual: _scopeEqual(parentScope, configure),
-    dispose: true,
+    hotReloadKey: hotReloadKey,
+    parentScope: parentScope,
+    configure: configure,
     builder: _defaultConstructBuilder(child),
   );
 
-  FlutterScope.using({
-    Key? key,
-    required Scope existingScope,
-    required Widget child,
-  }): this.scopeEqual(
-    key: key,
-    scopeEqual: (_) => existingScope,
-    dispose: false,
-    builder: (_, __) => child,
-  );
-
-  @experimental
-  FlutterScope.async({
-    Key? key,
-    Scope? parentScope,
-    required List<Configurable> configure,
-    required AsyncScopeWidgetBuilder builder,
-  }): this.scopeEqual(
-    key: key,
-    scopeEqual: _scopeEqual(parentScope, configure),
-    dispose: true,
-    builder: builder,
-  );
-
-  @experimental
-  const FlutterScope.scopeEqual({
+  const FlutterScope.async({
     super.key,
-    required this.scopeEqual,
-    this.dispose = true,
+    this.hotReloadKey,
+    this.parentScope,
+    required this.configure,
     required this.builder,
   });
 
-  final FlutterScopeEqual scopeEqual;
-  final bool dispose;
+  final int? hotReloadKey;
+  final Scope? parentScope;
+  final List<Configurable> configure;
   final AsyncScopeWidgetBuilder builder;
 
   static Scope? maybeOf(BuildContext context) {
-    final inherited = context.getElementForInheritedWidgetOfExactType<_InheritedScope>()?.widget as _InheritedScope?;
+    final inherited = context.getElementForInheritedWidgetOfExactType<InheritedScope>()?.widget as InheritedScope?;
     return inherited?.scope;
   }
 
@@ -68,14 +48,107 @@ class FlutterScope extends StatefulWidget {
   }
 
   @override
-  createState() => _FlutterScopeState();
+  createState() => FlutterScopeState();
 }
 
-FlutterScopeEqual _scopeEqual(Scope? parentScope, List<Configurable> configure) {
-  return (context) {
-    final scope = parentScope ?? FlutterScope.maybeOf(context);
-    return scope?.push(configure) ?? Scope.root(configure);
-  };
+class FlutterScopeState extends State<FlutterScope> {
+
+  Async<Scope>? _asyncScope;
+  Object? _currentScopeTicket;
+  Scope? _currentParentScope;
+  List<Configurable>? _currentConfigure;
+
+  Scope? get _parentScope => widget.parentScope ?? FlutterScope.maybeOf(context);
+
+  @override
+  void initState() {
+    super.initState();
+    _createScope(_parentScope, widget.configure);
+  }
+
+  @override
+  void didUpdateWidget(covariant FlutterScope oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (kDebugMode) {
+      final parentScope = _parentScope;
+      final hotReloadKeyChanged = oldWidget.hotReloadKey != widget.hotReloadKey;
+      final parentScopeChanged = _currentParentScope != parentScope;
+      final configureChanged = !configurableListEquality.equals(_currentConfigure, widget.configure);
+      if (hotReloadKeyChanged || parentScopeChanged || configureChanged) {
+        _disposeScope();
+        _createScope(parentScope, widget.configure);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposeScope();
+    super.dispose();
+  }
+
+  void _createScope(Scope? parentScope, List<Configurable> configure) {
+    final scopeTicket = Object();
+    _currentScopeTicket = scopeTicket;
+    _currentParentScope = parentScope;
+    _currentConfigure = configure;
+    try {
+      final futureOrScope = parentScope == null
+        ? Scope.root(configure)
+        : parentScope.push(configure);
+      if (futureOrScope is Scope) {
+        _onScopeLoaded(futureOrScope, scopeTicket);
+      } else {
+        _asyncScope = const Async<Scope>.loading();
+        futureOrScope
+          .then((scope) => _onScopeLoaded(scope, scopeTicket))
+          .catchError((Object error, StackTrace stackTrace) => _onError(error, stackTrace, scopeTicket));   
+      }
+    } catch (error, stackTrace) {
+      _onError(error, stackTrace, scopeTicket);
+    }
+  }
+
+  void _disposeScope() {
+    _asyncScope?.data?.dispose();
+    _asyncScope = null;
+    _currentConfigure = null;
+    _currentParentScope = null;
+    _currentScopeTicket = null;
+  }
+
+  void _onScopeLoaded(Scope scope, Object scopeTicket) {
+    if (_currentScopeTicket == scopeTicket) {
+      setState(() {
+        _asyncScope = Async<Scope>.loaded(data: scope);
+      });
+    } else {
+      scope.dispose();
+    }
+  }
+
+  void _onError(Object error, StackTrace stackTrace, Object scopeTicket) {
+    if (_currentScopeTicket == scopeTicket) {
+      setState(() {
+        _asyncScope = Async<Scope>.error(error: error, stackTrace: stackTrace);
+      });
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    assert(_asyncScope != null, '`_asyncScope` should not be null at build stage.');
+    final child = widget.builder(context, _asyncScope!);
+    final scope = _asyncScope!.data;
+    if (scope != null) {
+      return InheritedScope(
+        key: kDebugMode ? ObjectKey(scope) : null,
+        scope: scope,
+        child: child,
+      );
+    }
+    return child;
+  }
 }
 
 AsyncScopeWidgetBuilder _defaultConstructBuilder(Widget child) {
@@ -92,79 +165,10 @@ AsyncScopeWidgetBuilder _defaultConstructBuilder(Widget child) {
   };
 }
 
-class _FlutterScopeState extends State<FlutterScope> {
+class InheritedScope extends InheritedWidget {
 
-  late Async<Scope> _asyncScope;
-
-  @override
-  void initState() {
-    super.initState();
-    _initScope();
-  }
-
-  void _initScope() {
-    try {
-      final scope = widget.scopeEqual(context);
-      if (scope is Scope) {
-        _asyncScope = Async<Scope>.loaded(data: scope);
-      } else {
-        _asyncScope = const Async<Scope>.loading();
-        scope
-          .then(_onScopeLoaded)
-          .catchError(_onError);
-      }
-    } catch (error, stackTrace) {
-      _asyncScope = Async<Scope>.error(error: error, stackTrace: stackTrace);
-    }
-  }
-
-  void _onScopeLoaded(Scope scope) {
-    if (!mounted) {
-      _disposeScopeIfNeeded(scope);
-      return;
-    }
-    setState(() {
-      _asyncScope = Async<Scope>.loaded(data: scope);
-    });
-  }
-
-  void _onError(Object error, StackTrace stackTrace) {
-    if (!mounted) return;
-    setState(() {
-      _asyncScope = Async<Scope>.error(error: error, stackTrace: stackTrace); 
-    });
-  }
-
-  void _disposeScopeIfNeeded(Scope? scope) {
-    if (widget.dispose) {
-      scope?.dispose();
-    }
-  }
-
-  @override
-  void dispose() {
-    _disposeScopeIfNeeded(_asyncScope.data);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final child = widget.builder(context, _asyncScope);
-    final scope = _asyncScope.data;
-    if (scope != null) {
-      return _InheritedScope(
-        scope: scope,
-        child: child,
-      );
-    }
-    return child;
-  }
-}
-
-
-class _InheritedScope extends InheritedWidget {
-
-  const _InheritedScope({
+  const InheritedScope({
+    super.key,
     required this.scope,
     required super.child,
   });
@@ -172,7 +176,7 @@ class _InheritedScope extends InheritedWidget {
   final Scope scope;
 
   @override
-  bool updateShouldNotify(_InheritedScope oldWidget) {
+  bool updateShouldNotify(InheritedScope oldWidget) {
     return false;
   }
 }
