@@ -1,8 +1,9 @@
 
+import 'package:dart_scope/dart_scope.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:dart_scope/dart_scope.dart';
-import 'package:flutter_scope/src/configurable_equality.dart';
+
+import 'configurable_equality.dart';
 
 typedef FlutterScopeEqual = FutureOr<Scope> Function(BuildContext context);
 typedef AsyncScopeWidgetBuilder = Widget Function(BuildContext context, Async<Scope> asyncScope);
