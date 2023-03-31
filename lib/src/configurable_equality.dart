@@ -1,5 +1,4 @@
 
-
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
@@ -24,3 +23,6 @@ class RuntimeTypeEquality implements Equality<Object?> {
     return true;
   }
 }
+
+@internal
+const configurableListEquality = ListEquality(RuntimeTypeEquality());

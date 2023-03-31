@@ -1,7 +1,8 @@
 
 // ignore_for_file: prefer_const_declarations
 
-import 'package:dart_scope/dart_scope.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_scope/flutter_scope.dart';
 import 'package:flutter_scope/src/configurable_equality.dart';
 import 'package:test/test.dart';
 
@@ -19,6 +20,54 @@ final final1 = Final<String>(equal: (_) => 'final1');
 final final2 = Final<String>(equal: (_) => 'final2');
 final configurable1 = Configurable((_) { });
 final configurable2 = Configurable((_) { });
+
+final complexConfigurables1 = [
+  Configurable((_) => {}),
+  Final<int>(equal: (_) => 0),
+  AsyncFinal<String>(equal: (scope) => Future.value('')),
+  FinalStates<String>(equal: (_) => States((_) {
+    return Disposable.empty;
+  })),
+  FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
+];
+
+final complexConfigurables2 = [
+  Configurable((_) => {}),
+  Final<int>(equal: (_) => 0),
+  AsyncFinal<String>(equal: (scope) => Future.value('')),
+  FinalStates<String>(equal: (_) => States((_) {
+    return Disposable.empty;
+  })),
+  FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
+];
+final changedComplexConfigurables1 = [
+  Configurable((_) => {}),
+  Final<int>(equal: (_) => 0),
+  AsyncFinal<String>(equal: (scope) => Future.value('')),
+  FinalStates<String>(equal: (_) => States((_) {
+    return Disposable.empty;
+  })),
+  FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
+  Configurable((_) => {}), // length changed
+];
+final changedComplexConfigurables2 = [
+  Final<int>(equal: (_) => 0), // runtimeType changed
+  Final<int>(equal: (_) => 0),
+  AsyncFinal<String>(equal: (scope) => Future.value('')),
+  FinalStates<String>(equal: (_) => States((_) {
+    return Disposable.empty;
+  })),
+  FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
+];
+final changedComplexConfigurables3 = [
+  Configurable((_) => {}),
+  Final<int>(equal: (_) => 0),
+  AsyncFinal<String>(equal: (scope) => Future.value('')),
+  FinalStates<String>(equal: (_) => States((_) {
+    return Disposable.empty;
+  })),
+  FinalChangeNotifier<_Counter>(equal: (_) => _Counter()), // runtimeType changed
+];
 
 void main() {
 
@@ -148,4 +197,102 @@ void main() {
     );
     
   });
+
+  test('`configurableListEquality.isValidKey` verify objects', () {
+
+    final configurables = [
+      null,
+      true,
+      0,
+      '',
+      Object(),
+      Final<String>(equal: (_) => ''),
+
+      <Configurable>[],
+      [
+        Configurable((_) => {})
+      ],
+      [
+        Final<int>(equal: (_) => 0),
+        AsyncFinal<String>(equal: (scope) => Future.value('')),
+      ],
+      [
+        FinalStates<String>(equal: (_) => States((_) {
+          return Disposable.empty;
+        })),
+        FinalValueNotifier<_Counter, int>(equal: (_) => _Counter())
+      ],
+    ];
+
+    final expected = [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      
+      true,
+      true,
+      true,
+      true,
+    ];
+
+    expect(
+      configurables
+        .map(configurableListEquality.isValidKey)
+        .toList(),
+      expected,
+    );
+
+  });
+
+  test('`configurableListEquality.equals` comparing objects for equality', () {
+
+    final configurables = [
+      [complexConfigurables1, complexConfigurables2],
+      [complexConfigurables1, changedComplexConfigurables1],
+      [complexConfigurables1, changedComplexConfigurables2],
+      [complexConfigurables1, changedComplexConfigurables3],
+    ];
+
+    final expected = [
+      true,
+      false,
+      false,
+      false,
+    ];
+
+    expect(
+      configurables
+        .map((list) => configurableListEquality.equals(list[0], list[1]))
+        .toList(),
+      expected,
+    );
+
+  });
+
+  test('`configurableListEquality.hash` return same value when objects are equal', () {
+
+    final configurables = [
+      [complexConfigurables1, complexConfigurables2],
+    ];
+
+    final expected = [
+      true,
+    ];
+
+    expect(
+      configurables
+        .map((list) => 
+          configurableListEquality.hash(list[0]) == configurableListEquality.hash(list[1])
+        ).toList(),
+      expected,
+    );
+
+  });
+}
+
+class _Counter extends ValueNotifier<int> {
+  _Counter(): super(0);
 }
