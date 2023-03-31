@@ -6,22 +6,22 @@ import 'package:flutter_scope/flutter_scope.dart';
 import 'package:flutter_scope/src/configurable_equality.dart';
 import 'package:test/test.dart';
 
-final null1 = null;
-final null2 = null;
-final bool1 = true;
-final bool2 = false;
-final int1 = 1;
-final int2 = 2;
-final string1 = 'string1';
-final string2 = 'string2';
-final object1 = Object();
-final object2 = Object();
-final final1 = Final<String>(equal: (_) => 'final1');
-final final2 = Final<String>(equal: (_) => 'final2');
-final configurable1 = Configurable((_) { });
-final configurable2 = Configurable((_) { });
+final _null1 = null;
+final _null2 = null;
+final _bool1 = true;
+final _bool2 = false;
+final _int1 = 1;
+final _int2 = 2;
+final _string1 = 'string1';
+final _string2 = 'string2';
+final _object1 = Object();
+final _object2 = Object();
+final _final1 = Final<String>(equal: (_) => 'final1');
+final _final2 = Final<String>(equal: (_) => 'final2');
+final _configurable1 = Configurable((_) { });
+final _configurable2 = Configurable((_) { });
 
-final complexConfigurables1 = [
+final _complexConfigurables1 = [
   Configurable((_) => {}),
   Final<int>(equal: (_) => 0),
   AsyncFinal<String>(equal: (scope) => Future.value('')),
@@ -31,7 +31,7 @@ final complexConfigurables1 = [
   FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
 ];
 
-final complexConfigurables2 = [
+final _complexConfigurables2 = [
   Configurable((_) => {}),
   Final<int>(equal: (_) => 0),
   AsyncFinal<String>(equal: (scope) => Future.value('')),
@@ -40,7 +40,7 @@ final complexConfigurables2 = [
   })),
   FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
 ];
-final changedComplexConfigurables1 = [
+final _changedComplexConfigurables1 = [
   Configurable((_) => {}),
   Final<int>(equal: (_) => 0),
   AsyncFinal<String>(equal: (scope) => Future.value('')),
@@ -50,7 +50,7 @@ final changedComplexConfigurables1 = [
   FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
   Configurable((_) => {}), // length changed
 ];
-final changedComplexConfigurables2 = [
+final _changedComplexConfigurables2 = [
   Final<int>(equal: (_) => 0), // runtimeType changed
   Final<int>(equal: (_) => 0),
   AsyncFinal<String>(equal: (scope) => Future.value('')),
@@ -59,7 +59,7 @@ final changedComplexConfigurables2 = [
   })),
   FinalValueNotifier<_Counter, int>(equal: (_) => _Counter()),
 ];
-final changedComplexConfigurables3 = [
+final _changedComplexConfigurables3 = [
   Configurable((_) => {}),
   Final<int>(equal: (_) => 0),
   AsyncFinal<String>(equal: (scope) => Future.value('')),
@@ -111,26 +111,26 @@ void main() {
     const equality = RuntimeTypeEquality();
     
     final objects = [
-      [null1, null2],
-      [null1, bool2],
+      [_null1, _null2],
+      [_null1, _bool2],
 
-      [bool1, bool2],
-      [bool1, int2],
+      [_bool1, _bool2],
+      [_bool1, _int2],
 
-      [int1, int2],
-      [int1, string2],
+      [_int1, _int2],
+      [_int1, _string2],
 
-      [string1, string2],
-      [string1, object2],
+      [_string1, _string2],
+      [_string1, _object2],
 
-      [object1, object2],
-      [object1, final2],
+      [_object1, _object2],
+      [_object1, _final2],
 
-      [final1, final2],
-      [final1, configurable2],
+      [_final1, _final2],
+      [_final1, _configurable2],
       
-      [configurable1, configurable2],
-      [configurable1, null2],
+      [_configurable1, _configurable2],
+      [_configurable1, _null2],
     ];
 
     final expected = [
@@ -170,13 +170,13 @@ void main() {
     const equality = RuntimeTypeEquality();
 
     final objects = [
-      [null1, null2],
-      [bool1, bool2],
-      [int1, int2],
-      [string1, string2],
-      [object1, object2],
-      [final1, final2],
-      [configurable1, configurable2],
+      [_null1, _null2],
+      [_bool1, _bool2],
+      [_int1, _int2],
+      [_string1, _string2],
+      [_object1, _object2],
+      [_final1, _final2],
+      [_configurable1, _configurable2],
     ];
 
     final expected = [
@@ -250,10 +250,10 @@ void main() {
   test('`configurableListEquality.equals` comparing objects for equality', () {
 
     final configurables = [
-      [complexConfigurables1, complexConfigurables2],
-      [complexConfigurables1, changedComplexConfigurables1],
-      [complexConfigurables1, changedComplexConfigurables2],
-      [complexConfigurables1, changedComplexConfigurables3],
+      [_complexConfigurables1, _complexConfigurables2],
+      [_complexConfigurables1, _changedComplexConfigurables1],
+      [_complexConfigurables1, _changedComplexConfigurables2],
+      [_complexConfigurables1, _changedComplexConfigurables3],
     ];
 
     final expected = [
@@ -275,7 +275,7 @@ void main() {
   test('`configurableListEquality.hash` return same value when objects are equal', () {
 
     final configurables = [
-      [complexConfigurables1, complexConfigurables2],
+      [_complexConfigurables1, _complexConfigurables2],
     ];
 
     final expected = [
