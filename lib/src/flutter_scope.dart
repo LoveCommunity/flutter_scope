@@ -20,17 +20,6 @@ class FlutterScope extends StatefulWidget {
     builder: _defaultConstructBuilder(child),
   );
 
-  FlutterScope.using({
-    Key? key,
-    required Scope existingScope,
-    required Widget child,
-  }): this.scopeEqual(
-    key: key,
-    scopeEqual: (_) => existingScope,
-    dispose: false,
-    builder: (_, __) => child,
-  );
-
   @experimental
   FlutterScope.async({
     Key? key,
@@ -57,7 +46,7 @@ class FlutterScope extends StatefulWidget {
   final AsyncScopeWidgetBuilder builder;
 
   static Scope? maybeOf(BuildContext context) {
-    final inherited = context.getElementForInheritedWidgetOfExactType<_InheritedScope>()?.widget as _InheritedScope?;
+    final inherited = context.getElementForInheritedWidgetOfExactType<InheritedScope>()?.widget as InheritedScope?;
     return inherited?.scope;
   }
 
@@ -152,7 +141,7 @@ class _FlutterScopeState extends State<FlutterScope> {
     final child = widget.builder(context, _asyncScope);
     final scope = _asyncScope.data;
     if (scope != null) {
-      return _InheritedScope(
+      return InheritedScope(
         scope: scope,
         child: child,
       );
@@ -162,9 +151,10 @@ class _FlutterScopeState extends State<FlutterScope> {
 }
 
 
-class _InheritedScope extends InheritedWidget {
+class InheritedScope extends InheritedWidget {
 
-  const _InheritedScope({
+  const InheritedScope({
+    super.key,
     required this.scope,
     required super.child,
   });
@@ -172,7 +162,7 @@ class _InheritedScope extends InheritedWidget {
   final Scope scope;
 
   @override
-  bool updateShouldNotify(_InheritedScope oldWidget) {
+  bool updateShouldNotify(InheritedScope oldWidget) {
     return false;
   }
 }

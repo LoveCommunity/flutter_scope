@@ -655,15 +655,15 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.using` place an inherited scope in widget tree using an existing scope', (tester) async {
+  testWidgets('`InheritedScope` place an inherited scope in widget tree using an existing scope', (tester) async {
 
     final existingScope = await Scope.root([]);
 
     Scope? scope;
 
     await tester.pumpWidget(
-      FlutterScope.using(
-        existingScope: existingScope,
+      InheritedScope(
+        scope: existingScope,
         child: Builder(builder: (context) {
           scope = FlutterScope.maybeOf(context);
           return Container();
@@ -676,7 +676,7 @@ void main() {
 
   });
 
-  testWidgets("`FlutterScope.using` won't dispose registered resources when `FlutterScope` is removed from widget tree", (tester) async {
+  testWidgets("`InheritedScope` won't dispose registered resources when `FlutterScope` is removed from widget tree", (tester) async {
 
     bool disposed = false;
 
@@ -691,8 +691,8 @@ void main() {
     ]);
 
     await tester.pumpWidget(
-      FlutterScope.using(
-        existingScope: existingScope,
+      InheritedScope(
+        scope: existingScope,
         child: Container(),
       ),
     );

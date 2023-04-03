@@ -64,6 +64,7 @@ export 'src/flutter_scope.dart'
     FlutterScopeEqual,
     AsyncScopeWidgetBuilder,
     FlutterScope,
+    InheritedScope,
     BuildContextScopeX;
 export 'src/shared.dart' 
   show 
