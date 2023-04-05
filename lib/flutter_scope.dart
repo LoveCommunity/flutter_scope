@@ -61,9 +61,9 @@ export 'src/final_value_notifier.dart'
     FinalValueNotifier;
 export 'src/flutter_scope.dart'
   show
-    FlutterScopeEqual,
     AsyncScopeWidgetBuilder,
     FlutterScope,
+    InheritedScope,
     BuildContextScopeX;
 export 'src/shared.dart' 
   show 
