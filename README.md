@@ -12,7 +12,7 @@ A declarative dependency injection library which use dart syntax and flutter sty
 * Scope strategy is aligned with scoping of functions
 * Can handle async setup
 * Using `StatesBuilder` to map a sequence of state to widget
-* Using `StatesListener` to integrate with imperative call like showDialog
+* Using `StatesListener` to trigger side effect by reacting to state change
 * Using `Observable\States` as notification system with composition in mind
 
 ## Table Of Content
@@ -33,7 +33,9 @@ A declarative dependency injection library which use dart syntax and flutter sty
       - [Usage of `States.combine`](#usage-of-statescombine)
       - [Usage of `states.convert`](#usage-of-statesconvert)
     - [Usage of `StatesBuilder(...)`](#usage-of-statesbuilder)
+      - [Usage of `StatesBuilder` with `States.combine` operator](#usage-of-statesbuilder-with-statescombine-operator)
     - [Usage of `StatesListener(...)`](#usage-of-stateslistener)
+      - [Usage of `StatesListener` with `states.convert` operator](#usage-of-stateslistener-with-statesconvert-operator)
 
 - [dart_scope](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#dart_scope)
   - [Features](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#features)
@@ -59,6 +61,8 @@ A declarative dependency injection library which use dart syntax and flutter sty
 - [flutter_scope](https://pub.dev/packages/flutter_scope) - a flutter's declarative dependency injection library
 
 ## Quick Tour
+
+Let's explore with quick examples, assume we are developing a `todos` apps using [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html):
 
 ```dart
 class TodosNotifier extends ValueNotifier<Map<String, Todo>> {
@@ -101,6 +105,9 @@ FlutterScope(
   ),
 );
 ```
+A `FlutterScope` is created which expose singletons of `TodosNotifier` and `TodoFilterNotifier`. Later, these instances can be resolved by calling `context.scope.get<T>(...)`.
+
+Above example simulates:
 
 ```dart
 void flutterScope() { // `{` is the start of scope
@@ -115,6 +122,11 @@ void flutterScope() { // `{` is the start of scope
 
 }                     // `}` is the end of scope
 ```
+
+This simple pseudocode shown:
+ - function scope that starts with `{`, ends with `}`
+ -  how to create and expose instances in current scope
+ - how to resolve instances in current scope
 
 ### Usage of `name`
 
@@ -215,10 +227,12 @@ FlutterScope(
 If there is async setup like resolving `SharedPreference`. We can follow this:
 
 ```dart
-class PersistenceService {
-  PersistenceService({required this.sharedPreference});
-  final SharedPreference sharedPreference;
-  Map<String, Todo> get todos => ...;
+// simulate async resolve instance like `SharedPreferences.getInstance()`
+Future<Map<String, Todo>> resolveInitialTodosAsync() {
+  await Future<void>.delayed(Duration(seconds: 1));
+  return { 
+    ...
+  };
 }
 
 ...
@@ -226,19 +240,14 @@ class PersistenceService {
 FlutterScope.async(
   configure: [
     // using `AsyncFinal` to handle async setup
-    AsyncFinal<SharedPreference>(
+    AsyncFinal<Map<String, Todo>>(
       equal: (_) async {
-        return await SharedPreference.getInstance();
+        return await resolveInitialTodosAsync();
       },
-    ),
-    Final<PersistenceService>(
-      equal: (scope) => PersistenceService(
-        sharedPreference: scope.get<SharedPreference>(),
-      ),
     ),
     FinalValueNotifier<TodosNotifier, Map<String, Todo>>(
       equal: (scope) => TodosNotifier(
-        scope.get<PersistenceService>().todos,
+        scope.get<Map<String, Todo>>(),
       ),
     ),
   ],
@@ -261,11 +270,8 @@ Which simulates:
 
 ```dart
 void flutterScope() async {
-  final SharedPreference sharedPreference = await SharedPreference.getInstance();
-  final PersistenceService persistenceService = PersistenceService(
-    sharedPreference: sharedPreference,
-  );
-  final TodosNotifier todosNotifier = TodosNotifier(persistenceService.todos);
+  final Map<String, Todo> initialTodos = await resolveInitialTodosAsync();
+  final TodosNotifier todosNotifier = TodosNotifier(initialTodos);
 
   final myTodosNotifier = todosNotifier;
 }
@@ -445,13 +451,15 @@ FlutterScope(
 
 Note: [ValueListenableBuilder](https://api.flutter.dev/flutter/widgets/ValueListenableBuilder-class.html) is a build-in widget from flutter framework.
 
-`ValueListenableBuilder` is a standard way to transform listenable value to widget. But this library provide another option called `StatesBuilder` to map state to widget, it has composition capability.
+`ValueListenableBuilder` is a standard way to transform listenable value to widget. But this library provide another option called `StatesBuilder`, it has composition capability.
+
+`StatesBuilder` is based on `States` which is similar to dart `Stream`, so let's introduce `States` first.
 
 ### Usage of `States`
 
 `States` is a sequence of `state`. 
 
-It will replay current state synchronously, and emit following state asynchronously or synchronously.
+It will replay current state synchronously, then emit following state asynchronously or synchronously.
 
 Example in pure dart:
 
@@ -474,39 +482,29 @@ void flutterScope() async {
   ...// dispose `todosFilterNotifier`
 }
 
+// a function turns notifier to states
 States<TodoFilter> todosFilterNotifierAsStates(TodoFilterNotifier notifier) { ... }
 ```
 
-Note: `States` is similar to dart `Stream`, but with slightly different. `States` promise replay current state synchronously to observer, while dart `Stream` by design could not support this behavior.
+Above example shown:
+ - `late TodoFilter state` is a plain state
+ - `final States<TodoFilter> todoFilterStates` is a sequence of plain state. Sometimes `States` can be considered as plain state with a time dimension
+ - use `todoFilterStates.observe(...)` to start observe states
+ - use `observation.dispose()` to stop observe states
+  
+Note: Although `States` is similar to dart `Stream`, it is slightly different. `States` promise replay current state synchronously to observer, while dart `Stream` has its trade off, is designed without this feature.
+
+Since `States` has composition capability, let's introducing some common used operators.
 
 #### Usage of `States.combine`
 
+Use `States.combine` to combine multiple states into one `States`.
+
+When an item is emitted by one of multiple States, combine the latest item emitted by each States via a specified function and emit combined item.
+
+For example `filteredTodos` is computed by combining `todos` and `todoFilter`:
+
 ```dart
-void flutterScope() async {
-  final TodosNotifier todosNotifier = TodosNotifier();
-  final TodoFilterNotifier todosFilterNotifier = TodoFilterNotifier();
-  final States<Map<String, Todo>> todosStates = todosNotifierAsStates(todosNotifier)
-  final States<TodoFilter> todoFilterStates = todosNotifierAsStates(todosFilterNotifier);
-
-  /// `filteredTodos` is combined from `todos` and `todoFilter`
-  final States<List<Todo>> filteredTodosStates = States.combine2(
-    states1: todosStates,
-    states2: todoFilterStates,
-    combiner: filterTodos, // `filterTodos` is a pure function declared at bottom
-  );
-
-  late List<Todos> state;
-  final observation = filteredTodosStates.observe((filteredTodos) {
-    print('simulate flutter set state');
-    state = filteredTodos;
-    print('simulate map state to widget');
-  }); 
-
-  ...// waiting for `navigator.pop`, then dispose resources
-}
-
-...
-
 List<Todo> filterTodos(Map<String, Todo> todos, TodoFilter filter) {
   return todos.values
     .where((todo) {
@@ -518,58 +516,64 @@ List<Todo> filterTodos(Map<String, Todo> todos, TodoFilter filter) {
     })
     .toList();  
 }
-```
 
-#### Usage of `states.convert`
+...
 
-```dart
-void flutterScope() {
-  final TodosNotifier todosNotifier = TodosNotifier();
-  final States<Map<String, Todo>> todosStates = todosNotifierAsStates(todosNotifier)
+void flutterScope() async {
+  ...
 
-  // `todosLength` is converted from `todos`
-  final States<int> todosLengthStates = todosStates
-    .convert((todos) => todos.length);
+  final States<Map<String, Todo>> todosStates = ...;
+  final States<TodoFilter> todoFilterStates = ...;
+
+  final States<List<Todo>> filteredTodosStates = States.combine2(
+    states1: todosStates,
+    states2: todoFilterStates,
+    combiner: filterTodos, // `filterTodos` is a pure function declared at top
+  );
 
   late List<Todos> state;
-  final observation = todosLengthStates.observe((todosLength) {
+  final observation = filteredTodosStates.observe((filteredTodos) {
     print('simulate flutter set state');
-    state = todosLength;
+    state = filteredTodos;
     print('simulate map state to widget');
   }); 
 
   ...// waiting for `navigator.pop`, then dispose resources
 }
-
-...
 ```
+
+Above example shown:
+  - `filterTodos` is a pure function which compute plain `filteredTodos` by combining plain `todos` and `todoFilter`
+  - `filteredTodosStates` is a sequence of plain `filteredTodo` computed by combining a sequence of plain `todos` and a sequence of plain `todoFilter`
+
+#### Usage of `states.convert`
+
+Use `states.convert` to convert each item by applying a function and only emit result that changed.
+
+For example `todoLength` is converted from `todos`:
+
+```dart
+void flutterScope() {
+  final TodosNotifier todosNotifier = TodosNotifier();
+  final States<Map<String, Todo>> todosStates = todosNotifierAsStates(todosNotifier);
+
+  // `todosLength` is converted from `todos`
+  final States<int> todosLengthStates = todosStates
+    .convert((todos) => todos.length);
+
+  final observation = todosLengthStates.observe((todosLength) {
+    print('todos length changed to $todosLength');
+  }); 
+
+  ...
+}
+```
+
+We've seen basic usage of `States`, let's see how to integrate it with flutter.
 
 ### Usage of `StatesBuilder(...)`
 
 Use `StatesBuilder(...)` to map a sequence of state to widget, as `UI = f(state).` 
-
-```dart
-FlutterScope(
-  configure: [
-    FinalValueNotifier<TodoFilterNotifier, TodoFilter>(
-      equal: (_) => TodoFilterNotifier(),
-    ),
-  ],
-  child: Builder(
-    builder: (context) {
-      final todoFilterNotifier = context.scope.get<TodoFilterNotifier>();
-      // get a sequence of todo filter from current scope
-      final States<TodoFilter> todoFilterStates = context.scope.getStates<TodoFilter>();
-      return StatesBuilder<TodoFilter>(
-        states: todoFilterStates,
-        builder: (context, todoFilter) {
-          return ...; // map state to widget 
-        },
-      );
-    },
-  ),
-);
-```
 
 ```dart
 FlutterScope(
@@ -586,7 +590,35 @@ FlutterScope(
 );
 ```
 
+Which simulates:
+
 ```dart
+void flutterScope() async {
+  final TodoFilterNotifier todosFilterNotifier = TodoFilterNotifier();
+  final States<TodoFilter> todoFilterStates = todosFilterNotifierAsStates(todosFilterNotifier);
+
+  late TodoFilter state;
+  final observation = todoFilterStates.observe((todoFilter) {
+    print('simulate flutter set state');
+    state = todoFilter;
+    print('simulate map state to widget');
+  }); 
+
+  ...
+}
+
+...
+```
+
+`StatesBuilder` has composition capability, since it is based on `States`.
+
+#### Usage of `StatesBuilder` with `States.combine` operator
+
+Use `StatesBuilder` with `States.combine` operator to combine multiple states into one states, then map it to widget.
+
+```dart
+...
+
 FlutterScope(
   configure: [
     FinalValueNotifier<TodosNotifier, Map<String, Todo>>(
@@ -608,27 +640,42 @@ FlutterScope(
           return ...; // map state to widget
         },
       );
-    }
+    },
   ),
 );
+```
 
+Which simulates:
+
+```dart
 ...
 
-List<Todo> filterTodos(Map<String, Todo> todos, TodoFilter filter) {
-  return todos.values
-    .where((todo) {
-      switch (filter) {
-        case TodoFilter.all: return true;
-        case TodoFilter.completed: return todo.isCompleted;
-        case TodoFilter.uncompleted: return !todo.isCompleted;
-      }
-    })
-    .toList();  
+void flutterScope() async {
+  final TodosNotifier todosNotifier = TodosNotifier();
+  final TodoFilterNotifier todosFilterNotifier = TodoFilterNotifier();
+  final States<Map<String, Todo>> todosStates = todosNotifierAsStates(todosNotifier);
+  final States<TodoFilter> todoFilterStates = todosFilterNotifierAsStates(todosFilterNotifier);
+
+  final States<List<Todo>> filteredTodosStates = States.combine2(
+    states1: todosStates,
+    states2: todoFilterStates,
+    combiner: filterTodos, 
+  );
+
+  late List<Todos> state;
+  final observation = filteredTodosStates.observe((filteredTodos) {
+    print('simulate flutter set state');
+    state = filteredTodos;
+    print('simulate map state to widget');
+  }); 
+
+  ...
 }
 ```
 
-
 ### Usage of `StatesListener(...)`
+
+Use `StatesListener(...)` to trigger side effect by reacting to state change.
 
 ```dart
 FlutterScope(
@@ -648,6 +695,29 @@ FlutterScope(
   ),
 );
 ```
+
+Which simulates:
+
+```dart
+void flutterScope() async {
+  final TodoFilterNotifier todosFilterNotifier = TodoFilterNotifier();
+  final States<TodoFilter> todoFilterStates = todosFilterNotifierAsStates(todosFilterNotifier);
+
+  final observation = todoFilterStates.observe((todoFilter) {
+    print('todo filter changed to $todoFilter');
+  }); 
+
+  ...
+}
+
+...
+```
+
+`StatesListener` has composition capability, since it is based on `States`.
+
+#### Usage of `StatesListener` with `states.convert` operator
+
+Use `StatesListener` with `states.convert` operator to convert states to another states, then trigger side effect by reacting to state change.
 
 ```dart
 FlutterScope(
@@ -669,9 +739,30 @@ FlutterScope(
         },
         child: ...,
       );
-    }
+    },
   ),
 );
+```
+
+Which simulates:
+
+```dart
+void flutterScope() {
+  final TodosNotifier todosNotifier = TodosNotifier();
+  final States<Map<String, Todo>> todosStates = todosNotifierAsStates(todosNotifier);
+
+  // `todosLength` is converted from `todos`
+  final States<int> todosLengthStates = todosStates
+    .convert((todos) => todos.length);
+
+  final observation = todosLengthStates.observe((todosLength) {
+    print('todos length changed to $todosLength');
+  });
+
+  ...
+}
+
+...
 ```
 
 [**Next Page - dart_scope**](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#dart_scope)
