@@ -11,9 +11,9 @@ A declarative dependency injection library which use dart syntax and flutter sty
 * Configuration is aligned with syntax with dart language
 * Scope strategy is aligned with scoping of functions
 * Can handle async setup
-* Using `StatesBuilder` to map a sequence of state to widget
-* Using `StatesListener` to trigger side effect by reacting to state change
 * Using `Observable\States` as notification system with composition in mind
+* Using `StatesBuilder` to map a sequence of state to widget
+* Using `StatesListener` to add a listener in flutter layer
 
 ## Table Of Content
 
@@ -227,17 +227,14 @@ FlutterScope(
 If there is async setup like resolving `SharedPreference`. We can follow this:
 
 ```dart
-// simulate async resolve instance like `SharedPreferences.getInstance()`
 Future<Map<String, Todo>> resolveInitialTodosAsync() {
   await Future<void>.delayed(Duration(seconds: 1));
-  return { 
-    ...
-  };
+  return { ... };
 }
 
 ...
 
-FlutterScope.async(
+FlutterScope.async( // use `async` constructor
   configure: [
     // using `AsyncFinal` to handle async setup
     AsyncFinal<Map<String, Todo>>(
@@ -296,7 +293,7 @@ FlutterScope(
       equal: (_) => TodoFilterNotifier(),
     ),
   ],
-  child: FlutterScope( // creating a new scope in subtree
+  child: FlutterScope( // creating a new scope in subtree of parent scope
     configure: [
       FinalValueNotifier<AddTodoNotifier, AddTodoState>(
         equal: (_) => AddTodoNotifier(),
@@ -328,16 +325,16 @@ void flutterScope() {
     //  `todosNotifier`       is inherited from parent scope
     //  `todoFilterNotifier`  is inherited from parent scope
     //  `addTodoNotifier`     is exposed in current scope
-    final myAddTodoNotifier = addTodoNotifier;
     final myTodosNotifier = todosNotifier;
     final myTodoFilterNotifier = todoFilterNotifier;
+    final myAddTodoNotifier = addTodoNotifier;
   }
 }
 ```
 
 ### Usage of `InheritedScope`
 
-Use `InheritedScope` for making an exist scope available to subtree. This is useful when new route needs access resources from curren scope:
+Use `InheritedScope` for making an exist scope available to subtree. This is useful when current route share scope with new route:
 
 ```dart
 FlutterScope(
@@ -365,7 +362,7 @@ FlutterScope(
 ...
 
 void _showAddTodoDialog(BuildContext context) {
-  showDialog( // show dialog will create a new route
+  showDialog( // show dialog will push a new route
     context: context,
     builder: (_) {
       return InheritedScope(  // use `InheritedScope` for
@@ -386,11 +383,15 @@ void _showAddTodoDialog(BuildContext context) {
 }
 ```
 
-Sometimes, the new scope is based on exist one, and it also has additional configurations. In this case, we can go with `parentScope` parameter.
+Above example shown:
+ - press `FloatActionButton` will push a new route
+ - passing scope from current route to new route using `InheritedScope`
+ - resolve `TodosNotifier` in new route
+
 
 ### Usage of `FlutterScope`'s `parentScope` parameter
 
-Use `FlutterScope`'s `parentScope` to create a new scope with explicitly parent scope. 
+Use `FlutterScope`'s `parentScope` parameter to create a new scope which is based on exist one, and has additional configurations. 
 
 ```diff
   void _showAddTodoDialog(BuildContext context) {
@@ -424,6 +425,22 @@ Use `FlutterScope`'s `parentScope` to create a new scope with explicitly parent 
   }
 ```
 
+Which simulates:
+
+```dart
+void flutterScope() {
+  final TodosNotifier todosNotifier = TodosNotifier();
+  final TodoFilterNotifier todoFilterNotifier = TodoFilterNotifier();
+
+  void childFlutterScope() {
+    final AddTodoNotifier addTodoNotifier = AddTodoNotifier();
+
+    final myTodosNotifier = todosNotifier;
+    final myAddTodoNotifier = addTodoNotifier;
+  }
+}
+```
+
 ### Usage of `ValueListenableBuilder(...)`
 
 Use `ValueListenableBuilder` to map listenable value to widget, as `UI = f(state)`.
@@ -451,9 +468,9 @@ FlutterScope(
 
 Note: [ValueListenableBuilder](https://api.flutter.dev/flutter/widgets/ValueListenableBuilder-class.html) is a build-in widget from flutter framework.
 
-`ValueListenableBuilder` is a standard way to transform listenable value to widget. But this library provide another option called `StatesBuilder`, it has composition capability.
+`ValueListenableBuilder` is a standard way to transform listenable value to widget. `FlutterScope` provide another option called `StatesBuilder`, it has composition capability.
 
-`StatesBuilder` is based on `States` which is similar to dart `Stream`, so let's introduce `States` first.
+`StatesBuilder` is based on `States`, so let's introduce `States` first.
 
 ### Usage of `States`
 
@@ -492,9 +509,9 @@ Above example shown:
  - use `todoFilterStates.observe(...)` to start observe states
  - use `observation.dispose()` to stop observe states
   
-Note: Although `States` is similar to dart `Stream`, it is slightly different. `States` promise replay current state synchronously to observer, while dart `Stream` has its trade off, is designed without this feature.
+Note: `States` is similar to dart `Stream`, but it is slightly different. The main difference is `States` promise replay current state synchronously to observer, while dart `Stream` has its trade off, is designed without this feature.
 
-Since `States` has composition capability, let's introducing some common used operators.
+Since `States` has composition capability, let's introducing two common used operators.
 
 #### Usage of `States.combine`
 
@@ -675,7 +692,7 @@ void flutterScope() async {
 
 ### Usage of `StatesListener(...)`
 
-Use `StatesListener(...)` to trigger side effect by reacting to state change.
+Use `StatesListener(...)` to add a listener in flutter layer.
 
 ```dart
 FlutterScope(
@@ -713,11 +730,11 @@ void flutterScope() async {
 ...
 ```
 
-`StatesListener` has composition capability, since it is based on `States`.
+`StatesListener` also has composition capability, since it is based on `States`.
 
 #### Usage of `StatesListener` with `states.convert` operator
 
-Use `StatesListener` with `states.convert` operator to convert states to another states, then trigger side effect by reacting to state change.
+Use `StatesListener` with `states.convert` operator to convert states to another states, then add a listener to the states.
 
 ```dart
 FlutterScope(
