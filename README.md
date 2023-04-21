@@ -28,7 +28,6 @@ A declarative dependency injection library which use dart syntax and flutter sty
     - [Usage of child scope](#usage-of-child-scope)
     - [Usage of `InheritedScope`](#usage-of-inheritedscope)
     - [Usage of `FlutterScope`'s `parentScope` parameter](#usage-of-flutterscopes-parentscope-parameter)
-    - [Usage of `ValueListenableBuilder(...)`](#usage-of-valuelistenablebuilder)
     - [Usage of `States`](#usage-of-states)
       - [Usage of `States.combine`](#usage-of-statescombine)
       - [Usage of `states.convert`](#usage-of-statesconvert)
@@ -62,7 +61,7 @@ A declarative dependency injection library which use dart syntax and flutter sty
 
 ## Quick Tour
 
-Let's explore with quick examples, assume we are developing a `todos` apps using [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html):
+Let's explore with quick examples, assume we are developing a `todos` apps using [ValueNotifier]:
 
 ```dart
 class TodosNotifier extends ValueNotifier<Map<String, Todo>> {
@@ -441,40 +440,11 @@ void flutterScope() {
 }
 ```
 
-### Usage of `ValueListenableBuilder(...)`
-
-Use `ValueListenableBuilder` to map listenable value to widget, as `UI = f(state)`.
-
-```dart
-FlutterScope(
-  configure: [
-    FinalValueNotifier<TodoFilterNotifier, TodoFilter>(
-      equal: (_) => TodoFilterNotifier(),
-    ),
-  ],
-  child: Builder(
-    builder: (context) {
-      final todoFilterNotifier = context.scope.get<TodoFilterNotifier>();
-      return ValueListenableBuilder<TodoFilter>(
-        valueListenable: todoFilterNotifier,
-        builder: (context, todoFilter, child) {
-          return ...; // map state to widget
-        },
-      );
-    },
-  ),
-);
-```
-
-Note: [ValueListenableBuilder](https://api.flutter.dev/flutter/widgets/ValueListenableBuilder-class.html) is a build-in widget from flutter framework.
-
-`ValueListenableBuilder` is a standard way to transform listenable value to widget. `FlutterScope` provide another option called `StatesBuilder`, it has composition capability.
-
-`StatesBuilder` is based on `States`, so let's introduce `States` first.
+We've covered the dependency injection part of `FlutterScope`. Now, let's explore `Observable/States` based notification system.
 
 ### Usage of `States`
 
-`States` is a sequence of `state`. 
+`States` is a sequence of `state`.
 
 It will replay current state synchronously, then emit following state asynchronously or synchronously.
 
@@ -509,7 +479,7 @@ Above example shown:
  - use `todoFilterStates.observe(...)` to start observe states
  - use `observation.dispose()` to stop observe states
   
-Note: `States` is similar to dart `Stream`, but it is slightly different. The main difference is `States` promise replay current state synchronously to observer, while dart `Stream` has its trade off, is designed without this feature.
+Note: `States` is similar to dart [Stream], but it is slightly different. `States` promise replay current state synchronously to observer, while dart [Stream] has its trade off, is designed not support this feature.
 
 Since `States` has composition capability, let's introducing two common used operators.
 
@@ -555,19 +525,19 @@ void flutterScope() async {
     print('simulate map state to widget');
   }); 
 
-  ...// waiting for `navigator.pop`, then dispose resources
+  ...
 }
 ```
 
 Above example shown:
   - `filterTodos` is a pure function which compute plain `filteredTodos` by combining plain `todos` and `todoFilter`
-  - `filteredTodosStates` is a sequence of plain `filteredTodo` computed by combining a sequence of plain `todos` and a sequence of plain `todoFilter`
+  - `filteredTodosStates` is computed by combining `todosStates` and `todoFilterStates`
 
 #### Usage of `states.convert`
 
 Use `states.convert` to convert each item by applying a function and only emit result that changed.
 
-For example `todoLength` is converted from `todos`:
+For example `todosLength` is converted from `todos`:
 
 ```dart
 void flutterScope() {
@@ -586,7 +556,7 @@ void flutterScope() {
 }
 ```
 
-We've seen basic usage of `States`, let's see how to integrate it with flutter.
+We've seen basic usage of `States`, let's see how to integrate with flutter.
 
 ### Usage of `StatesBuilder(...)`
 
@@ -783,3 +753,6 @@ void flutterScope() {
 ```
 
 [**Next Page - dart_scope**](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#dart_scope)
+
+[ValueNotifier]:https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html
+[Stream]:https://dart.dev/tutorials/language/streams
