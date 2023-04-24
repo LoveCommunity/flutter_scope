@@ -65,9 +65,6 @@ export 'src/flutter_scope.dart'
     FlutterScope,
     InheritedScope,
     BuildContextScopeX;
-export 'src/shared.dart' 
-  show 
-    FlutterEqual;
 export 'src/states_widgets.dart'
   show
     StatesWidgetBase,
