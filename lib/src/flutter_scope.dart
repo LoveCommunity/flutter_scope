@@ -5,10 +5,52 @@ import 'package:dart_scope/dart_scope.dart';
 
 import 'configurable_equality.dart';
 
+/// A `Builder` build a widget with an async scope.
 typedef AsyncScopeWidgetBuilder = Widget Function(BuildContext context, Async<Scope> asyncScope);
 
+/// FlutterScope is the range that something within it can be accessed.
 class FlutterScope extends StatefulWidget {
 
+  /// Use `FlutterScope(...)` to create a scope with configurations.
+  /// 
+  /// ```dart
+  /// FlutterScope(
+  ///   configure: [
+  ///     FinalValueNotifier<TodosNotifier, Map<String, Todo>>(
+  ///       name: 'todosNotifier',
+  ///       equal: (_) => TodosNotifier(),
+  ///     ),
+  ///     FinalValueNotifier<TodoFilterNotifier, TodoFilter>(
+  ///       name: 'todoFilterNotifier',
+  ///       equal: (_) => TodoFilterNotifier(),
+  ///     ),
+  ///   ],
+  ///   child: Builder(
+  ///     builder: (context) {
+  ///       final myTodosNotifier = context.scope.get<TodosNotifier>(name: 'todosNotifier');
+  ///       final myTodoFilterNotifier = context.scope.get<TodoFilterNotifier>(name: 'todoFilterNotifier');
+  ///       return ...;
+  ///     }
+  ///   ),
+  /// );
+  /// ```
+  /// 
+  /// Above example simulates:
+  /// 
+  /// ```dart
+  /// void flutterScope() { // `{` is the start of scope
+  /// 
+  ///   // create and exposed instances in current scope
+  ///   final TodosNotifier todosNotifier = TodosNotifier();
+  ///   final TodoFilterNotifier todoFilterNotifier = TodoFilterNotifier();
+  /// 
+  ///   // resolve instances in current scope
+  ///   final myTodosNotifier = todosNotifier;
+  ///   final myTodoFilterNotifier = todoFilterNotifier;
+  /// 
+  /// }                     // `}` is the end of scope
+  /// ```
+  /// 
   FlutterScope({
     Key? key,
     int? hotReloadKey,
@@ -23,6 +65,58 @@ class FlutterScope extends StatefulWidget {
     builder: _syncScopeWidgetBuilder(child),
   );
 
+  /// Use `FlutterScope.async(...)` to create a scope with async configurations.
+  /// 
+  /// If there is async setup like resolving `SharedPreference`. We can follow this: 
+  ///
+  /// ```dart
+  /// Future<Map<String, Todo>> resolveInitialTodosAsync() {
+  ///   await Future<void>.delayed(Duration(seconds: 1));
+  ///   return { ... };
+  /// }
+  /// 
+  /// ...
+  /// 
+  /// FlutterScope.async( // use `async` constructor
+  ///   configure: [
+  ///     // using `AsyncFinal` to handle async setup
+  ///     AsyncFinal<Map<String, Todo>>(
+  ///       equal: (_) async {
+  ///         return await resolveInitialTodosAsync();
+  ///       },
+  ///     ),
+  ///     FinalValueNotifier<TodosNotifier, Map<String, Todo>>(
+  ///       equal: (scope) => TodosNotifier(
+  ///         scope.get<Map<String, Todo>>(),
+  ///       ),
+  ///     ),
+  ///   ],
+  ///   builder: (context, asyncScope) {
+  ///     switch (asyncScope.status) {
+  ///       case AsyncStatus.loading:
+  ///         return ...; // loading widget
+  ///       case AsyncStatus.error:
+  ///         return ...; // error widget
+  ///       case AsyncStatus.loaded:
+  ///         final scope = asyncScope.requireData;
+  ///         final myTodosNotifier = scope.get<TodosNotifier>();
+  ///         return ...; // success widget
+  ///     },
+  ///   },
+  /// );
+  /// ```
+  /// 
+  /// Which simulates:
+  /// 
+  /// ```dart
+  /// void flutterScope() async {
+  ///   final Map<String, Todo> initialTodos = await resolveInitialTodosAsync();
+  ///   final TodosNotifier todosNotifier = TodosNotifier(initialTodos);
+  /// 
+  ///   final myTodosNotifier = todosNotifier;
+  /// }
+  /// ```
+  ///
   const FlutterScope.async({
     super.key,
     this.hotReloadKey,
@@ -31,16 +125,33 @@ class FlutterScope extends StatefulWidget {
     required this.builder,
   });
 
+  /// Change this key will trigger hot reload with new configurations.
+  /// 
+  /// When `hotReloadKey` is different from old one, old scope will be
+  /// replaced with new scope created using new configurations.
+  /// 
+  /// It only has effect in debug mode, since it is designed for
+  /// manually triggering hot reload.
+  /// 
+  /// See implementation in method `_flutterScopeState.didUpdateWidget`.
+  /// 
   final int? hotReloadKey;
+  /// The parent scope
   final Scope? parentScope;
+  /// The configurations
   final List<Configurable> configure;
+  /// Built widget with an async scope
   final AsyncScopeWidgetBuilder builder;
 
+  /// Resolve `Scope` which is inherited from context.
+  /// Return null if there is no scope inherited.
   static Scope? maybeOf(BuildContext context) {
     final inherited = context.getElementForInheritedWidgetOfExactType<InheritedScope>()?.widget as InheritedScope?;
     return inherited?.scope;
   }
 
+  /// Resolve `Scope` which is inherited from context.
+  /// Throws `error` if there is no scope inherited.
   static Scope of(BuildContext context) {
     final scope = FlutterScope.maybeOf(context);
     assert(scope != null, 'There is no scope associated with context: $context');
@@ -168,14 +279,72 @@ class _FlutterScopeState extends State<FlutterScope> {
 }
 
 
+/// Use `InheritedScope` for making an exist scope available to subtree. 
+/// 
+/// This is useful when current route share scope with new route:
+/// 
+/// ```dart
+/// FlutterScope(
+///   configure: [
+///     FinalValueNotifier<TodosNotifier, Map<String, Todo>>(
+///       equal: (_) => TodosNotifier(),
+///     ),
+///     FinalValueNotifier<TodoFilterNotifier, TodoFilter>(
+///       equal: (_) => TodoFilterNotifier(),
+///     ),
+///   ],
+///   child: Builder(
+///     builder: (context) {
+///       return Scaffold(
+///         ...
+///         floatActionButton: FloatActionButton(
+///           onPressed: () => _showAddTodoDialog(context),
+///           child: ...,
+///         ),
+///       ),
+///     },
+///   ),
+/// );
+/// 
+/// ...
+/// 
+/// void _showAddTodoDialog(BuildContext context) {
+///   showDialog( // show dialog will push a new route
+///     context: context,
+///     builder: (_) {
+///       return InheritedScope(  // use `InheritedScope` for
+///         scope: context.scope, // making exist scope available to subtree
+///         child: AlertDialog(
+///           ...,
+///           content: Builder(
+///             builder: (context) {
+///               // resolve instance in new route
+///               final myTodosNotifier = context.scope.get<TodosNotifier>();
+///               return ...;
+///             },
+///           ),
+///         ),
+///       );
+///     },
+///   );
+/// }
+/// ```
+/// 
+/// Above example shown:
+///  - press `FloatActionButton` will push a new route
+///  - passing scope from current route to new route using `InheritedScope`
+///  - resolve `TodosNotifier` in new route
+/// 
 class InheritedScope extends InheritedWidget {
 
+  /// Create a `InheritedScope` with an exist scope.
   const InheritedScope({
     super.key,
     required this.scope,
     required super.child,
   });
 
+  /// The inherited `scope` for subtree
   final Scope scope;
 
   @override
@@ -184,12 +353,18 @@ class InheritedScope extends InheritedWidget {
   }
 }
 
+/// `BuildContextScopeX` is an extension to `BuildContext`
+/// which add convenience methods to access `Scope`.
 extension BuildContextScopeX on BuildContext {
 
+  /// Resolve `Scope` which is inherited from context.
+  /// Return null if there is no scope inherited.
   Scope? get scopeOrNull {
     return FlutterScope.maybeOf(this);
   }
 
+  /// Resolve `Scope` which is inherited from context.
+  /// Throws `error` if there is no scope inherited.
   Scope get scope {
     return FlutterScope.of(this);
   }

@@ -124,7 +124,7 @@ void flutterScope() { // `{` is the start of scope
 
 This simple pseudocode shown:
  - function scope that starts with `{`, ends with `}`
- -  how to create and expose instances in current scope
+ - how to create and expose instances in current scope
  - how to resolve instances in current scope
 
 ### Usage of `name`
@@ -222,6 +222,8 @@ FlutterScope(
 ```
 
 ### Usage of `FlutterScope.async(...)`
+
+Use `FlutterScope.async(...)` to create a scope with async configurations.
 
 If there is async setup like resolving `SharedPreference`. We can follow this:
 
