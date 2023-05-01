@@ -2,8 +2,50 @@
 import 'package:dart_scope/dart_scope.dart';
 import 'package:flutter/foundation.dart';
 
+/// `FinalChangeNotifier` is a configuration simulate assignments
+/// with `ChangeNotifier` and `States<ChangeNotifier>`.
+/// 
+/// ```dart
+/// class Counter extends ChangeNotifier { ... }
+/// 
+/// ...
+/// 
+/// FlutterScope(
+///   configure: [
+///     FinalChangeNotifier<Counter>(
+///       name: 'counter',
+///       statesName: 'counterStates',
+///       equal: (_) => Counter(),
+///     ),
+///   ],
+///   child: Builder(
+///     builder: (context) {
+///       final myCounter = context.scope.get<Counter>(name: 'counter');
+///       final myCounterStates = context.scope.getStates<Counter>(name: 'counterStates');
+///       return ...;
+///     },
+///   ),
+/// );
+/// ```
+/// 
+/// Which simulates:
+/// 
+/// ```dart
+/// void flutterScope() {
+///   // create and exposed `ChangeNotifier` and `States` in current scope
+///   final Counter counter = Counter();
+///   final States<Counter> counterStates = changeNotifierToStates(counter);
+///   
+///   // resolve instances in current scope
+///   final myCounter = counter;
+///   final myCounterStates = counterStates;
+/// }
+/// ```
+/// 
 class FinalChangeNotifier<T extends ChangeNotifier> extends FinalStatesConvertible<T, T> {
 
+  /// Assign `ChangeNotifier` and its `States`,
+  /// then expose them in current scope.
   FinalChangeNotifier({
     super.name,
     required super.equal,
