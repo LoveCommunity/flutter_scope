@@ -12,18 +12,19 @@ _TestTodo _testTodo(TodoFilter filter) {
   } 
 }
 
-List<Todo> filteredTodos(List<Todo> todos, TodoFilter filter) {
+List<Todo> filterTodos(Map<String, Todo> todos, TodoFilter filter) {
   final test = _testTodo(filter);
   return todos
+    .values
     .where(test)
     .toList();
 }
 
-States<List<Todo>> filteredTodosStates({
-  required States<List<Todo>> todosStates,
+States<List<Todo>> filterTodosStates({
+  required States<Map<String, Todo>> todosStates,
   required States<TodoFilter> filterStates,
 }) => States.combine2(
   states1: todosStates,
   states2: filterStates,
-  combiner: filteredTodos,
+  combiner: filterTodos,
 );
