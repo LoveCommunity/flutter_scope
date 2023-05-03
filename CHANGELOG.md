@@ -1,3 +1,41 @@
+## 0.1.0-beta.1
+
+- feature 
+  - add widget `StatesWidgetBase` [\#64](https://github.com/LoveCommunity/flutter_scope/pull/64)
+- refactor 
+  - remove unused type `FlutterEqual` [\#73](https://github.com/LoveCommunity/flutter_scope/pull/73)
+  - reimplement widget `FlutterScope` [\#71](https://github.com/LoveCommunity/flutter_scope/pull/71)
+  - add equality `configurableListEquality` [\#70](https://github.com/LoveCommunity/flutter_scope/pull/70)
+  - add equality `RuntimeTypeEquality` [\#69](https://github.com/LoveCommunity/flutter_scope/pull/69)
+  - reimplement widget `StatesListener` [\#66](https://github.com/LoveCommunity/flutter_scope/pull/66)
+  - reimplement widget `StatesBuilder` [\#65](https://github.com/LoveCommunity/flutter_scope/pull/65)
+  - remove unnecessary annotation `visibleForTesting` [\#63](https://github.com/LoveCommunity/flutter_scope/pull/63)
+  - add equality `deepObservableEquality` [\#62](https://github.com/LoveCommunity/flutter_scope/pull/62)
+  - add equality `InstanceAsObservableEquality` [\#61](https://github.com/LoveCommunity/flutter_scope/pull/61)
+  - add equality `MultiSourcePipeObservableEquality` [\#60](https://github.com/LoveCommunity/flutter_scope/pull/60)
+  - add equality `PipeObservableEquality` [\#59](https://github.com/LoveCommunity/flutter_scope/pull/59)
+  - add equality `FallbackObservableEquality` [\#58](https://github.com/LoveCommunity/flutter_scope/pull/58)
+  - migrate with `InstanceAsObservable` [\#56](https://github.com/LoveCommunity/flutter_scope/pull/56)
+  - upgrade dart-sdk\(^2.18\) and dependencies [\#55](https://github.com/LoveCommunity/flutter_scope/pull/55)
+- docs 
+  - add api documentation [\#75](https://github.com/LoveCommunity/flutter_scope/pull/75)
+  - add `README` [\#72](https://github.com/LoveCommunity/flutter_scope/pull/72)
+- example 
+  - adjust todo example according to readme [\#76](https://github.com/LoveCommunity/flutter_scope/pull/76)
+  - migrate with new `States{Builder|Listener}` [\#67](https://github.com/LoveCommunity/flutter_scope/pull/67)
+  - add `todo` example [\#52](https://github.com/LoveCommunity/flutter_scope/pull/52)
+  - add `counter` example [\#50](https://github.com/LoveCommunity/flutter_scope/pull/50)
+- include changes made from dart\_scope 0.1.0-beta.1 [\#53](https://github.com/LoveCommunity/flutter_scope/pull/53)
+  - feature
+    - add convenience methods `scope.getStates{orNull}` [\#182](https://github.com/LoveCommunity/dart_scope.dart/pull/182)
+    - add observable `InstanceAsObservable` [\#181](https://github.com/LoveCommunity/dart_scope.dart/pull/181)
+  - refactor
+    - introduce observable `MultiSourcePipeObservable` [\#180](https://github.com/LoveCommunity/dart_scope.dart/pull/180)
+    - introduce observable `PipeObservable` [\#179](https://github.com/LoveCommunity/dart_scope.dart/pull/179)
+    - add `observation.configuration` field [\#178](https://github.com/LoveCommunity/dart_scope.dart/pull/178)
+    - prefer `source` over `observable` to name input observable [\#177](https://github.com/LoveCommunity/dart_scope.dart/pull/177)
+    - upgrade dart-sdk\(^2.18\) and dependencies [\#176](https://github.com/LoveCommunity/dart_scope.dart/pull/176)
+    
 ## 0.1.0-alpha.2
 
 - refactor 
