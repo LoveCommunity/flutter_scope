@@ -23,8 +23,8 @@ List<Todo> filterTodos(Map<String, Todo> todos, TodoFilter filter) {
 States<List<Todo>> filterTodosStates({
   required States<Map<String, Todo>> todosStates,
   required States<TodoFilter> filterStates,
-}) => States.combine2(
+}) => States.computed2(
   states1: todosStates,
   states2: filterStates,
-  combiner: filterTodos,
+  compute: filterTodos,
 );
