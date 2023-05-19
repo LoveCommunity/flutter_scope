@@ -7,7 +7,7 @@ import 'package:todo/flutter/my_navigator.dart';
 
 void main() {
 
-  testWidgets('`AddTodoPage` common usage', (tester) async {
+  testWidgets('AddTodoPage common usage', (tester) async {
 
     Todo? addedTodo;
 

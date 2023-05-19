@@ -5,7 +5,7 @@ import 'package:flutter_scope/flutter_scope.dart';
 
 void main() {
 
-  test('`FinalValueNotifier` is sync configuration', () {
+  test('FinalValueNotifier is sync configuration', () {
 
     final scope = Scope.root([
       FinalValueNotifier<_MockValueNotifier, String>(
@@ -17,7 +17,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` share same notifier and states in scope', () async {
+  test('FinalValueNotifier share same notifier and states in scope', () async {
 
     final scope = await Scope.root([
       FinalValueNotifier<_MockValueNotifier, String>(
@@ -38,7 +38,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` share same notifier and states in scope with name', () async {
+  test('FinalValueNotifier share same notifier and states in scope with name', () async {
 
     final scope = await Scope.root([
       FinalValueNotifier<_MockValueNotifier, String>(
@@ -61,7 +61,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` assign notifier which depends on other value', () async {
+  test('FinalValueNotifier assign notifier which depends on other value', () async {
 
     final scope = await Scope.root([
       Configurable((scope) {
@@ -80,7 +80,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` assign states success', () async {
+  test('FinalValueNotifier assign states success', () async {
 
     final scope = await Scope.root([
       FinalValueNotifier<_MockValueNotifier, String>(
@@ -108,7 +108,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` will dispose notifier when `dispose` is omitted', () async {
+  test('FinalValueNotifier will dispose notifier when dispose is omitted', () async {
 
     final scope = await Scope.root([
       FinalValueNotifier<_MockValueNotifier, String>(
@@ -124,7 +124,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` will dispose notifier when `dispose` is true', () async {
+  test('FinalValueNotifier will dispose notifier when dispose is true', () async {
 
     final scope = await Scope.root([
       FinalValueNotifier<_MockValueNotifier, String>(
@@ -141,7 +141,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` will not dispose notifier when `dispose` is false', () async {
+  test('FinalValueNotifier will not dispose notifier when dispose is false', () async {
 
     final scope = await Scope.root([
       FinalValueNotifier<_MockValueNotifier, String>(
@@ -158,7 +158,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` assign notifier lazily when `lazy` is omitted', () async {
+  test('FinalValueNotifier assign notifier lazily when lazy is omitted', () async {
 
     int invokes = 0;
 
@@ -177,7 +177,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` assign notifier lazily when `lazy` is true', () async {
+  test('FinalValueNotifier assign notifier lazily when lazy is true', () async {
 
     int invokes = 0;
 
@@ -197,7 +197,7 @@ void main() {
 
   });
 
-  test('`FinalValueNotifier` assign notifier immediately when `lazy` is false', () async {
+  test('FinalValueNotifier assign notifier immediately when lazy is false', () async {
     
     int invokes = 0;
 

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
 
-  testWidgets('`StatesWidgetBase` assigned states directly', (tester) async {
+  testWidgets('StatesWidgetBase assigned states directly', (tester) async {
 
     final List<String> recorded = [];
 
@@ -34,7 +34,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesWidgetBase` assigned states from scope', (tester) async {
+  testWidgets('StatesWidgetBase assigned states from scope', (tester) async {
 
     final List<String> recorded = [];
 
@@ -67,7 +67,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesWidgetBase` start observe states when been inserted into widget tree, stop observe when removed form widget tree', (tester) async {
+  testWidgets('StatesWidgetBase start observe states when been inserted into widget tree, stop observe when removed form widget tree', (tester) async {
 
     final List<String> invokes = [];
 
@@ -97,7 +97,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesWidgetBase` hot reload with new states when `Observable` tree changed', (tester) async {
+  testWidgets('StatesWidgetBase hot reload with new states when Observable tree changed', (tester) async {
 
     final List<String> invokes = [];
 
@@ -157,7 +157,7 @@ void main() {
     
   });
 
-  testWidgets('`StatesWidgetBase` hot reload with new states when `hotReloadKey` changed', (tester) async {
+  testWidgets('StatesWidgetBase hot reload with new states when hotReloadKey changed', (tester) async {
 
     final List<String> invokes = [];
 
@@ -210,7 +210,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilder` assigned states directly', (tester) async {
+  testWidgets('StatesBuilder assigned states directly', (tester) async {
 
     final List<String> recorded = [];
 
@@ -242,7 +242,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilder` assigned states from scope', (tester) async {
+  testWidgets('StatesBuilder assigned states from scope', (tester) async {
 
     final List<String> recorded = [];
 
@@ -278,7 +278,7 @@ void main() {
 
   });
  
-  testWidgets('`StatesBuilder` throw error when states is omitted and there is no `FlutterScope` above', (tester) async {
+  testWidgets('StatesBuilder throw error when states is omitted and there is no FlutterScope above', (tester) async {
 
     await tester.pumpWidget(
       StatesBuilder<String>(
@@ -298,7 +298,7 @@ void main() {
     
   });
 
-  testWidgets('`StatesBuilder` throw error when states is omitted and it is not exposed from `FlutterScope`', (tester) async {
+  testWidgets('StatesBuilder throw error when states is omitted and it is not exposed from FlutterScope', (tester) async {
 
     await tester.pumpWidget(
       FlutterScope(
@@ -321,7 +321,7 @@ void main() {
     
   });  
 
-  testWidgets('`StatesBuilder` start observe states when been inserted into widget tree, stop observe when removed form widget tree', (tester) async {
+  testWidgets('StatesBuilder start observe states when been inserted into widget tree, stop observe when removed form widget tree', (tester) async {
 
     final List<String> invokes = [];
 
@@ -352,7 +352,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesBuilder` hot reload with new states when `Observable` tree changed', (tester) async {
+  testWidgets('StatesBuilder hot reload with new states when Observable tree changed', (tester) async {
 
     final List<String> invokes = [];
 
@@ -415,7 +415,7 @@ void main() {
     
   });
 
-  testWidgets('`StatesBuilder` hot reload with new states when `hotReloadKey` changed', (tester) async {
+  testWidgets('StatesBuilder hot reload with new states when hotReloadKey changed', (tester) async {
 
     final List<String> invokes = [];
 
@@ -472,7 +472,7 @@ void main() {
   });
 
 
-  testWidgets('`StatesListener` assigned states directly', (tester) async {
+  testWidgets('StatesListener assigned states directly', (tester) async {
 
     final List<String> recorded = [];
 
@@ -501,7 +501,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener` assigned states from scope', (tester) async {
+  testWidgets('StatesListener assigned states from scope', (tester) async {
 
     final List<String> recorded = [];
 
@@ -530,7 +530,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener` skip initial state if `skipInitialState` is omitted', (tester) async {
+  testWidgets('StatesListener skip initial state if skipInitialState is omitted', (tester) async {
 
     final List<String> recorded = [];
 
@@ -553,7 +553,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener` skip initial state if `skipInitialState` is true', (tester) async {
+  testWidgets('StatesListener skip initial state if skipInitialState is true', (tester) async {
 
     final List<String> recorded = [];
 
@@ -577,7 +577,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener` will not skip initial state if `skipInitialState` is false', (tester) async {
+  testWidgets('StatesListener will not skip initial state if skipInitialState is false', (tester) async {
 
     final List<String> recorded = [];
 
@@ -603,7 +603,7 @@ void main() {
 
   });
   
-  testWidgets('`StatesListener` throw error when states is omitted and there is no `FlutterScope` above', (tester) async {
+  testWidgets('StatesListener throw error when states is omitted and there is no FlutterScope above', (tester) async {
 
     await tester.pumpWidget(
       StatesListener<String>(
@@ -624,7 +624,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener` throw error when states is omitted and it is not exposed from `FlutterScope`', (tester) async {
+  testWidgets('StatesListener throw error when states is omitted and it is not exposed from FlutterScope', (tester) async {
 
     await tester.pumpWidget(
       FlutterScope(
@@ -647,7 +647,7 @@ void main() {
     );
   });  
 
-  testWidgets('`StatesListener` start observe states when been inserted into widget tree, stop observe when removed form widget tree', (tester) async {
+  testWidgets('StatesListener start observe states when been inserted into widget tree, stop observe when removed form widget tree', (tester) async {
 
     final List<String> invokes = [];
 
@@ -679,7 +679,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener` hot reload with new states when `Observable` tree changed', (tester) async {
+  testWidgets('StatesListener hot reload with new states when Observable tree changed', (tester) async {
 
     final List<String> invokes = [];
 
@@ -745,7 +745,7 @@ void main() {
 
   });
 
-  testWidgets('`StatesListener` hot reload with new states when `hotReloadKey` changed', (tester) async {
+  testWidgets('StatesListener hot reload with new states when hotReloadKey changed', (tester) async {
 
     final List<String> invokes = [];
 

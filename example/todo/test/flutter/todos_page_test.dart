@@ -39,7 +39,7 @@ class _MyMockNavigator implements MyNavigator {
 
 void main() {
 
-  testWidgets('`TodosView` convert input `states` into widget tree', (tester) async {
+  testWidgets('TodosView convert input states into widget tree', (tester) async {
     
     final todoFilter = Variable(TodoFilter.all);
     final todos = Variable(<Todo>[]);
@@ -81,7 +81,7 @@ void main() {
     todos.dispose();
   });
 
-  testWidgets('`TodosView` send output `events` back via callbacks', (tester) async {
+  testWidgets('TodosView send output events back via callbacks', (tester) async {
 
     final todoFilter = Variable(TodoFilter.all);
     final todos = Variable([_uncompletedTodo1]);
@@ -147,7 +147,7 @@ void main() {
     todos.dispose();
   });
 
-  testWidgets('`TodosPage` common usage', (tester) async {
+  testWidgets('TodosPage common usage', (tester) async {
 
     final myNavigator = _MyMockNavigator();
 

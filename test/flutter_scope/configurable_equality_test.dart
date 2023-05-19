@@ -71,7 +71,7 @@ final _changedComplexConfigurables3 = [
 
 void main() {
 
-  test('`runtimeTypeEquality.isValidKey` verify objects', () {
+  test('runtimeTypeEquality.isValidKey verify objects', () {
     
     const equality = RuntimeTypeEquality();
 
@@ -106,7 +106,7 @@ void main() {
 
   });
 
-  test('`runtimeTypeEquality.equals` comparing objects for equality', () {
+  test('runtimeTypeEquality.equals comparing objects for equality', () {
 
     const equality = RuntimeTypeEquality();
     
@@ -165,7 +165,7 @@ void main() {
 
   });
 
-  test('`runtimeTypeEquality.hash` return same value when objects are equal', () {
+  test('runtimeTypeEquality.hash return same value when objects are equal', () {
 
     const equality = RuntimeTypeEquality();
 
@@ -198,7 +198,7 @@ void main() {
     
   });
 
-  test('`configurableListEquality.isValidKey` verify objects', () {
+  test('configurableListEquality.isValidKey verify objects', () {
 
     final configurables = [
       null,
@@ -247,7 +247,7 @@ void main() {
 
   });
 
-  test('`configurableListEquality.equals` comparing objects for equality', () {
+  test('configurableListEquality.equals comparing objects for equality', () {
 
     final configurables = [
       [_complexConfigurables1, _complexConfigurables2],
@@ -272,7 +272,7 @@ void main() {
 
   });
 
-  test('`configurableListEquality.hash` return same value when objects are equal', () {
+  test('configurableListEquality.hash return same value when objects are equal', () {
 
     final configurables = [
       [_complexConfigurables1, _complexConfigurables2],

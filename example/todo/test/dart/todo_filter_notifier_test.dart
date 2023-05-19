@@ -5,7 +5,7 @@ import 'package:todo/dart/todo_filter_notifier.dart';
 
 void main() {
 
-  test('`TodoFilterNotifier` common usage', () {
+  test('TodoFilterNotifier common usage', () {
     
     final notifier = TodoFilterNotifier();
     expect(notifier.value, TodoFilter.all);

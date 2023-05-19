@@ -6,7 +6,7 @@ import 'package:flutter_scope/flutter_scope.dart';
 
 void main() {
 
-  testWidgets('`FlutterScope.maybeOf` return null if there is no `FlutterScope` above', (tester) async {
+  testWidgets('FlutterScope.maybeOf return null if there is no FlutterScope above', (tester) async {
 
     Scope? scope;
 
@@ -21,7 +21,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.maybeOf` return scope if there is `FlutterScope` above', (tester) async {
+  testWidgets('FlutterScope.maybeOf return scope if there is FlutterScope above', (tester) async {
 
     Scope? scope;
 
@@ -45,7 +45,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.of` throw error if there is no `FlutterScope` above', (tester) async {
+  testWidgets('FlutterScope.of throw error if there is no FlutterScope above', (tester) async {
 
     await tester.pumpWidget(
       Builder(builder: (context) {
@@ -66,7 +66,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.of` return scope if there is `FlutterScope` above', (tester) async {
+  testWidgets('FlutterScope.of return scope if there is FlutterScope above', (tester) async {
 
     Scope? scope;
 
@@ -88,7 +88,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` place an inherited scope in widget tree', (tester) async {
+  testWidgets('FlutterScope.defaultConstructor place an inherited scope in widget tree', (tester) async {
 
     Scope? scope;
 
@@ -106,7 +106,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` configure scope failed will throw assert error', (tester) async {
+  testWidgets('FlutterScope.defaultConstructor configure scope failed will throw assert error', (tester) async {
 
     final exception = Exception('custom exception');
 
@@ -131,7 +131,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` configure scope async will throw assert error', (tester) async {
+  testWidgets('FlutterScope.defaultConstructor configure scope async will throw assert error', (tester) async {
 
     await tester.pumpWidget(
       FlutterScope(
@@ -154,7 +154,7 @@ void main() {
 
   });
 
-  testWidgets("`FlutterScope.defaultConstructor` nested scope inherit values from implicitly parent scope", (tester) async {
+  testWidgets("FlutterScope.defaultConstructor nested scope inherit values from implicitly parent scope", (tester) async {
 
     Scope? parent;
     Scope? scope;
@@ -194,7 +194,7 @@ void main() {
 
   });
 
-  testWidgets("`FlutterScope.defaultConstructor` created scope inherit values from explicitly parent scope", (tester) async {
+  testWidgets("FlutterScope.defaultConstructor created scope inherit values from explicitly parent scope", (tester) async {
 
     final Scope parent = await Scope.root([
       Final<String>(name: 'state1', equal: (_) => 'a'),
@@ -229,7 +229,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` dispose registered resources when `FlutterScope` is removed from widget tree', (tester) async {
+  testWidgets('FlutterScope.defaultConstructor dispose registered resources when FlutterScope is removed from widget tree', (tester) async {
 
     bool disposed = false;
 
@@ -254,7 +254,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` hot reload with new parent', (tester) async {
+  testWidgets('FlutterScope.defaultConstructor hot reload with new parent', (tester) async {
     
     final invokes = <String>[];
 
@@ -309,7 +309,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` hot reload with new configure when configurable list changed', (tester) async {
+  testWidgets('FlutterScope.defaultConstructor hot reload with new configure when configurable list changed', (tester) async {
     
     final invokes = <String>[];
 
@@ -369,7 +369,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.defaultConstructor` hot reload with new configure when `hotReloadKey` changed', (tester) async {
+  testWidgets('FlutterScope.defaultConstructor hot reload with new configure when hotReloadKey changed', (tester) async {
     
     final invokes = <String>[];
 
@@ -431,7 +431,7 @@ void main() {
 
   });
 
-  testWidgets('`InheritedScope` place an inherited scope in widget tree using an existing scope', (tester) async {
+  testWidgets('InheritedScope place an inherited scope in widget tree using an existing scope', (tester) async {
 
     final existingScope = await Scope.root([]);
 
@@ -452,7 +452,7 @@ void main() {
 
   });
 
-  testWidgets("`InheritedScope` won't dispose registered resources when `FlutterScope` is removed from widget tree", (tester) async {
+  testWidgets("InheritedScope won't dispose registered resources when FlutterScope is removed from widget tree", (tester) async {
 
     bool disposed = false;
 
@@ -479,7 +479,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` build with `asyncScope` when resolve scope success', (tester) async {
+  testWidgets('FlutterScope.async build with asyncScope when resolve scope success', (tester) async {
 
     final List<Async<Scope>> asyncScopes = [];
 
@@ -510,7 +510,7 @@ void main() {
     
   });
 
-  testWidgets('`FlutterScope.async` build with `asyncScope` when resolve scope failed', (tester) async {
+  testWidgets('FlutterScope.async build with asyncScope when resolve scope failed', (tester) async {
 
     final List<Async<Scope>> asyncScopes = [];
 
@@ -543,7 +543,7 @@ void main() {
     
   });
 
-  testWidgets('`FlutterScope.async` place an inherited scope in widget tree after scope resolved success', (tester) async {
+  testWidgets('FlutterScope.async place an inherited scope in widget tree after scope resolved success', (tester) async {
 
     Scope? scope;
 
@@ -567,7 +567,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` nested scope inherit values from implicitly parent scope', (tester) async {
+  testWidgets('FlutterScope.async nested scope inherit values from implicitly parent scope', (tester) async {
 
     Scope? parent;
     Scope? scope;
@@ -612,7 +612,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` created scope inherit values from explicitly parent scope', (tester) async {
+  testWidgets('FlutterScope.async created scope inherit values from explicitly parent scope', (tester) async {
     
     Scope? scope;
 
@@ -651,7 +651,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` dispose registered resources when `FlutterScope` is removed from widget tree', (tester) async {
+  testWidgets('FlutterScope.async dispose registered resources when FlutterScope is removed from widget tree', (tester) async {
     
     bool disposed = false;
 
@@ -678,7 +678,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` defer dispose registered resources when `FlutterScope` is removed from widget tree and scope is not yet resolved', (tester) async {
+  testWidgets('FlutterScope.async defer dispose registered resources when FlutterScope is removed from widget tree and scope is not yet resolved', (tester) async {
     
     bool disposed = false;
     final completer = Completer<void>();
@@ -708,7 +708,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` dispose registered resources when resolve scope failed', (tester) async {
+  testWidgets('FlutterScope.async dispose registered resources when resolve scope failed', (tester) async {
 
     bool disposed = false;
     final completer = Completer<void>();
@@ -736,7 +736,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` hot reload with new parent', (tester) async {
+  testWidgets('FlutterScope.async hot reload with new parent', (tester) async {
     
     final invokes = <String>[];
 
@@ -791,7 +791,7 @@ void main() {
     
   });
 
-  testWidgets('`FlutterScope.async` hot reload with new configure when configurable list changed', (tester) async {
+  testWidgets('FlutterScope.async hot reload with new configure when configurable list changed', (tester) async {
 
     final invokes = <String>[];
 
@@ -851,7 +851,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` hot reload with new configure when `hotReloadKey` changed', (tester) async {
+  testWidgets('FlutterScope.async hot reload with new configure when hotReloadKey changed', (tester) async {
 
     final invokes = <String>[];
 
@@ -912,7 +912,7 @@ void main() {
 
   });
 
-  testWidgets('`FlutterScope.async` hot reload with new configure, defer dispose old registered resources when old scope is not yet resolved', (tester) async {
+  testWidgets('FlutterScope.async hot reload with new configure, defer dispose old registered resources when old scope is not yet resolved', (tester) async {
 
     final invokes = <String>[];
     final completer = Completer<void>();
@@ -969,7 +969,7 @@ void main() {
 
   });
 
-  testWidgets('`context.scopeOrNull` return null if there is no `FlutterScope` above', (tester) async {
+  testWidgets('context.scopeOrNull return null if there is no FlutterScope above', (tester) async {
 
     Scope? scope;
 
@@ -984,7 +984,7 @@ void main() {
 
   });
 
-  testWidgets('`context.scopeOrNull` return scope if there is `FlutterScope` above', (tester) async {
+  testWidgets('context.scopeOrNull return scope if there is FlutterScope above', (tester) async {
 
     Scope? scope;
 
@@ -1013,7 +1013,7 @@ void main() {
 
   });
 
-  testWidgets('`context.scope` throw error if there is no `FlutterScope` above', (tester) async {
+  testWidgets('context.scope throw error if there is no FlutterScope above', (tester) async {
 
     await tester.pumpWidget(
       Builder(builder: (context) {
@@ -1034,7 +1034,7 @@ void main() {
 
   });
 
-  testWidgets('`context.scope` return scope if there is `FlutterScope` above', (tester) async {
+  testWidgets('context.scope return scope if there is FlutterScope above', (tester) async {
 
     Scope? scope;
 

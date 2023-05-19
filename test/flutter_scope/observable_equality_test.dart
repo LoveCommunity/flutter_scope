@@ -147,7 +147,7 @@ final _changedComplexObservable6 = _ObservableZip<int, int>(
 
 void main() {
 
-  test('`fallbackObservableEquality.isValidKey` verify objects', () {
+  test('fallbackObservableEquality.isValidKey verify objects', () {
 
     const equality = FallbackObservableEquality<int>();
     
@@ -176,7 +176,7 @@ void main() {
 
   });
 
-  test('`fallbackObservableEquality.equals` comparing observables for equality', () {
+  test('fallbackObservableEquality.equals comparing observables for equality', () {
 
     const equality = FallbackObservableEquality<int>();
 
@@ -205,7 +205,7 @@ void main() {
 
   });
 
-  test('`fallbackObservableEquality.hash` return same value when observables are equal', () {
+  test('fallbackObservableEquality.hash return same value when observables are equal', () {
 
     const equality = FallbackObservableEquality<int>();
 
@@ -230,7 +230,7 @@ void main() {
 
   });
 
-  test('`pipeObservableEquality.isValidKey` verify objects', () {
+  test('pipeObservableEquality.isValidKey verify objects', () {
 
     final equality = PipeObservableEquality<int, int>(
       () => const FallbackObservableEquality<int>()
@@ -270,7 +270,7 @@ void main() {
     );
   });
 
-  test('`pipeObservableEquality.equals` comparing observables for equality', () {
+  test('pipeObservableEquality.equals comparing observables for equality', () {
 
     final equality = PipeObservableEquality<int, int>(
       () => const FallbackObservableEquality<int>()
@@ -307,7 +307,7 @@ void main() {
 
   });
 
-  test('`pipeObservableEquality.hash` return same value when observables are equal', () {
+  test('pipeObservableEquality.hash return same value when observables are equal', () {
 
     final equality = PipeObservableEquality<int, int>(
       () => const FallbackObservableEquality<int>()
@@ -339,7 +339,7 @@ void main() {
   });
 
 
-  test('`multiSourceObservableEquality.isValidKey` verify objects', () {
+  test('multiSourceObservableEquality.isValidKey verify objects', () {
 
     final equality = MultiSourcePipeObservableEquality<int, int>(
       () => const FallbackObservableEquality<int>()
@@ -381,7 +381,7 @@ void main() {
 
   });
 
-  test('`multiSourceObservableEquality.equals` comparing observables for equality', () {
+  test('multiSourceObservableEquality.equals comparing observables for equality', () {
 
     final equality = MultiSourcePipeObservableEquality<int, int>(
       () => const FallbackObservableEquality<int>()
@@ -436,7 +436,7 @@ void main() {
 
   });
 
-  test('`multiSourceObservableEquality.hash` return same value when observables are equal', () {
+  test('multiSourceObservableEquality.hash return same value when observables are equal', () {
 
     final equality = MultiSourcePipeObservableEquality<int, int>(
       () => const FallbackObservableEquality<int>()
@@ -473,7 +473,7 @@ void main() {
 
   });
 
-  test('`instanceAsObservableEquality.isValidKey` verify objects', () {
+  test('instanceAsObservableEquality.isValidKey verify objects', () {
 
     const equality = InstanceAsObservableEquality<Object, int>();
 
@@ -511,7 +511,7 @@ void main() {
 
   });
 
-  test('`instanceAsObservableEquality.equals` comparing observables for equality', () {
+  test('instanceAsObservableEquality.equals comparing observables for equality', () {
 
     const equality = InstanceAsObservableEquality<Object, int>();
 
@@ -542,7 +542,7 @@ void main() {
 
   });
 
-  test('`instanceAsObservableEquality.hash` return same value when observables are equal', () {
+  test('instanceAsObservableEquality.hash return same value when observables are equal', () {
 
     const equality = InstanceAsObservableEquality<Object, int>();
 
@@ -569,7 +569,7 @@ void main() {
 
   });
   
-  test('`deepObservableEquality.isValidKey` verify objects', () {
+  test('deepObservableEquality.isValidKey verify objects', () {
 
     final objects = [
       true,
@@ -618,7 +618,7 @@ void main() {
     );
   });
 
-  test('`deepObservableEquality.equals` comparing observables for equality', () {
+  test('deepObservableEquality.equals comparing observables for equality', () {
     
     final observables = [
       [_complexObservable1, _complexObservable2],
@@ -653,7 +653,7 @@ void main() {
 
   });
 
-  test('`deepObservableEquality.hash` return same value when observables are equal', () {
+  test('deepObservableEquality.hash return same value when observables are equal', () {
 
     final observables = [
       [_observableCreate1, _observableCreate1],

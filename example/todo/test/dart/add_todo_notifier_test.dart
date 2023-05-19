@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:todo/dart/add_todo_notifier.dart';
 
 void main() {
-  test('`addTodoNotifier.onTodoTitleChanged` value updates', () {
+  test('addTodoNotifier.onTodoTitleChanged value updates', () {
     final notifier = AddTodoNotifier();
     expect(notifier.value, const AddTodoState());
     notifier.onTodoTitleChanged('todo title');

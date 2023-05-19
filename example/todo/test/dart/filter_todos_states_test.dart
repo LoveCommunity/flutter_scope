@@ -26,7 +26,7 @@ final _todos = <String, Todo>{
 
 void main() {
 
-  test('`filterTodos` using `TodoFilter.all`', () {
+  test('filterTodos using TodoFilter.all', () {
     final todos = filterTodos(_todos, TodoFilter.all);
     expect(todos, [
       _uncompletedTodo,
@@ -34,21 +34,21 @@ void main() {
     ]);
   });
 
-  test('`filterTodos` using `TodoFilter.completed`', () {
+  test('filterTodos using TodoFilter.completed', () {
     final todos = filterTodos(_todos, TodoFilter.completed);
     expect(todos, [
       _completedTodo
     ]);
   });
 
-  test('`filterTodos` using `TodoFilter.uncompleted`', () {
+  test('filterTodos using TodoFilter.uncompleted', () {
     final todos = filterTodos(_todos, TodoFilter.uncompleted);
     expect(todos, [
       _uncompletedTodo
     ]);
   });
 
-  test('`filterTodosStates` common usage', () {
+  test('filterTodosStates common usage', () {
     
     final List<List<Todo>> recorded = [];
 
