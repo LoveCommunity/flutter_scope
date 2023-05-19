@@ -29,10 +29,10 @@ A declarative dependency injection library which use dart syntax and flutter sty
     - [Usage of `InheritedScope`](#usage-of-inheritedscope)
     - [Usage of `FlutterScope`'s `parentScope` parameter](#usage-of-flutterscopes-parentscope-parameter)
     - [Usage of `States`](#usage-of-states)
-      - [Usage of `States.combine`](#usage-of-statescombine)
+      - [Usage of `States.computed`](#usage-of-statescomputed)
       - [Usage of `states.convert`](#usage-of-statesconvert)
     - [Usage of `StatesBuilder(...)`](#usage-of-statesbuilder)
-      - [Usage of `StatesBuilder` with `States.combine` operator](#usage-of-statesbuilder-with-statescombine-operator)
+      - [Usage of `StatesBuilder` with `States.computed` operator](#usage-of-statesbuilder-with-statescomputed-operator)
     - [Usage of `StatesListener(...)`](#usage-of-stateslistener)
       - [Usage of `StatesListener` with `states.convert` operator](#usage-of-stateslistener-with-statesconvert-operator)
 
@@ -485,11 +485,11 @@ Note: `States` is similar to dart [Stream], but it is slightly different. `State
 
 Since `States` has composition capability, let's introducing two common used operators.
 
-#### Usage of `States.combine`
+#### Usage of `States.computed`
 
-Use `States.combine` to combine multiple states into one `States`.
+Use `States.computed` to combine multiple states into one `States`.
 
-When an item is emitted by one of multiple States, combine the latest item emitted by each States via a specified function and emit combined item.
+When an item is emitted by one of multiple States, combine the latest item emitted by each States via a specified function and emit combined item that changed.
 
 For example `filteredTodos` is computed by combining `todos` and `todoFilter`:
 
@@ -514,10 +514,10 @@ void flutterScope() async {
   final States<Map<String, Todo>> todosStates = ...;
   final States<TodoFilter> todoFilterStates = ...;
 
-  final States<List<Todo>> filteredTodosStates = States.combine2(
+  final States<List<Todo>> filteredTodosStates = States.computed2(
     states1: todosStates,
     states2: todoFilterStates,
-    combiner: filterTodos, // `filterTodos` is a pure function declared at top
+    compute: filterTodos, // `filterTodos` is a pure function declared at top
   );
 
   late List<Todos> state;
@@ -601,9 +601,9 @@ void flutterScope() async {
 
 `StatesBuilder` has composition capability, since it is based on `States`.
 
-#### Usage of `StatesBuilder` with `States.combine` operator
+#### Usage of `StatesBuilder` with `States.computed` operator
 
-Use `StatesBuilder` with `States.combine` operator to combine multiple states into one states, then map it to widget.
+Use `StatesBuilder` with `States.computed` operator to combine multiple states into one states, then map it to widget.
 
 ```dart
 ...
@@ -620,10 +620,10 @@ FlutterScope(
   child: Builder(
     builder: (context) {
       return StatesBuilder<List<Todo>>(
-        states: States.combine2(
+        states: States.computed2(
           states1: context.scope.getStates<Map<String, Todo>>(),
           states2: context.scope.getStates<TodoFilter>(),
-          combiner: filterTodos,
+          compute: filterTodos,
         ),
         builder: (context, filteredTodos) {
           return ...; // map state to widget
@@ -645,10 +645,10 @@ void flutterScope() async {
   final States<Map<String, Todo>> todosStates = todosNotifierAsStates(todosNotifier);
   final States<TodoFilter> todoFilterStates = todosFilterNotifierAsStates(todosFilterNotifier);
 
-  final States<List<Todo>> filteredTodosStates = States.combine2(
+  final States<List<Todo>> filteredTodosStates = States.computed2(
     states1: todosStates,
     states2: todoFilterStates,
-    combiner: filterTodos, 
+    compute: filterTodos,
   );
 
   late List<Todos> state;

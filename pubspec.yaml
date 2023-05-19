@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.8.0
-  dart_scope: ^0.1.0-beta.2
+  dart_scope: ^0.1.0-beta.3
   collection: ^1.16.0
 
 dev_dependencies:
