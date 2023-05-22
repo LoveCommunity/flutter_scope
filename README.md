@@ -572,7 +572,7 @@ FlutterScope(
     ),
   ],
   child: StatesBuilder<TodoFilter>(
-    builder: (context, todoFilter) {
+    builder: (context, todoFilter, child) {
       return ...; // map state to widget
     },
   ),
@@ -625,7 +625,7 @@ FlutterScope(
           states2: context.scope.getStates<TodoFilter>(),
           compute: filterTodos,
         ),
-        builder: (context, filteredTodos) {
+        builder: (context, filteredTodos, child) {
           return ...; // map state to widget
         },
       );
