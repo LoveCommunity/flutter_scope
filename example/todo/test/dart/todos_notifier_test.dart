@@ -33,7 +33,7 @@ final _completedTodo2 = Todo(
 
 void main() {
 
-  test('`TodosNotifier` updates value', () {
+  test('TodosNotifier updates value', () {
 
     final notifier = TodosNotifier();
     expect(notifier.value, TodosState.empty);

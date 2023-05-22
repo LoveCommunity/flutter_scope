@@ -5,7 +5,7 @@ import 'package:flutter_scope/flutter_scope.dart';
 
 void main() {
 
-  test('`FinalChangeNotifier` is sync configuration', () {
+  test('FinalChangeNotifier is sync configuration', () {
 
     final scope = Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
@@ -17,7 +17,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` share same value and states in scope', () async {
+  test('FinalChangeNotifier share same value and states in scope', () async {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
@@ -38,7 +38,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` share same value and states in scope with name', () async {
+  test('FinalChangeNotifier share same value and states in scope with name', () async {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
@@ -60,7 +60,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` assign value which depends on other value', () async {
+  test('FinalChangeNotifier assign value which depends on other value', () async {
 
     final scope = await Scope.root([
       Configurable((scope) {
@@ -79,7 +79,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` assign states success', () async {
+  test('FinalChangeNotifier assign states success', () async {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
@@ -109,7 +109,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` will dispose notifier when `dispose` is omitted', () async {
+  test('FinalChangeNotifier will dispose notifier when dispose is omitted', () async {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
@@ -125,7 +125,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` will dispose notifier when `dispose` is true', () async {
+  test('FinalChangeNotifier will dispose notifier when dispose is true', () async {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
@@ -142,7 +142,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` will not dispose notifier when `dispose` is false', () async {
+  test('FinalChangeNotifier will not dispose notifier when dispose is false', () async {
 
     final scope = await Scope.root([
       FinalChangeNotifier<_MockChangeNotifier>(
@@ -159,7 +159,7 @@ void main() {
 
   });
 
-  test('`FinalChangeNotifier` assign notifier lazily when `lazy` is omitted', () async {
+  test('FinalChangeNotifier assign notifier lazily when lazy is omitted', () async {
 
     int invokes = 0;
 
@@ -178,7 +178,7 @@ void main() {
     
   });
 
-  test('`FinalChangeNotifier` assign notifier lazily when `lazy` is true', () async {
+  test('FinalChangeNotifier assign notifier lazily when lazy is true', () async {
 
     int invokes = 0;
 
@@ -198,7 +198,7 @@ void main() {
     
   });
 
-  test('`FinalChangeNotifier` assign notifier immediately when `lazy` is false', () async {
+  test('FinalChangeNotifier assign notifier immediately when lazy is false', () async {
 
     int invokes = 0;
 
