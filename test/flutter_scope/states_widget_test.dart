@@ -481,52 +481,28 @@ void main() {
       StatesBuilder<String>(
         states: variable.asStates(),
         builder: (context, state, child) {
-          return Builder(
-            builder: (context) {
-              invokes.add('builder as builder parameter');
-              return Container();
-            },
-          ); 
-        },
-      ),
-    );
-    expect(invokes, [
-      'builder as builder parameter',
-    ]);
-
-    variable.value = 'b';
-    await tester.pump();
-    expect(invokes, [
-      'builder as builder parameter',
-      'builder as builder parameter',
-    ]);
-
-    await tester.pumpWidget(
-      StatesBuilder<String>(
-        states: variable.asStates(),
-        builder: (context, state, child) {
+          invokes.add('builder builds');
           return child!;
         },
         child: Builder(
           builder: (context) {
-            invokes.add('builder as child parameter');
+            invokes.add('child builds');
             return Container();
           },
         ),
       ),
     );
     expect(invokes, [
-      'builder as builder parameter',
-      'builder as builder parameter',
-      'builder as child parameter',
+      'builder builds',
+      'child builds',
     ]);
 
-    variable.value = 'c';
+    variable.value = 'b';
     await tester.pump();
     expect(invokes, [
-      'builder as builder parameter',
-      'builder as builder parameter',
-      'builder as child parameter',
+      'builder builds',
+      'child builds',
+      'builder builds',
     ]);
 
     variable.dispose();
