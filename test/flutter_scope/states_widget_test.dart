@@ -219,7 +219,7 @@ void main() {
     await tester.pumpWidget(
       StatesBuilder<String>(
         states: variable.asStates(),
-        builder: (context, state) {
+        builder: (context, state, _) {
           recorded.add(state);
           return Container(); 
         },
@@ -254,7 +254,7 @@ void main() {
           Final<States<String>>(equal: (_) => variable.asStates()),
         ],
         child: StatesBuilder<String>(
-          builder: (context, state) {
+          builder: (context, state, _) {
             recorded.add(state);
             return Container();
           },
@@ -282,7 +282,7 @@ void main() {
 
     await tester.pumpWidget(
       StatesBuilder<String>(
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       ),
     );
 
@@ -304,7 +304,7 @@ void main() {
       FlutterScope(
         configure: const [],
         child: StatesBuilder<String>(
-          builder: (context, state) => Container(),
+          builder: (context, state, _) => Container(),
         ),
       ),
     );
@@ -337,7 +337,7 @@ void main() {
     await tester.pumpWidget(
       StatesBuilder<String>(
         states: states,
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       ),
     );
     expect(invokes, [
@@ -384,7 +384,7 @@ void main() {
     await tester.pumpWidget(
       StatesBuilder<String>(
         states: states,
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       ),
     );
     expect(invokes, [
@@ -394,7 +394,7 @@ void main() {
     await tester.pumpWidget(
       StatesBuilder<String>(
         states: similarStates, // use similar states
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       )
     );
     expect(invokes, [
@@ -404,7 +404,7 @@ void main() {
     await tester.pumpWidget(
       StatesBuilder<String>(
         states: changedStates,
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       ),
     );
     expect(invokes, [
@@ -439,7 +439,7 @@ void main() {
     await tester.pumpWidget(
       StatesBuilder<String>(
         states: states,
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       ),
     );
     expect(invokes, [
@@ -449,7 +449,7 @@ void main() {
     await tester.pumpWidget(
       StatesBuilder<String>(
         states: similarStates, // use similar states
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       ),
     );
     expect(invokes, [
@@ -460,7 +460,7 @@ void main() {
       StatesBuilder<String>(
         hotReloadKey: 1,
         states: similarStates,
-        builder: (context, state) => Container(),
+        builder: (context, state, _) => Container(),
       ),
     );
     expect(invokes, [
@@ -471,6 +471,43 @@ void main() {
 
   });
 
+  testWidgets('StatesBuilder optimize build with child parameter', (tester) async {
+
+    final List<String> invokes = [];
+
+    final variable = Variable('a');
+
+    await tester.pumpWidget(
+      StatesBuilder<String>(
+        states: variable.asStates(),
+        builder: (context, state, child) {
+          invokes.add('builder builds');
+          return child!;
+        },
+        child: Builder(
+          builder: (context) {
+            invokes.add('child builds');
+            return Container();
+          },
+        ),
+      ),
+    );
+    expect(invokes, [
+      'builder builds',
+      'child builds',
+    ]);
+
+    variable.value = 'b';
+    await tester.pump();
+    expect(invokes, [
+      'builder builds',
+      'child builds',
+      'builder builds',
+    ]);
+
+    variable.dispose();
+
+  });
 
   testWidgets('StatesListener assigned states directly', (tester) async {
 

@@ -57,7 +57,7 @@ class AddTodoView extends StatelessWidget {
         floatingActionButton: StatesBuilder(
           states: addTodoStates
             .convert((state) => state.isTodoTitleValid),
-          builder: (context, isTodoTitleValid)  => FloatingActionButton(
+          builder: (context, isTodoTitleValid, _)  => FloatingActionButton(
             onPressed: isTodoTitleValid 
               ? addTodoNotifier.onTodoSubmitted 
               : null,

@@ -78,7 +78,7 @@ class CounterView extends StatelessWidget {
             ),
             // Convert counter state to UI, as: UI = f(state)
             StatesBuilder<CounterState>(
-              builder: (context, count) => Text(
+              builder: (context, count, child) => Text(
                 '$count',
                 style: Theme.of(context).textTheme.headline4,
               ),

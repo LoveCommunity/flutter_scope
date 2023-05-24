@@ -63,7 +63,7 @@ class TodosView extends StatelessWidget {
         actions: [
           StatesBuilder(
             states: todoFilterStates,
-            builder: (context, filter) {
+            builder: (context, filter, _) {
               return TodoFilterButton(
                 filter: filter,
                 onSelected: onTodoFilterChanged,
@@ -74,7 +74,7 @@ class TodosView extends StatelessWidget {
       ),
       body: StatesBuilder(
         states: todosStates,
-        builder: (context, todos) => Stack(
+        builder: (context, todos, _) => Stack(
           fit: StackFit.expand,
           children: [
             if (todos.isEmpty) Center(

@@ -93,8 +93,8 @@ abstract class StatesWidgetBaseState<W extends StatesWidgetBase<T>, T>
   }
 }
 
-/// A `Builder` build a widget with a state.
-typedef StateWidgetBuilder<T> = Widget Function(BuildContext context, T state);
+/// A `Builder` build a widget with a state and an optional child.
+typedef StateWidgetBuilder<T> = Widget Function(BuildContext context, T state, Widget? child);
 
 /// `StatesBuilder` transform a sequence of state to widget.
 class StatesBuilder<T> extends StatesWidgetBase<T> {
@@ -109,7 +109,7 @@ class StatesBuilder<T> extends StatesWidgetBase<T> {
   ///     ),
   ///   ],
   ///   child: StatesBuilder<TodoFilter>(
-  ///     builder: (context, todoFilter) {
+  ///     builder: (context, todoFilter, child) {
   ///       return ...; // map state to widget
   ///     },
   ///   ),
@@ -141,9 +141,13 @@ class StatesBuilder<T> extends StatesWidgetBase<T> {
     super.hotReloadKey,
     super.states,
     required this.builder,
+    this.child,
   });
 
+  /// A `builder` return widget based on current state.
   final StateWidgetBuilder<T> builder;
+  /// An optional child been used to remove unnecessary rebuild.
+  final Widget? child;
 
   @override
   createState() => _StatesBuilderState<T>();
@@ -163,7 +167,7 @@ class _StatesBuilderState<T> extends StatesWidgetBaseState<StatesBuilder<T>, T> 
   @override
   Widget build(BuildContext context) {
     assert(_currentState is T, 'Current state: $_currentState, should be instance of $T at build stage.');
-    return widget.builder(context, _currentState as T);
+    return widget.builder(context, _currentState as T, widget.child);
   }
 }
 
