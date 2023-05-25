@@ -1,3 +1,17 @@
+## 0.1.0-beta.2
+
+- refactor 
+  - add `StatesBuilder` child parameter [\#81](https://github.com/LoveCommunity/flutter_scope/pull/81)
+- test
+  - simplify test description [\#80](https://github.com/LoveCommunity/flutter_scope/pull/80)
+- include changes made from dart\_scope 0.1.0-beta.3 [\#79](https://github.com/LoveCommunity/flutter_scope/pull/79)
+  - feature
+    - add configurables `Computed{4~9}` [\#192](https://github.com/LoveCommunity/dart_scope.dart/pull/192)
+    - add operators `States.computed{4~9}` [\#191](https://github.com/LoveCommunity/dart_scope.dart/pull/191)
+    - add operators `Observable.combine{4~9}` [\#190](https://github.com/LoveCommunity/dart_scope.dart/pull/190)
+  - refactor
+    - replace `States.combine` with `States.computed` [\#188](https://github.com/LoveCommunity/dart_scope.dart/pull/188)
+
 ## 0.1.0-beta.1
 
 - feature 
