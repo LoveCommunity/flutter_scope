@@ -36,23 +36,23 @@ A declarative dependency injection library which use dart syntax and flutter sty
     - [Usage of `StatesListener(...)`](#usage-of-stateslistener)
       - [Usage of `StatesListener` with `states.convert` operator](#usage-of-stateslistener-with-statesconvert-operator)
 
-- [dart_scope](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#dart_scope)
-  - [Features](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#features)
-  - [Table Of Content](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#table-of-content)
-  - [Quick Tour](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#quick-tour)
-    - [Usage of `Scope.root(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#usage-of-scoperoot)
-    - [Usage of `name`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#usage-of-name)
-    - [`Scope.root(...)` async setup](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#scoperoot-async-setup)
-    - [Usage of `scope.push(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#usage-of-scopepush)
-    - [Usage of `scope.has<T>(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#usage-of-scopehast)
-    - [Usage of `scope.getOrNull<T>(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#usage-of-scopegetornullt)
-    - [Usage of `scope.dispose()`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#usage-of-scopedispose)
-    - [(Non)Lazily assignment](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#nonlazily-assignment)
-  - [Advanced](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#advanced)
-    - [Configurable](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#configurable)
-    - [Inline `Configurable`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#inline-configurable)
-    - [Decompose configuration](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#decompose-configuration)
-    - [Compose configurations](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#compose-configurations)
+- [dart_scope](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#dart_scope)
+  - [Features](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#features)
+  - [Table Of Content](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#table-of-content)
+  - [Quick Tour](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#quick-tour)
+    - [Usage of `Scope.root(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#usage-of-scoperoot)
+    - [Usage of `name`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#usage-of-name)
+    - [`Scope.root(...)` async setup](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#scoperoot-async-setup)
+    - [Usage of `scope.push(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#usage-of-scopepush)
+    - [Usage of `scope.has<T>(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#usage-of-scopehast)
+    - [Usage of `scope.getOrNull<T>(...)`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#usage-of-scopegetornullt)
+    - [Usage of `scope.dispose()`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#usage-of-scopedispose)
+    - [(Non)Lazily assignment](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#nonlazily-assignment)
+  - [Advanced](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#advanced)
+    - [Configurable](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#configurable)
+    - [Inline `Configurable`](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#inline-configurable)
+    - [Decompose configuration](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#decompose-configuration)
+    - [Compose configurations](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#compose-configurations)
 
 ## Packages
 
@@ -754,7 +754,7 @@ void flutterScope() {
 ...
 ```
 
-[**Next Page - dart_scope**](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.2#dart_scope)
+[**Next Page - dart_scope**](https://pub.dev/packages/dart_scope/versions/0.1.0-beta.3#dart_scope)
 
 [ValueNotifier]:https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html
 [Stream]:https://dart.dev/tutorials/language/streams
