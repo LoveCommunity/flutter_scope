@@ -1,3 +1,13 @@
+## 0.1.0-beta.3
+
+- ci
+  - add tests for flutter version 3.3.0 [\#85](https://github.com/LoveCommunity/flutter_scope/pull/85)
+- refactor
+  - update sdk constrain to "\>=2.18.0 \<4.0.0" [\#84](https://github.com/LoveCommunity/flutter_scope/pull/84)
+- include changes made from dart\_scope 0.1.0-beta.4 [\#86](https://github.com/LoveCommunity/flutter_scope/pull/86)
+  - feature 
+    - export class `Observation` [\#195](https://github.com/LoveCommunity/dart_scope.dart/pull/195)
+
 ## 0.1.0-beta.2
 
 - refactor 
