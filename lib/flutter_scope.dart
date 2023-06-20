@@ -19,6 +19,7 @@ export 'package:dart_scope/dart_scope.dart'
     Observe,
     Observable,
     ObservableX,
+    Observation,
     OnData,
     Observer,
     Publisher,
